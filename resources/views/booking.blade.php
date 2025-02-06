@@ -41,7 +41,6 @@
             font-weight: bold;
             text-align: center;
             width: 100%;
-            
         }
 
         .input-container {
@@ -86,6 +85,18 @@
             width: 100%;
         }
 
+        /* Success message styling */
+        .success-message {
+            background-color: #28a745;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 900px;
+        }
+
         /* Responsive Adjustments */
         @media (max-width: 768px) {
             .form-container {
@@ -101,7 +112,7 @@
 </head>
 <body>
 <div class="absolute top-4 left-4 flex space-x-4">
-        <button class="bg-gradient-to-r from-green-500 to-green-700 text-white text-xl md:text-2xl font-medium px-3 md:px-4 py-2 rounded shadow">
+    <button class="bg-gradient-to-r from-green-500 to-green-700 text-white text-xl md:text-2xl font-medium px-3 md:px-4 py-2 rounded shadow">
         <a href="/">Home</a>
     </button>
     <button class="bg-gradient-to-r from-green-500 to-green-700 text-white text-xl md:text-2xl font-medium px-3 md:px-4 py-2 rounded shadow">
@@ -109,25 +120,32 @@
     </button>
 </div>
 
-        <div id="error-message" class="error-message"></div>
+<!-- Position the success message at the top -->
+
+
+<form action="/bookform" method="POST">
+    @csrf
+  
+
+
     <div class="form-container">
         <h1 class="form-title">Booking Form</h1>
-
+        @if(session('success'))
+    <div class="success-message">
+        {{ session('success') }}
+    </div>
+@endif
+<div id="error-message" class="error-message"></div>
         <div class="input-container">
             <label for="name">Full Name</label>
-            <input type="text" id="name" name="name" required class="input-field" placeholder="Enter your full name" pattern="[A-Za-z\s]+" title="Only letters and spaces are allowed">
-        </div>
-
-        <div class="input-container">
-            <label for="email">Email Address (Optional)</label>
-            <input type="email" id="email" name="email" class="input-field" placeholder="Enter your email">
+            <input type="text" id="name" name="customer_name" required class="input-field" placeholder="Enter your full name" pattern="[A-Za-z\s]+" title="Only letters and spaces are allowed">
         </div>
 
         <div class="input-container">
             <label for="checkin">Check-in Date</label>
-            <input type="date" id="checkin" name="checkin" required class="input-field">
+            <input type="date" id="checkin" name="check_in_date" required class="input-field">
         </div>
-        
+
         <div class="input-container">
             <label for="phone">Phone Number</label>
             <input type="tel" id="phone" name="phone" required class="input-field" placeholder="Enter your phone number" pattern="^\d{11}$" maxlength="11" title="Phone number must be exactly 11 digits">
@@ -135,21 +153,24 @@
 
         <div class="input-container">
             <label for="checkout">Check-out Date</label>
-            <input type="date" id="checkout" name="checkout" required class="input-field">
+            <input type="date" id="checkout" name="check_out_date" required class="input-field">
         </div>
 
         <div class="input-container">
-            <label for="message">Extra Pax</label>
-            <input type="number" id="message" name="message" required class="input-field" placeholder="Extra Pax?">
+            <label for="extra_pax">Extra Pax</label>
+            <input type="number" id="extra_pax" name="extra_pax" required class="input-field" placeholder="Extra Pax?">
         </div>
 
         <div class="input-container full-width">
-            <label for="special-requests">Special Requests</label>
-            <textarea id="special-requests" name="special-requests" class="input-field" placeholder="Any special requests?" rows="4"></textarea>
+            <label for="special_requests">Special Requests</label>
+            <textarea id="special_requests" name="special_request" class="input-field" placeholder="Any special requests?" rows="4"></textarea>
+
         </div>
 
-        <button class="bg-gradient-to-r from-green-500 to-green-700  submit-btn full-width" type="submit">Submit Booking</button>
+        <button class="bg-gradient-to-r from-green-500 to-green-700 submit-btn full-width" type="submit">Submit Booking</button>
+   
     </div>
+</form>
 
 </body>
 </html>

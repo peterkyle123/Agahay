@@ -9,17 +9,19 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::create('bookings', function (Blueprint $table) {
-            $table->id();
-            $table->string('guest_name');
-            $table->date('check_in');
-            $table->date('check_out');
-            $table->enum('category', ['Small Group', 'VIP', 'Large Group']);
-            $table->timestamps();
-        });
-    }
+    public function up()
+{
+    Schema::create('bookings', function (Blueprint $table) {
+        $table->id();
+        $table->string('customer_name');
+        $table->string('email')->unique();
+        $table->string('phone_number');
+        $table->date('booking_date');
+        $table->enum('status', ['pending', 'confirmed', 'cancelled'])->default('pending');
+        $table->timestamps();
+    });
+}
+
 
     /**
      * Reverse the migrations.

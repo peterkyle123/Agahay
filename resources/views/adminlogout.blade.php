@@ -14,7 +14,7 @@
 
         <div class="flex justify-center gap-4">
             <!-- Logout Button -->
-            <a href="adminhome" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-500 transition font-medium">
+            <a href="/adminhome" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-500 transition font-medium">
                 Logout
             </a>
             <!-- Cancel Button -->

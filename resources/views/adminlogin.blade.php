@@ -94,19 +94,22 @@
     <main>
         <div class="form-container">
             <h1 class="form-title">Welcome Back</h1>
-
-            <form action="{{ route('dashboard') }}" method="POST"> <!-- Replace nextpage.html with your desired page -->
-                <input class="input-field" type="email" placeholder="Email" required />
-                <input class="input-field" type="password" placeholder="Password" required />
-
-                <div class="flex items-center justify-between mb-6">
-                    <div class="flex items-center">
-                        <input id="remember-me" type="checkbox" class="mr-2" />
-                        <label for="remember-me" class="checkbox-label">Remember me</label>
-                    </div>
-                    <button class="login-btn" type="submit">Log In</button>
+            @if ($errors->any())
+                <div style="color: red; margin-bottom: 15px;">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
-            </form>
+            @endif
+            <form action="/login1" method="POST">
+    @csrf
+    <input class="input-field" type="email" name="email" placeholder="Email" required />
+    <input class="input-field" type="password" name="password" placeholder="Password" required />
+    <button class="login-btn" type="submit">Log In</button>
+</form>
+
         </div>
     </main>
 </body>

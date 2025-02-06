@@ -126,7 +126,7 @@
                     <span class="material-icons-outlined float-right">keyboard_arrow_right</span>
                     </a>
 
-                    <a href="{{ route('b00kings') }}" class="inline-block text-green-600 hover:text-green-800 my-4 w-full">
+                    <a href="{{ route('b00kings1') }}" class="inline-block text-green-600 hover:text-green-800 my-4 w-full">
                         <span class="material-icons-outlined float-left pr-2">file_copy</span> See Bookings
                         <span class="material-icons-outlined float-right">keyboard_arrow_right</span>
                     </a>
