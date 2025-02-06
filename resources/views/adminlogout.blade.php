@@ -14,11 +14,14 @@
 
         <div class="flex justify-center gap-4">
             <!-- Logout Button -->
-            <a href="/adminhome" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-500 transition font-medium">
-                Logout
-            </a>
+            <form action="/adminhome12" method="GET">
+                <button type="submit" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-500 transition font-medium">
+                    Logout
+                </button>
+            </form>
+            
             <!-- Cancel Button -->
-            <a href="dashboard" class="bg-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-400 transition font-medium">
+            <a href="{{ route('dashboard') }}" class="bg-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-400 transition font-medium">
                 Cancel
             </a>
         </div>

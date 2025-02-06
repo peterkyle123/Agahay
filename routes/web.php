@@ -69,10 +69,17 @@ Route::get('/adminhome', function () {
     return view('adminhome');
 })->name('adminhome');
 
-Route::get('/adminhome1', function () {
+Route::get('/adminhome12', function () {
     Auth::logout();  // Logs out the current user
     session()->invalidate();  // Clears the session data
     session()->regenerateToken();  // Regenerates the CSRF token
 
     return redirect()->route('adminhome');  // Redirects to the admin login page
 });
+Route::get('/dashboard', function () {
+    if (!session()->has('admin')) {
+        return redirect()->route('adminlogin');  // Redirect to login if not logged in
+    }
+
+    return view('dashboard');  // Proceed to dashboard if logged in
+})->name('dashboard');
