@@ -125,17 +125,39 @@
 
 <form action="/bookform" method="POST">
     @csrf
-  
-
 
     <div class="form-container">
         <h1 class="form-title">Booking Form</h1>
-        @if(session('success'))
-    <div class="success-message">
-        {{ session('success') }}
+        @if(session('tracking_code'))
+    <div id="tracking-code-alert" class="alert alert-success">
+        <strong>Tracking Code: </strong>{{ session('tracking_code') }}
     </div>
+
+    <script>
+        // JavaScript to hide the tracking code alert after a short delay
+        window.onload = function() {
+            setTimeout(function() {
+                document.getElementById('tracking-code-alert').style.display = 'none';
+            }, 7000); // Hides the alert after 10 seconds (3000ms)
+        };
+    </script>
 @endif
-<div id="error-message" class="error-message"></div>
+
+        @if($errors->any())
+            <div>
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{$error}}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        @if(session('success'))
+            <div class="success-message">
+                {{ session('success') }}
+            </div>
+        @endif
+        <div id="error-message" class="error-message"></div>
         <div class="input-container">
             <label for="name">Full Name</label>
             <input type="text" id="name" name="customer_name" required class="input-field" placeholder="Enter your full name" pattern="[A-Za-z\s]+" title="Only letters and spaces are allowed">

@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Track Your Booking | Agahay Guesthouse</title>
     @vite('resources/css/app.css')
@@ -88,47 +90,12 @@
             font-weight: bold;
         }
     </style>
-    <script>
-        function searchBooking() {
-            const bookingCode = document.getElementById("bookingCode").value.trim();
-            const resultSection = document.getElementById("bookingResult");
-
-            if (bookingCode === "") {
-                resultSection.innerHTML = "<p class='error-message'>Please enter a booking code.</p>";
-                return;
-            }
-
-            // Simulated booking lookup
-            if (bookingCode === "ABC123") {
-                resultSection.innerHTML = `
-                    <div class="booking-details">
-                        <p><strong>Booking Code:</strong> ABC123</p>
-                        <p><strong>Guest Name:</strong> John Doe</p>
-                        <p><strong>Check-in:</strong> February 10, 2025</p>
-                        <p><strong>Check-out:</strong> February 12, 2025</p>
-                        <p><strong>Status:</strong> Confirmed</p>
-                        <button class="cancel-btn" onclick="cancelBooking()">Cancel Booking</button>
-                    </div>
-                `;
-            } else {
-                resultSection.innerHTML = "<p class='error-message'>No booking found for this code.</p>";
-            }
-        }
-
-        function cancelBooking() {
-            const confirmCancel = confirm("Are you sure you want to cancel this booking?");
-            if (confirmCancel) {
-                document.getElementById("bookingResult").innerHTML = "<p class='error-message'>Your booking has been canceled.</p>";
-            }
-        }
-    </script>
-</head>
+   </head>
 <body>
-<div class="bg-green-900 text-white p-4 sm:p-6 shadow-md w-full">
+    <div class="bg-green-900 text-white p-4 sm:p-6 shadow-md w-full">
         <div class="flex flex-wrap items-center justify-between">
             <h1 class="text-xl sm:text-2xl font-semibold">Track Your Booking</h1>
             <div class="flex items-center mt-2 sm:mt-0">
-                <!-- Home Button -->
                 <a href="/" class="bg-white text-green-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition mr-2 sm:mr-4 text-sm sm:text-base">
                     Home
                 </a>
@@ -136,13 +103,75 @@
         </div>
     </div>
 
-    
     <div class="container">
         <h2>Enter Your Booking Code</h2>
-        <input type="text" id="bookingCode" placeholder="E.g., ABC123">
-        <button class="search-btn" onclick="searchBooking()">Search</button>
+        
+        <!-- Track Booking Form -->
+        <form action="{{ route('trackbooking') }}" method="POST">
+            @csrf
+            <input type="text" name="tracking_code" id="bookingCode" placeholder="E.g., BKABC123" value="{{ old('tracking_code') }}" required>
+            <button class="search-btn" type="submit">Search</button>
+        </form>
 
-        <div id="bookingResult"></div>
+        <!-- Display Errors -->
+        @error('tracking_code')
+            <div class="error-message">{{ $message }}</div>
+        @enderror
+
+         <!-- Display Results -->
+         @if(isset($booking))
+            <div class="booking-details" id="bookingDetails">
+                <p><strong>Booking Code:</strong> {{ $booking->tracking_code }}</p>
+                <p><strong>Guest Name:</strong> {{ $booking->customer_name }}</p>
+                <p><strong>Check-in:</strong> {{ $booking->check_in_date }}</p>
+                <p><strong>Check-out:</strong> {{ $booking->check_out_date }}</p>
+                <p><strong>Status:</strong> {{ $booking->status }}</p>
+                <button onclick="cancelBooking({{ $booking->id }})" class="cancel-btn">Cancel Booking</button>
+
+            </div>
+
+            <script>
+                // Hide booking details after 5 seconds (5000ms)
+                setTimeout(function() {
+                    document.getElementById('bookingDetails').style.display = 'none';
+                }, 5000); // 5000ms = 5 seconds
+            </script>
+        @elseif(session('error'))
+            <div class="error-message">{{ session('error') }}</div>
+        @endif
     </div>
+    <script>
+    function cancelBooking(bookingId) {
+        const confirmCancel = confirm("Are you sure you want to cancel this booking?");
+        if (confirmCancel) {
+            // Send the cancel request to the server via AJAX
+            fetch(`/cancel-booking/${bookingId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    _method: 'POST',  // Use the POST method for the route
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById("bookingResult").innerHTML = "<p class='success-message'>Your booking has been canceled.</p>";
+                    setTimeout(function() {
+                        document.getElementById('bookingDetails').style.display = 'none';
+                    }, 5000);
+                } else {
+                    document.getElementById("bookingResult").innerHTML = "<p class='error-message'>Failed to cancel the booking. Please try again.</p>";
+                }
+            })
+            .catch(error => {
+                document.getElementById("bookingResult").innerHTML = "<p class='error-message'>An error occurred. Please try again later.</p>";
+            });
+        }
+    }
+</script>
+
 </body>
 </html>

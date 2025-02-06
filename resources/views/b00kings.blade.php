@@ -4,13 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Booking List</title>
+    @vite('resources/css/app.css')
+    @vite('resources/js/app.js')
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-green-100">
     <div class="min-h-screen p-6">
-        <div class="text-green-800 font-bold text-2xl mb-6">
-            <span class="text-green-900">Admin</span> - View Bookings
-        </div>
+    <header class="bg-gradient-to-r from-green-500 to-green-700 text-white font-bold text-2xl p-4 rounded-xl mb-6 flex justify-between items-center">
+    <span class="text-white">Bookings</span>
+
+    <!-- Home Button -->
+    <a href="dashboard" class="bg-white text-green-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition text-sm sm:text-base">
+        Home
+    </a>
+</header>
 
         <div class="bg-white rounded-xl shadow-lg p-6">
             <h2 class="text-xl font-semibold text-green-800 mb-4">List of Bookings</h2>
@@ -31,13 +38,15 @@
                             <th class="px-4 py-2 text-left">
                                 <input type="checkbox" id="select-all" class="select-all">
                             </th>
-                            <th class="px-4 py-2 text-left">Booking ID</th>
+                            <th class="px-4 py-2 text-left">Tracking Code</th>
                             <th class="px-4 py-2 text-left">Customer Name</th>
                             <th class="px-4 py-2 text-left">Check-in Date</th>
                             <th class="px-4 py-2 text-left">Check-out Date</th>
                             <th class="px-4 py-2 text-left">Phone</th>
                             <th class="px-4 py-2 text-left">Extra Pax</th> <!-- New Column -->
                             <th class="px-4 py-2 text-left">Special Request</th> <!-- New Column -->
+                            <th class="px-4 py-2 text-left">Status</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -46,13 +55,16 @@
                                 <td class="px-4 py-2">
                                     <input type="checkbox" name="bookings[]" value="{{ $booking->id }}" class="booking-checkbox">
                                 </td>
-                                <td class="px-4 py-2">{{ $booking->id }}</td>
+                                <td class="px-4 py-2">{{ $booking->tracking_code }}</td>
                                 <td class="px-4 py-2">{{ $booking->customer_name }}</td>
                                 <td class="px-4 py-2">{{ $booking->check_in_date }}</td>
                                 <td class="px-4 py-2">{{ $booking->check_out_date }}</td>
                                 <td class="px-4 py-2 text-green-600">{{ $booking->phone }}</td>
                                 <td class="px-4 py-2">{{ $booking->extra_pax }}</td> <!-- Display Extra Pax -->
                                 <td class="px-4 py-2">{{ $booking->special_request ?? 'None' }}</td> <!-- Display Special Request -->
+                                <td class="px-4 py-2">
+                    {{ $booking->status ?? 'Not Set' }} <!-- Display the Status -->
+                </td>
                             </tr>
                         @endforeach
                     </tbody>

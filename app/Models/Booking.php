@@ -17,7 +17,8 @@ class Booking extends Model
         'phone',
         'payment',
         'extra_pax',        // Add this
-        'special_request'   // Add this
+        'special_request',
+        'tracking_code'   // Add this
     ];
 }
 

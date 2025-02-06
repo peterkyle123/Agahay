@@ -93,7 +93,6 @@
 <body>
     <main>
         <div class="form-container">
-            <h1 class="form-title">Welcome Back</h1>
             @if ($errors->any())
                 <div style="color: red; margin-bottom: 15px;">
                     <ul>

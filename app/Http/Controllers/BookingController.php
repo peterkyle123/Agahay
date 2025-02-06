@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class BookingController extends Controller
 {
@@ -39,30 +40,10 @@ class BookingController extends Controller
     }
     public function bookstore()
     {
-       
- 
-
         // Return the view with the bookings data
         return view('booking');
     }
-    // public function store(Request $request)
-    // {
-    //     // Validate input
-    //     $request->validate([
-    //         'name' => 'required|string|max:255',
-    //         'email' => 'nullable|email',
-    //         'phone' => 'required|digits:11',
-    //         'checkin' => 'required|date',
-    //         'checkout' => 'required|date|after_or_equal:checkin',
-    //         'extra_pax' => 'required|integer|min:0',
-    //         'special_requests' => 'nullable|string',
-    //     ]);
-
-    //     // Insert into database
-    //     Booking::create($request->all());
-
-    //     return redirect()->back()->with('success', 'Booking submitted successfully!');
-    // }
+    
         public function store(Request $request)
     {
         // Validate input
@@ -75,6 +56,8 @@ class BookingController extends Controller
             'special_request' => 'nullable|string|max:500',
         ]);
 
+        $trackingCode = 'BK' . strtoupper(Str::random(1)) . '-' . str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT) . '-' . strtoupper(Str::random(1));
+
         // Save to database
         Booking::create([
             'customer_name' => $request->customer_name,
@@ -83,10 +66,56 @@ class BookingController extends Controller
             'phone' => $request->phone,
             'extra_pax' => $request->extra_pax,
             'special_request' => $request->special_request,
+         'tracking_code' => $trackingCode, // Save the generated tracking code
         ]);
+   
+        session(['tracking_code' => $trackingCode]);
 
         // Redirect with success message
         return redirect()->back()->with('success', 'Booking submitted successfully!');
     }
+    public function trackBooking(Request $request)
+{
+    // Validate the input
+    $request->validate([
+        'tracking_code' => 'required|string',
+    ]);
+
+    // Find the booking by the tracking code
+    $booking = Booking::where('tracking_code', $request->tracking_code)->first();
+
+    if ($booking) {
+        // If a booking is found, return it to the view
+        return view('trackbooking', compact('booking'));
+    } else {
+        // If no booking is found, return with an error
+        return back()->withErrors(['tracking_code' => 'No booking found for this tracking code.']);
+    }
+}
+public function showBookingPage()
+{
+    // Generate a new tracking code
+    $trackingCode = 'BK' . strtoupper(Str::random(3)) . '-' . rand(1000, 9999); // New tracking code (4-digit number)
+
+    // Pass the tracking code to the view
+    return view('trackbooking', compact('trackingCode'));
+}
+public function cancel($bookingId)
+{
+    // Find the booking by ID
+    $booking = Booking::find($bookingId);
+
+    if ($booking) {
+        // Update the booking status to "Canceled"
+        $booking->status = 'Canceled';
+        $booking->save();
+
+        // Redirect with success message
+        return redirect()->route('booking.show', $bookingId)->with('success', 'Your booking has been canceled.');
+    }
+
+    return redirect()->back()->with('error', 'Booking not found.');
+}
+
 }
 

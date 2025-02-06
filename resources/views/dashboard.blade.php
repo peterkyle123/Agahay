@@ -10,7 +10,7 @@
     <style>
         /* Custom Styles */
         .custom-bg {
-            background-image: url('https://www.example.com/your-image.jpg');
+            /* background-image: url('https://www.example.com/your-image.jpg'); */
             background-size: cover;
             background-position: center;
         }
@@ -75,12 +75,6 @@
             <div class="flex items-center justify-between py-2 text-xl">
                 <div class="font-bold text-green-900">Admin<span class="text-green-600">Panel</span></div>
                 <div class="flex items-center text-gray-500 float-left w-full">
-                    <!-- Notifications Icon -->
-                    <div class="absolute right-0">
-                        <span id="notification-icon" class="material-icons-outlined p-2" style="font-size: 30px">notifications</span>
-                        <!-- Notification Badge -->
-                        <span id="notification-badge" class="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs px-2 py-1">3</span>
-                    </div>
                    
                 </div>
             </div>
@@ -117,7 +111,7 @@
             <!-- Sidebar -->
             <div class="w-2/12 mr-6">
                 <div class="bg-white rounded-xl shadow-lg mb-6 px-6 py-4">
-                    <a href="#" class="inline-block text-green-600 hover:text-green-800 my-4 w-full">
+                    <a href="dashboard" class="inline-block text-green-600 hover:text-green-800 my-4 w-full">
                         <span class="material-icons-outlined float-left pr-2">dashboard</span> Home
                         <span class="material-icons-outlined float-right">keyboard_arrow_right</span>
                     </a>
@@ -150,22 +144,36 @@
 
            <!-- Main Dashboard Content -->
 <div class="w-10/12">
-    <div class="flex flex-row space-x-4">
-        <!-- Welcome Panel -->
-        <div class="bg-gradient-green border-gradient rounded-xl w-7/12 p-6 card">
-            <p class="text-5xl text-green-900">Welcome <br><strong>Admin!</strong></p>
-            <span class="bg-gradient-btn text-xl text-white inline-block rounded-full mt-12 px-8 py-2"><strong>01:51</strong></span>
-        </div>
+    <div class="flex flex-row space-x-6 mb-6"> <!-- Increased spacing between panels -->
+  <!-- Welcome Panel -->
+<div class="bg-gradient-green border-gradient rounded-xl w-7/12 p-6 card">
+    <p class="text-5xl text-green-900">Welcome <br><strong>Admin!</strong></p>
+    <span id="time" class="bg-gradient-btn text-xl text-white inline-block rounded-full mt-12 px-8 py-2"><strong>01:51</strong></span>
+</div>
+
+<script>
+    function updateTime() {
+        const now = new Date();
+        const hours = now.getHours().toString().padStart(2, '0');  // Add leading zero if necessary
+        const minutes = now.getMinutes().toString().padStart(2, '0');  // Add leading zero if necessary
+        const time = `${hours}:${minutes}`;
+        
+        document.getElementById('time').innerHTML = `<strong>${time}</strong>`;
+    }
+    
+    setInterval(updateTime, 1000);  // Update every second
+    updateTime();  // Initial call to set time immediately
+</script>
 
         <!-- Inbox Panel -->
         <div class="bg-gradient-green border-gradient rounded-xl w-5/12 p-6 card">
-            <p class="text-5xl text-green-900">Bookings <br><strong>23</strong></p>
-            <a href="#" class="bg-gradient-btn text-xl text-white underline hover:bg-gradient-btn inline-block rounded-full mt-12 px-8 py-2"><strong>See messages</strong></a>
+            <p class="text-5xl text-green-900">Bookings <br><strong>{{ $bookingCount }}</strong></p>
+            <a href="b00kings1" class="bg-gradient-btn text-xl text-white underline hover:bg-gradient-btn inline-block rounded-full mt-12 px-8 py-2"><strong>See bookings</strong></a>
         </div>
     </div>
 
     <!-- New Revenue and Canceled Bookings Panels -->
-    <div class="flex flex-row space-x-4 mt-6">
+    <div class="flex flex-row space-x-6"> <!-- Increased spacing between panels -->
         <!-- Bookings Revenue for This Month -->
         <div class="bg-gradient-green border-gradient rounded-xl w-4/12 p-6 card">
             <p class="text-3xl text-green-900">Bookings Revenue <br><strong>This Month</strong></p>
@@ -185,9 +193,6 @@
         </div>
     </div>
 </div>
-
-        </div>
-    </div>
 
     <!-- Optional JavaScript -->
     <script>

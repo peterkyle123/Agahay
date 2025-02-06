@@ -34,10 +34,6 @@
                 <a href="dashboard" class="bg-white text-green-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition mr-2 sm:mr-4 text-sm sm:text-base">
                     Home
                 </a>
-                <span class="material-icons-outlined p-2 text-lg sm:text-2xl">notifications</span>
-                <div class="bg-center bg-cover bg-no-repeat rounded-full h-10 w-10 sm:h-12 sm:w-12 ml-2" 
-                     style="background-image: url(https://scontent.fmnl9-1.fna.fbcdn.net/v/t39.30808-6/472249971_1016588200482999_5303754963802870843_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=sJ53QmRi1gEQ7kNvgHtI0ML&_nc_zt=23&_nc_ht=scontent.fmnl9-1.fna&_nc_gid=ApNALXX88p-GVt8qvJEgI4n&oh=00_AYArajmlVejP0zbJGSR7MccIm-o2R4kKewYaLmx2DBfeiQ&oe=67A36AC7)">
-                </div>
             </div>
         </div>
     </div>
@@ -71,10 +67,6 @@
                         <div class="space-y-2">
                             <label for="password" class="text-gray-700 font-medium text-sm sm:text-lg">Password</label>
                             <input id="password" type="password" class="w-full p-2 sm:p-3 border-2 border-green-500 rounded-lg" placeholder="Enter password" />
-                        </div>
-                        <div class="space-y-2">
-                            <label for="confirm-password" class="text-gray-700 font-medium text-sm sm:text-lg">Confirm Password</label>
-                            <input id="confirm-password" type="password" class="w-full p-2 sm:p-3 border-2 border-green-500 rounded-lg" placeholder="Confirm password" />
                         </div>
                     </div>
                     <div class="flex flex-col sm:flex-row justify-end mt-4">
