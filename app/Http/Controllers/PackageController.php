@@ -10,10 +10,18 @@ class PackageController extends Controller
     // Show all available packages
     public function show()
     {
+        if (!session()->has('admin')) {
+            return redirect()->route('adminlogin'); // Redirects to login page if no session
+        }
         $packages = Package::all(); // Fetch all packages
         return view('packages', compact('packages'));
     }
 
+    public function editpackages()
+    {
+        $package = Package::all(); // Fetch all packages
+        return view('editpackages', compact('package'));
+    }
     // Show the edit form for a specific package
     public function edit($slug)
     {

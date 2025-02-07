@@ -121,7 +121,7 @@
             </div>
             <!-- Edit Button -->
             <div class="edit-btn-container">
-                <a href="/admin/edit/small-group" class="edit-btn">Edit</a>
+                <a href="/editpackages" class="edit-btn">Edit</a>
             </div>
         </div>
 
@@ -135,7 +135,7 @@
             </div>
             <!-- Edit Button -->
             <div class="edit-btn-container">
-                <a href="/admin/edit/vip" class="edit-btn">Edit</a>
+                <a href="/editpackages" class="edit-btn">Edit</a>
             </div>
         </div>
 
@@ -149,7 +149,7 @@
             </div>
             <!-- Edit Button -->
             <div class="edit-btn-container">
-                <a href="/admin/edit/large-group" class="edit-btn">Edit</a>
+                <a href="/editpackages" class="edit-btn">Edit</a>
             </div>
         </div>
     </div>

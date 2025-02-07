@@ -144,7 +144,6 @@
     function cancelBooking(bookingId) {
         const confirmCancel = confirm("Are you sure you want to cancel this booking?");
         if (confirmCancel) {
-            // Send the cancel request to the server via AJAX
             fetch(`/cancel-booking/${bookingId}`, {
                 method: 'POST',
                 headers: {
@@ -152,16 +151,19 @@
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
                 body: JSON.stringify({
-                    _method: 'POST',  // Use the POST method for the route
+                    _method: 'POST'
                 })
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    // Hide the canceled booking immediately
+                    const bookingElement = document.getElementById(`booking-${bookingId}`);
+                    if (bookingElement) {
+                        bookingElement.style.display = 'none';
+                    }
+
                     document.getElementById("bookingResult").innerHTML = "<p class='success-message'>Your booking has been canceled.</p>";
-                    setTimeout(function() {
-                        document.getElementById('bookingDetails').style.display = 'none';
-                    }, 5000);
                 } else {
                     document.getElementById("bookingResult").innerHTML = "<p class='error-message'>Failed to cancel the booking. Please try again.</p>";
                 }
@@ -172,6 +174,5 @@
         }
     }
 </script>
-
 </body>
 </html>

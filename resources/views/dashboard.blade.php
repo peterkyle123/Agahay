@@ -127,10 +127,6 @@
                 </div>
 
                 <div class="bg-white rounded-xl shadow-lg mb-6 px-6 py-4">
-                <a href="{{ route('adminprofile') }}" class="inline-block text-green-600 hover:text-green-800 my-4 w-full">
-                        <span class="material-icons-outlined float-left pr-2">face</span> Profile
-                        <span class="material-icons-outlined float-right">keyboard_arrow_right</span>
-                    </a>
                     <a href="#" class="inline-block text-green-600 hover:text-green-800 my-4 w-full">
                         <span class="material-icons-outlined float-left pr-2">settings</span> Settings
                         <span class="material-icons-outlined float-right">keyboard_arrow_right</span>

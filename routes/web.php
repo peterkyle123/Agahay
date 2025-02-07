@@ -3,11 +3,14 @@ use App\Models\Booking;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\BookingController;
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Admin;
+
+
+
 
 // Admin login route
 Route::post('/login1', function (Request $request) {
@@ -34,6 +37,7 @@ Route::get('/', function () {
 });
 
 Route::get('/book', function () {
+    session()->flush(); 
     return view('book'); // Booking page view
 })->name('book');
 
@@ -47,17 +51,18 @@ Route::get('/adminlogin', function () {
 
 // Dashboard route
 Route::get('/dashboard', function () {
-    // Checks if the admin session exists
     if (!session()->has('admin')) {
         return redirect()->route('adminlogin'); // Redirects to login page if no session
     }
-    // Fetches the count of bookings from the database
     $bookingCount = Booking::count();
     return view('dashboard', compact('bookingCount')); // Displays the dashboard with booking count
 })->name('dashboard');
 
 // Admin profile page route
 Route::get('/adminprofile', function () {
+    if (!session()->has('admin')) {
+        return redirect()->route('adminlogin'); // Redirects to login page if no session
+    }
     return view('adminprofile'); // Admin profile page view
 })->name('adminprofile');
 
@@ -65,12 +70,12 @@ Route::get('/adminprofile', function () {
 Route::delete('/admin/bookings', [BookingController::class, 'deleteBookings'])->name('admin.deleteBookings');
 
 // Package routes
-Route::get('/packages', [PackageController::class, 'show'])->name('packages'); // Shows available packages
+Route::get('/packages', [PackageController::class, 'show'])->name('packages');
 
 // Booking-related routes
-Route::get('/b00kings1', [BookingController::class, 'b00kings'])->name('b00kings1'); // Displays all bookings
-Route::post('/bookstore', [BookingController::class, 'bookstore'])->name('bookstore'); // Stores booking data
-Route::post('/bookform', [BookingController::class, 'store'])->name('bookform.store'); // Stores booking form data
+Route::get('/b00kings1', [BookingController::class, 'b00kings'])->name('b00kings1'); 
+Route::post('/bookstore', [BookingController::class, 'bookstore'])->name('bookstore'); 
+Route::post('/bookform', [BookingController::class, 'store'])->name('bookform.store');
 
 // Static pages routes
 Route::get('/aboutus', function () {
@@ -100,14 +105,18 @@ Route::get('/adminhome', function () {
     return view('adminhome'); // Admin home page view
 })->name('adminhome');
 
-// Admin logout and session invalidate route (Logout functionality)
+// Admin logout and session invalidate route
 Route::get('/adminhome12', function () {
-    Auth::logout();  // Logs out the current user
-    session()->invalidate();  // Clears the session data
-    session()->regenerateToken();  // Regenerates the CSRF token
-
-    return redirect()->route('adminhome');  // Redirects to the admin login page
+    Auth::logout(); 
+    session()->invalidate(); 
+    session()->regenerateToken(); 
+    return redirect()->route('adminhome');
 });
+
 // Route to display booking data by tracking code
 Route::post('/trackbooking', [BookingController::class, 'trackBooking'])->name('trackbooking');
+
 Route::post('/cancel-booking/{bookingId}', [BookingController::class, 'cancel'])->name('booking.cancel');
+
+// ** New Route to Update Booking Status to "Done" **
+Route::patch('/admin/bookings/update-status', [AdminController::class, 'updateBookingsStatus'])->name('admin.updateBookingsStatus');

@@ -128,21 +128,6 @@
 
     <div class="form-container">
         <h1 class="form-title">Booking Form</h1>
-        @if(session('tracking_code'))
-    <div id="tracking-code-alert" class="alert alert-success">
-        <strong>Tracking Code: </strong>{{ session('tracking_code') }}
-    </div>
-
-    <script>
-        // JavaScript to hide the tracking code alert after a short delay
-        window.onload = function() {
-            setTimeout(function() {
-                document.getElementById('tracking-code-alert').style.display = 'none';
-            }, 7000); // Hides the alert after 10 seconds (3000ms)
-        };
-    </script>
-@endif
-
         @if($errors->any())
             <div>
                 <ul>
@@ -167,7 +152,6 @@
             <label for="checkin">Check-in Date</label>
             <input type="date" id="checkin" name="check_in_date" required class="input-field">
         </div>
-
         <div class="input-container">
             <label for="phone">Phone Number</label>
             <input type="tel" id="phone" name="phone" required class="input-field" placeholder="Enter your phone number" pattern="^\d{11}$" maxlength="11" title="Phone number must be exactly 11 digits">
@@ -177,17 +161,79 @@
             <label for="checkout">Check-out Date</label>
             <input type="date" id="checkout" name="check_out_date" required class="input-field">
         </div>
+        
+     
 
         <div class="input-container">
-            <label for="extra_pax">Extra Pax</label>
-            <input type="number" id="extra_pax" name="extra_pax" required class="input-field" placeholder="Extra Pax?">
-        </div>
+    <label for="extra_pax">Extra Pax</label>
+    <input type="number" id="extra_pax" name="extra_pax" required class="input-field" placeholder="Extra Pax?" min="0" step="1">
+</div>
 
         <div class="input-container full-width">
             <label for="special_requests">Special Requests</label>
             <textarea id="special_requests" name="special_request" class="input-field" placeholder="Any special requests?" rows="4"></textarea>
 
         </div>
+       @if(session('tracking_code'))
+    <div id="tracking-code-alert" class="tracking-code-alert">
+        <strong>Screenshot or save Your Tracking Code: </strong>{{ session('tracking_code') }}
+    </div>
+@endif
+
+
+    <script>
+        // JavaScript to hide the tracking code alert after a short delay
+        window.onload = function() {
+            setTimeout(function() {
+                document.getElementById('tracking-code-alert').style.display = 'none';
+            }, 7000); // Hides the alert after 7 seconds
+        };
+    </script>
+
+    <style>
+        /* Overlay filter effect */
+        .tracking-code-alert {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 15px 20px;
+            background: rgba(0, 255, 55, 0.8); /* Red transparent background */
+            color: white; /* Ensure text is readable */
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+            z-index: 9999;
+        }
+
+        /* Full-screen background filter */
+        body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Ensure it stays behind the form */
+}
+
+    </style>
+    <script>
+    // Get the check-in and check-out date inputs
+    const checkinInput = document.getElementById('checkin');
+    const checkoutInput = document.getElementById('checkout');
+
+    // Set the minimum check-out date to be the selected check-in date
+    checkinInput.addEventListener('change', function() {
+        const checkinDate = checkinInput.value;
+        checkoutInput.setAttribute('min', checkinDate);
+        
+        // Optionally, if the user selects a check-in date that is later than the current check-out date, adjust the check-out date
+        if (checkoutInput.value && checkoutInput.value < checkinDate) {
+            checkoutInput.value = checkinDate;
+        }
+    });
+</script>
+
 
         <button class="bg-gradient-to-r from-green-500 to-green-700 submit-btn full-width" type="submit">Submit Booking</button>
    

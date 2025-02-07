@@ -12,7 +12,7 @@ class Package extends Model
     // The attributes that are mass assignable
     protected $fillable = [
         'slug',       // Unique identifier for the package
-        'name',       // Package name
+        'package_name',       // Package name
         'description', // Package description
         'image',      // Package image
         'price',      // Price of the package (optional)

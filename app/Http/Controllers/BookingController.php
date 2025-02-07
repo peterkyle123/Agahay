@@ -32,7 +32,9 @@ class BookingController extends Controller
     }
     public function b00kings()
     {
-       
+        if (!session()->has('admin')) {
+            return redirect()->route('adminlogin'); // Redirects to login page if no session
+        }
         $bookings = Booking::all();
 
         // Return the view with the bookings data
@@ -84,12 +86,13 @@ class BookingController extends Controller
     // Find the booking by the tracking code
     $booking = Booking::where('tracking_code', $request->tracking_code)->first();
 
-    if ($booking) {
+    if ($booking->status == "Canceled") {
         // If a booking is found, return it to the view
-        return view('trackbooking', compact('booking'));
+       
+        return back()->withErrors(['tracking_code' => 'No booking found for this tracking code.']);
     } else {
         // If no booking is found, return with an error
-        return back()->withErrors(['tracking_code' => 'No booking found for this tracking code.']);
+        return view('trackbooking', compact('booking'));
     }
 }
 public function showBookingPage()
@@ -115,6 +118,19 @@ public function cancel($bookingId)
     }
 
     return redirect()->back()->with('error', 'Booking not found.');
+}
+public function updateBookingsStatus(Request $request)
+{
+    $validated = $request->validate([
+        'bookings' => 'required|array',
+        'bookings.*' => 'exists:bookings,id', // Ensure selected bookings exist
+    ]);
+
+    // Update status of selected bookings to 'Done'
+    Booking::whereIn('id', $request->bookings)
+        ->update(['status' => 'Done']);
+
+    return redirect()->route('admin.bookings')->with('success', 'Selected bookings marked as Done.');
 }
 
 }
