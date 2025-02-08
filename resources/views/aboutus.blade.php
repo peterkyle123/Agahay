@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>What's In?</title>
+    @vite('resources/css/app.css')
+    @vite('resources/js/app.js')
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gradient-to-b from-green-50 to-green-100 text-gray-800">

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Admin;
+use App\Http\Controllers\GalleryController;
 
 
 
@@ -120,3 +121,9 @@ Route::post('/cancel-booking/{bookingId}', [BookingController::class, 'cancel'])
 
 // ** New Route to Update Booking Status to "Done" **
 Route::patch('/admin/bookings/update-status', [AdminController::class, 'updateBookingsStatus'])->name('admin.updateBookingsStatus');
+//**Route for uploading */
+Route::get('/editgallery', [GalleryController::class, 'create'])->name('gallery.create');
+Route::post('gallery/store', [GalleryController::class, 'store'])->name('gallery.store');
+Route::delete('/gallery/delete-multiple', [GalleryController::class, 'destroyMultiple'])->name('gallery.destroyMultiple');
+Route::get('/gallerysection', [GalleryController::class, 'gallerysection'])->name('gallerysection');
+

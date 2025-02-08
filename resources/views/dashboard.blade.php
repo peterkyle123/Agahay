@@ -121,14 +121,14 @@
                     </a>
 
                     <a href="{{ route('b00kings1') }}" class="inline-block text-green-600 hover:text-green-800 my-4 w-full">
-                        <span class="material-icons-outlined float-left pr-2">file_copy</span> See Bookings
+                        <span class="material-icons-outlined float-left pr-2">file_copy</span>Bookings
                         <span class="material-icons-outlined float-right">keyboard_arrow_right</span>
                     </a>
                 </div>
 
                 <div class="bg-white rounded-xl shadow-lg mb-6 px-6 py-4">
-                    <a href="#" class="inline-block text-green-600 hover:text-green-800 my-4 w-full">
-                        <span class="material-icons-outlined float-left pr-2">settings</span> Settings
+                    <a href="editgallery" class="inline-block text-green-600 hover:text-green-800 my-4 w-full">
+                        <span class="material-icons-outlined float-left pr-2">settings</span> Gallery
                         <span class="material-icons-outlined float-right">keyboard_arrow_right</span>
                     </a>
                     <a href="adminlogout" class="inline-block text-green-600 hover:text-green-800 my-4 w-full">

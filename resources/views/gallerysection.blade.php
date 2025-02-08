@@ -3,70 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gallery</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <title>Gallery - {{ config('app.name') }}</title>
+    @vite('resources/css/app.css')
+    @vite('resources/js/app.js')
 </head>
-<body class="bg-gradient-to-r from-white-600 to-white-300 min-h-screen flex flex-col">
-<button class="bg-gradient-to-r from-green-500 to-green-700 m-4 absolute text-white text-2xl font-medium px-4 py-2 rounded shadow"><a href="/">Back</a></button>
-<div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold text-center mb-8 text-white">Gallery</h1>
-<div>
+<body class="bg-gradient-to-br from-green-100 to-green-200 flex flex-col items-center p-6">
 
-   
-    <!-- Image Gallery with Alpine.js -->
-    <div x-data="{ showImage: false, activeImage: '' }">
-        <div class="flex flex-wrap justify-center gap-6">
-            @php
-                $images = [
-                    ['path' => 'images/8.jpg', 'title' => 'Beautiful Sunset'],
-                    ['path' => 'images/image2.jpg', 'title' => 'Mountain Peak'],
-                    ['path' => 'images/image3.jpg', 'title' => 'Serene Beach'],
-                    ['path' => 'images/image4.jpg', 'title' => 'City Lights'],
-                    ['path' => 'images/image5.jpg', 'title' => 'Forest Trail'],
-                    ['path' => 'images/image6.jpg', 'title' => 'Desert Dunes'],
-                ];
-            @endphp
+    <!-- Header -->
+    <header class="bg-green-700 text-white text-xl font-bold p-4 rounded-lg w-full flex justify-between items-center">
+        <span>Gallery</span>
+        <a href="/" class="bg-white text-green-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition mr-2 sm:mr-4 text-sm sm:text-base">
+                    Home
+                </a>
+    </header>
 
-            @foreach($images as $image)
-                <div class="bg-white rounded-lg shadow-md overflow-hidden w-64 transform transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer"
-                     @click="activeImage = '{{ asset($image['path']) }}'; showImage = true">
-                    <img src="{{ asset($image['path']) }}" alt="{{ $image['title'] }}" 
-                         class="w-full h-64 object-cover">
-                    <div class="p-4 text-center">
-                        <h2 class="text-lg font-semibold text-green-800">{{ $image['title'] }}</h2>
-                    </div>
+    <!-- Image Gallery -->
+    <div class="overflow-x-auto whitespace-nowrap bg-white p-4 shadow-lg rounded-lg mt-6 w-full max-w-screen-lg" id="gallery-scroll">
+        <div class="flex gap-4">
+            @forelse($galleryItems as $item)
+                <div class="bg-white rounded-lg p-3 shadow-md min-w-[250px] max-w-[250px]">
+                    <img src="{{ asset('storage/' . $item->image_path) }}" alt="{{ $item->image_name }}" class="w-full h-48 object-cover rounded-md">
+                    <p class="text-center mt-2 text-gray-700">{{ $item->description }}</p>
                 </div>
-            @endforeach
-        </div>
-
-        <!-- Modal for Enlarged Image -->
-        <div x-show="showImage"
-             x-transition:enter="transition-opacity duration-300"
-             x-transition:enter-start="opacity-0"
-             x-transition:enter-end="opacity-100"
-             x-transition:leave="transition-opacity duration-200"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
-             @click="showImage = false"
-             style="display: none;">
-            
-            <!-- Image Container -->
-            <div class="relative bg-green p-4 rounded-lg shadow-lg max-w-4xl mx-auto"
-                 @click.stop>
-                <!-- Close Button -->
-                <button @click="showImage = false"
-                        class="absolute top-2 right-2 bg-red-600 text-white p-2 rounded-full shadow-md hover:bg-red-700 transition">
-                    &times;
-                </button>
-                
-                <!-- Enlarged Image -->
-                <img :src="activeImage" class="max-w-full max-h-[80vh] rounded-lg shadow-lg">
-            </div>
+            @empty
+                <p class="text-gray-500">No images found in the gallery.</p>
+            @endforelse
         </div>
     </div>
-</div>
+
+    <script>
+        // Drag to Scroll Feature
+        const slider = document.getElementById('gallery-scroll');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        slider.addEventListener('mousedown', (e) => {
+            isDown = true;
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+        });
+
+        slider.addEventListener('mouseleave', () => isDown = false);
+        slider.addEventListener('mouseup', () => isDown = false);
+        slider.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 2;
+            slider.scrollLeft = scrollLeft - walk;
+        });
+    </script>
 
 </body>
 </html>
