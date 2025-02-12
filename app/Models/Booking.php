@@ -14,11 +14,12 @@ class Booking extends Model
         'check_in_date',
         'check_out_date',
         'status',
+        'package_name',
         'phone',
         'payment',
         'extra_pax',        // Add this
         'special_request',
-        'tracking_code'   // Add this
+        'tracking_code',   // Add this
     ];
 }
 

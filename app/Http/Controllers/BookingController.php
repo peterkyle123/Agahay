@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Booking;
+use App\Models\Package;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -32,9 +33,9 @@ class BookingController extends Controller
     }
     public function b00kings()
     {
-        if (!session()->has('admin')) {
-            return redirect()->route('adminlogin'); // Redirects to login page if no session
-        }
+           if (!session()->has('admin')) {
+        return redirect()->route('adminlogin'); // Redirects to login page if no session
+    }
         $bookings = Booking::all();
 
         // Return the view with the bookings data
@@ -55,6 +56,7 @@ class BookingController extends Controller
             'check_out_date' => 'required|date|after:check_in_date',
             'phone' => 'required|digits:11',
             'extra_pax' => 'nullable|integer|min:0',
+'package_name' => 'nullable|string|max:255',
             'special_request' => 'nullable|string|max:500',
         ]);
 
@@ -68,6 +70,7 @@ class BookingController extends Controller
             'phone' => $request->phone,
             'extra_pax' => $request->extra_pax,
             'special_request' => $request->special_request,
+            'package_name' => $request->package_name,
          'tracking_code' => $trackingCode, // Save the generated tracking code
         ]);
    
@@ -119,19 +122,30 @@ public function cancel($bookingId)
 
     return redirect()->back()->with('error', 'Booking not found.');
 }
-public function updateBookingsStatus(Request $request)
+public function showPackages() {
+    $packages = Package::all(); // Retrieve all available packages
+    return view('book', compact('packages'));
+}
+
+public function showForm($package_id) {
+    $packages = Package::findOrFail($package_id);
+    return view('booking', compact('packages'));
+}
+public function showBookings()
 {
-    $validated = $request->validate([
-        'bookings' => 'required|array',
-        'bookings.*' => 'exists:bookings,id', // Ensure selected bookings exist
+    // Fetch all bookings
+    $bookings = Booking::all(); 
+
+    // Fetch only the count of canceled bookings
+    $canceledBookingsCount = Booking::where('status', 'Canceled')->count(); 
+
+    // Debug to check if the variable is set
+    if($canceledBookingsCount); // This will stop execution and show the value
+
+    return view('admin.bookings', [
+        'bookings' => $bookings,
+        'canceledBookingsCount' => $canceledBookingsCount
     ]);
 
-    // Update status of selected bookings to 'Done'
-    Booking::whereIn('id', $request->bookings)
-        ->update(['status' => 'Done']);
-
-    return redirect()->route('admin.bookings')->with('success', 'Selected bookings marked as Done.');
 }
-
 }
-

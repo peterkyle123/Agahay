@@ -12,6 +12,7 @@ use App\Http\Controllers\GalleryController;
 
 
 
+Route::get('/booking31/{package_id}', [BookingController::class, 'showForm'])->name('frm');
 
 // Admin login route
 Route::post('/login1', function (Request $request) {
@@ -45,7 +46,9 @@ Route::get('/book', function () {
 Route::get('/booking', function () {
     return view('booking'); // Booking form page view
 })->name('booking');
-
+Route::get('/packages', function () {
+    return view('packages'); // Booking form page view
+})->name('packages');
 Route::get('/adminlogin', function () {
     return view('adminlogin'); // Admin login page view
 })->name('adminlogin');
@@ -56,7 +59,11 @@ Route::get('/dashboard', function () {
         return redirect()->route('adminlogin'); // Redirects to login page if no session
     }
     $bookingCount = Booking::count();
-    return view('dashboard', compact('bookingCount')); // Displays the dashboard with booking count
+    $bookings = Booking::all(); 
+
+    // Fetch only the count of canceled bookings
+    $canceledBookingsCount = Booking::where('status', 'Canceled')->count(); 
+    return view('dashboard', compact('bookingCount','canceledBookingsCount')); // Displays the dashboard with booking count
 })->name('dashboard');
 
 // Admin profile page route
@@ -71,7 +78,9 @@ Route::get('/adminprofile', function () {
 Route::delete('/admin/bookings', [BookingController::class, 'deleteBookings'])->name('admin.deleteBookings');
 
 // Package routes
-Route::get('/packages', [PackageController::class, 'show'])->name('packages');
+// Package listing page (shows available booking packages)
+Route::get('/book', [BookingController::class, 'showPackages'])->name('book');
+
 
 // Booking-related routes
 Route::get('/b00kings1', [BookingController::class, 'b00kings'])->name('b00kings1'); 
@@ -113,7 +122,11 @@ Route::get('/adminhome12', function () {
     session()->regenerateToken(); 
     return redirect()->route('adminhome');
 });
-
+// Route to handle clear out of tracking code
+Route::post('/clear-tracking-code', function() {
+    session()->forget('tracking_code');
+    return response()->json(['message' => 'Tracking code cleared']);
+})->name('clear.tracking.code');
 // Route to display booking data by tracking code
 Route::post('/trackbooking', [BookingController::class, 'trackBooking'])->name('trackbooking');
 
@@ -126,4 +139,8 @@ Route::get('/editgallery', [GalleryController::class, 'create'])->name('gallery.
 Route::post('gallery/store', [GalleryController::class, 'store'])->name('gallery.store');
 Route::delete('/gallery/delete-multiple', [GalleryController::class, 'destroyMultiple'])->name('gallery.destroyMultiple');
 Route::get('/gallerysection', [GalleryController::class, 'gallerysection'])->name('gallerysection');
+Route::get('/bookings/packages', [BookingController::class, 'showPackages'])->name('bookings.packages');
+Route::post('/bookform', [BookingController::class, 'store'])->name('bookform.store');
+
+
 

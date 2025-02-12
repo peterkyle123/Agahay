@@ -14,7 +14,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: 100vh;  
             background-color: #f4f4f4;
             background-image: url('{{asset('images/8.jpg')}}');
             background-size: cover;
@@ -127,7 +127,7 @@
     @csrf
 
     <div class="form-container">
-        <h1 class="form-title">Booking Form</h1>
+        <h1 class="form-title">Booking Form : {{ $packages->package_name }}</h1>
         @if($errors->any())
             <div>
                 <ul>
@@ -160,6 +160,8 @@
         <div class="input-container">
             <label for="checkout">Check-out Date</label>
             <input type="date" id="checkout" name="check_out_date" required class="input-field">
+            <input type="hidden" name="package_name" value="{{ $packages->package_name }}" required>
+
         </div>
         
      
@@ -174,21 +176,52 @@
             <textarea id="special_requests" name="special_request" class="input-field" placeholder="Any special requests?" rows="4"></textarea>
 
         </div>
-       @if(session('tracking_code'))
+        @if(session('tracking_code'))
     <div id="tracking-code-alert" class="tracking-code-alert">
         <strong>Screenshot or save Your Tracking Code: </strong>{{ session('tracking_code') }}
     </div>
-@endif
-
 
     <script>
-        // JavaScript to hide the tracking code alert after a short delay
-        window.onload = function() {
-            setTimeout(function() {
+        // Ensure the tracking code disappears after page refresh
+        window.addEventListener('load', function() {
+            if (performance.navigation.type === 1) { // 1 means the page was reloaded
                 document.getElementById('tracking-code-alert').style.display = 'none';
-            }, 7000); // Hides the alert after 7 seconds
-        };
+            }
+        });
     </script>
+@endif
+
+@if(session('tracking_code'))
+    <div id="tracking-code-alert" class="tracking-code-alert">
+        <strong>Screenshot or save Your Tracking Code: </strong>{{ session('tracking_code') }}
+    </div>
+
+    <script>
+        // Remove the tracking code after a few seconds (optional)
+        setTimeout(function() {
+            document.getElementById('tracking-code-alert').style.display = 'none';
+        }, 10000); // 10 seconds
+
+        // Remove tracking code from session via AJAX (to avoid it showing after refresh)
+        fetch("{{ route('clear.tracking.code') }}", {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({})
+        });
+    </script>
+@endif
+
+  
+
+
+        <button class="bg-gradient-to-r from-green-500 to-green-700 submit-btn full-width" type="submit">Submit Booking</button>
+   
+    </div>
+</form>
+
 
     <style>
         /* Overlay filter effect */
@@ -207,14 +240,15 @@
 
         /* Full-screen background filter */
         body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1; /* Ensure it stays behind the form */
-}
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none; /* This ensures it does not block inputs */
+        }
 
     </style>
     <script>
@@ -233,12 +267,5 @@
         }
     });
 </script>
-
-
-        <button class="bg-gradient-to-r from-green-500 to-green-700 submit-btn full-width" type="submit">Submit Booking</button>
-   
-    </div>
-</form>
-
 </body>
 </html>

@@ -9,17 +9,25 @@ class Package extends Model
 {
     use HasFactory;
 
-    // The attributes that are mass assignable
+    protected $table = 'packages'; // Ensure Laravel uses the correct table
+
+    protected $primaryKey = 'package_id'; // Set the correct primary key
+
+    public $incrementing = false; // If `package_id` is NOT an auto-incrementing integer
+
+    protected $keyType = 'string'; // Use 'integer' if it's a numeric ID
+
     protected $fillable = [
-        'slug',       // Unique identifier for the package
-        'package_name',       // Package name
-        'description', // Package description
-        'image',      // Package image
-        'price',      // Price of the package (optional)
+        'package_id',  // Ensure your primary key is included
+        'slug',
+        'package_name',
+        'description',
+        'image',
+        'price',
     ];
 
-    // If you want to cast certain attributes (like dates or prices)
     protected $casts = [
-        'price' => 'decimal:2',  // Example if you want to cast price as a decimal
+        'price' => 'decimal:2',
     ];
 }
+

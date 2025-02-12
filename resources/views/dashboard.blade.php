@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
-
+    @vite('resources/css/app.css')
+    @vite('resources/js/app.js')
     <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
@@ -183,10 +184,11 @@
         </div>
 
         <!-- Canceled Bookings -->
-        <div class="bg-gradient-green border-gradient rounded-xl w-4/12 p-6 card">
-            <p class="text-3xl text-green-900">Canceled <br><strong>Bookings</strong></p>
-            <p class="text-xl text-white mt-4">5</p> <!-- This count should reflect actual canceled bookings -->
-        </div>
+        <div class="bg-gradient-green border-gradient rounded-xl w-4/12 p-6 card"> 
+    <p class="text-3xl text-green-900">Canceled <br><strong>Bookings</strong></p>
+    <p class="text-xl text-white mt-4">{{ $canceledBookingsCount ?? 0 }}</p> <!-- Default to 0 if undefined -->
+</div>
+
     </div>
 </div>
 

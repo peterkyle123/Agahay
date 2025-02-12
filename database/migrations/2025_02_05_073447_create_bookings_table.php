@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('payment', 8, 2)->nullable();
             $table->integer('extra_pax')->default(0);
             $table->text('special_request')->nullable();
+            $table->foreignId('package_id')->constrained('packages')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -29,6 +30,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bookings');
+        Schema::table('bookings', function (Blueprint $table) {
+            $table->dropForeign(['package_id']);
+            $table->dropColumn('package_id');
+        });
     }
 };

@@ -48,6 +48,7 @@
                             <th class="px-4 py-2 text-left">Extra Pax</th>
                             <th class="px-4 py-2 text-left">Special Request</th>
                             <th class="px-4 py-2 text-left">Status</th>
+                            <th class="px-4 py-2 text-left">Category</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -63,9 +64,11 @@
                                 <td class="px-4 py-2 text-green-600">{{ $booking->phone }}</td>
                                 <td class="px-4 py-2">{{ $booking->extra_pax }}</td>
                                 <td class="px-4 py-2">{{ $booking->special_request ?? 'None' }}</td>
+        
                                 <td class="px-4 py-2">
                                     {{ $booking->status ?? 'Pending' }}
                                 </td>
+                                <td class="px-4 py-2">{{ $booking->package_name}}</td>
                             </tr>
                         @endforeach
                     </tbody>
