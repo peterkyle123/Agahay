@@ -11,11 +11,13 @@
     body {
         font-family: Arial, sans-serif;
         text-align: center;
-        background-color: #f4f4f4;
         margin: 0;
-        padding: 20px;
+        padding: 0; /* Remove default padding */
         background: url('{{ asset("images/Green.jpg") }}') no-repeat center center fixed;
         background-size: cover;
+        display: flex; /* Use flexbox for vertical centering */
+        flex-direction: column; /* Align items vertically */
+        min-height: 100vh; /* Ensure full viewport height */
     }
 
     .black {
@@ -23,7 +25,7 @@
     }
 
     .header {
-        background-color: transparent;
+        background: none; /* Light green gradient */
         color: white;
         padding: 16px;
         display: flex;
@@ -52,6 +54,11 @@
 
     .home-btn:hover {
         background-color: #e0e0e0;
+    }
+
+    .content-wrapper {  /* Added wrapper for content */
+        flex: 1; /* Allow content to take up available space */
+        padding: 20px; /* Add padding to content area */
     }
 
     .option-container {
@@ -113,26 +120,17 @@
     <a href="/" class="home-btn">Back</a>
 </header>
 
-<div class="option-container">
-    @foreach ($packages as $package)
+<div class="content-wrapper"> <div class="option-container">  @foreach ($packages as $package)
     <a href="{{ route('frm', ['package_id' => $package->package_id]) }}"
- 
-           class="option" 
-           style="background-image: url('{{ asset($package->image) }}');">
-            <div class="option-text">{{ $package->package_name }}</div>
-            <div class="description-text">
-                {{ $package->description }} <br>
-                <strong>₱{{ number_format($package->price, 2) }}</strong> | 
-                {{ $package->number_of_days }} days | 
-                Up to {{ $package->number_of_guests }} guests
-            </div>
-        </a>
+        class="option" 
+        style="background-image: url('{{ asset($package->image) }}');">
+        <div class="option-text">{{ $package->package_name }}</div>
+        <div class="description-text">
+            {{ $package->description }} <br>
+            <strong>₱{{ number_format($package->price, 2) }}</strong> | 
+            Up to {{ $package->number_of_guests }} guests
+        </div>
+    </a>
     @endforeach
-</div>
-
-
-
-
-
-</body>
+</div> </div> </body>
 </html>

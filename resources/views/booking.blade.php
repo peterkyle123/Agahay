@@ -35,7 +35,7 @@
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: flex-start;
-            margin-top: 110px;
+            margin-top: 100px;
             position: absolute;
             top: 50%;
             left: 50%;
@@ -118,10 +118,10 @@
 </head>
 <body>
 <div class="absolute top-4 left-4 flex space-x-4">
-    <button class="bg-gradient-to-r from-green-500 to-green-700 text-white text-xl md:text-2xl font-medium px-3 md:px-4 py-2 rounded shadow">
+    <button class="bg-white text-green-700 px-4 py-2 rounded-md font-semibold mr-5 shadow-sm hover:bg-gray-100 transition-colors duration-300 ease-in-out">
         <a href="/">Home</a>
     </button>
-    <button class="bg-gradient-to-r from-green-500 to-green-700 text-white text-xl md:text-2xl font-medium px-3 md:px-4 py-2 rounded shadow">
+    <button class="bg-white text-green-700 px-4 py-2 rounded-md font-semibold mr-5 shadow-sm hover:bg-gray-100 transition-colors duration-300 ease-in-out">
         <a href="{{ route('book') }}">Back</a>
     </button>
 </div>

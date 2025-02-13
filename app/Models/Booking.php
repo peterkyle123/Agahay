@@ -19,7 +19,8 @@ class Booking extends Model
         'payment',
         'extra_pax',        // Add this
         'special_request',
-        'tracking_code',   // Add this
+        'tracking_code',  
+        // Add this
     ];
 }
 
