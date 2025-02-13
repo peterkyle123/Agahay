@@ -132,6 +132,10 @@
                         <span class="material-icons-outlined float-left pr-2">settings</span> Gallery
                         <span class="material-icons-outlined float-right">keyboard_arrow_right</span>
                     </a>
+                    <a href="reviews" class="inline-block text-green-600 hover:text-green-800 my-4 w-full">
+                        <span class="material-icons-outlined float-left pr-2">settings</span>Reviews
+                        <span class="material-icons-outlined float-right">keyboard_arrow_right</span>
+                    </a>
                     <a href="adminlogout" class="inline-block text-green-600 hover:text-green-800 my-4 w-full">
                         <span class="material-icons-outlined float-left pr-2">power_settings_new</span> Log out
                         <span class="material-icons-outlined float-right">keyboard_arrow_right</span>
@@ -186,9 +190,8 @@
         <!-- Canceled Bookings -->
         <div class="bg-gradient-green border-gradient rounded-xl w-4/12 p-6 card"> 
     <p class="text-3xl text-green-900">Canceled <br><strong>Bookings</strong></p>
-    <p class="text-xl text-white mt-4">{{ $canceledBookingsCount ?? 0 }}</p> <!-- Default to 0 if undefined -->
-</div>
-
+    <p class="text-xl text-white mt-4">{{ $canceledBookingsCount }}</p> <!-- Displays actual canceled bookings count -->
+        </div>
     </div>
 </div>
 

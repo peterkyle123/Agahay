@@ -72,37 +72,53 @@
             </div>
         </div>
     </section>
-
-    <!-- Contact Us -->
+<!-- REVIEW SECTION -->
     <section id="contact" class="py-20 bg-gradient-to-b from-green-50 to-white">
-        <div class="max-w-4xl mx-auto text-center px-4">
-            <h2 class="mt-4 text-3xl sm:text-4xl font-semibold text-green-700">Get In Touch</h2>
-            <p class="mt-4 text-base sm:text-lg text-gray-700 leading-relaxed">
-                Have any questions? Feel free to reach out to us, and we’ll be happy to assist you.
-            </p>
-            <form class="mt-8 space-y-4">
-    <input type="text" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-    <input type="email" placeholder="Your Email" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-    <textarea rows="4" placeholder="Your Message" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"></textarea>
+    <div class="max-w-4xl mx-auto text-center px-4">
+        <h2 class="mt-4 text-3xl sm:text-4xl font-semibold text-green-700">Get In Touch</h2>
+        <p class="mt-4 text-base sm:text-lg text-gray-700 leading-relaxed">
+            Have any questions? Feel free to reach out to us, and we’ll be happy to assist you.
+        </p>
 
-    <!-- Star Rating Section -->
-    <div class="flex items-center space-x-2">
-        <span class="text-gray-700">Rate Us:</span>
-        <div class="flex space-x-1">
-            <button type="button" class="star text-gray-400 text-2xl" data-value="1">★</button>
-            <button type="button" class="star text-gray-400 text-2xl" data-value="2">★</button>
-            <button type="button" class="star text-gray-400 text-2xl" data-value="3">★</button>
-            <button type="button" class="star text-gray-400 text-2xl" data-value="4">★</button>
-            <button type="button" class="star text-gray-400 text-2xl" data-value="5">★</button>
-        </div>
-        <input type="hidden" name="rating" id="rating">
+        @if(session('success'))
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                <strong class="font-bold">Success!</strong>
+                <span class="block sm:inline">{{ session('success') }}</span>
+            </div>
+        @endif
+        @if($errors->any())
+            <div>
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{$error}}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        <form action="{{ route('reviews.store') }}" method="POST" class="mt-8 space-y-4">
+            @csrf  
+            <input type="text" name="name" placeholder="Your Name" required class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+
+            <input type="email" name="email" placeholder="Your Email (Optional)" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+
+            <textarea name="message" rows="4" placeholder="Your Message" required class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"></textarea>
+
+            <div class="flex items-center space-x-2">
+                <span class="text-gray-700">Rate Us:</span>
+                <div class="flex space-x-1">
+                    @for ($i = 1; $i <= 5; $i++)
+                        <button type="button" class="star text-gray-400 text-2xl" data-value="{{ $i }}">★</button>
+                    @endfor
+                </div>
+                <input type="hidden" name="rating" id="rating" required>  </div>
+
+            <button type="submit" class="w-full p-3 bg-gradient-to-r from-green-500 to-green-700 text-white font-semibold rounded-lg shadow-md hover:from-green-600 hover:to-green-800 transition duration-300">
+                Send Message
+            </button>
+        </form>
     </div>
-
-    <button type="submit" class="w-full p-3 bg-gradient-to-r from-green-500 to-green-700 text-white font-semibold rounded-lg shadow-md hover:from-green-600 hover:to-green-800 transition duration-300">
-        Send Message
-    </button>
-</form>
-
+</section>
+<!-- STARS -->
 <script>
     const stars = document.querySelectorAll('.star');
     const ratingInput = document.getElementById('rating');
@@ -118,10 +134,6 @@
         });
     });
 </script>
-
-        </div>
-    </section>
-
     <!-- Footer -->
     <footer class="bg-gradient-to-r from-green-500 to-green-700 text-white text-center py-6">
         <p>&copy; 2025 Agahay Guesthouse. All Rights Reserved.</p>

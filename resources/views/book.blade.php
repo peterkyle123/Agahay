@@ -110,7 +110,6 @@
 </style>
 
 <header class="header">
-    <h1>Booking Options</h1>
     <a href="/" class="home-btn">Back</a>
 </header>
 

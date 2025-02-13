@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Admin;
 use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\ReviewController;
 
 
 
@@ -110,6 +111,10 @@ Route::get('/adminlogout', function () {
     return view('adminlogout'); // Admin logout page view
 })->name('adminlogout');
 
+Route::get('/viewreviews', function () {
+    return view('viewreviews'); // Admin logout page view
+})->name('viewreviews');
+
 // Admin home page route
 Route::get('/adminhome', function () {
     return view('adminhome'); // Admin home page view
@@ -141,6 +146,8 @@ Route::delete('/gallery/delete-multiple', [GalleryController::class, 'destroyMul
 Route::get('/gallerysection', [GalleryController::class, 'gallerysection'])->name('gallerysection');
 Route::get('/bookings/packages', [BookingController::class, 'showPackages'])->name('bookings.packages');
 Route::post('/bookform', [BookingController::class, 'store'])->name('bookform.store');
-
+Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
+Route::get('/reviews', [ReviewController::class, 'reviews'])->name('reviews.index'); //If you have an index page
 
 

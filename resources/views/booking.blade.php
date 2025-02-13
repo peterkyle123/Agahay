@@ -17,11 +17,13 @@
             height: 100vh;  
             background-color: #f4f4f4;
             background-image: url('{{asset('images/8.jpg')}}');
-            background-size: cover;
+             background-size: cover;
             background-position: center;
             overflow-y: auto;
+
         }
 
+        /* Centering form container */
         .form-container {
             background-color: rgba(255, 255, 255, 0.8);
             padding: 30px;
@@ -33,7 +35,11 @@
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: flex-start;
-            margin-top: 120px;
+            margin-top: 110px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
         .form-title {
@@ -182,21 +188,22 @@
     </div>
 
     <script>
-        // Ensure the tracking code disappears after page refresh
-        window.addEventListener('load', function() {
-            if (performance.navigation.type === 1) { // 1 means the page was reloaded
-                document.getElementById('tracking-code-alert').style.display = 'none';
-            }
+        window.addEventListener('DOMContentLoaded', () => { // Use DOMContentLoaded
+            const trackingCodeAlert = document.getElementById('tracking-code-alert');
+            setTimeout(() => {
+                trackingCodeAlert.style.display = 'none';
+            }, 10000); // 10 seconds
+
+            fetch("{{ route('clear.tracking.code') }}", {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({})
+            });
         });
-    </script>
-@endif
-
-@if(session('tracking_code'))
-    <div id="tracking-code-alert" class="tracking-code-alert">
-        <strong>Screenshot or save Your Tracking Code: </strong>{{ session('tracking_code') }}
-    </div>
-
-    <script>
+   
         // Remove the tracking code after a few seconds (optional)
         setTimeout(function() {
             document.getElementById('tracking-code-alert').style.display = 'none';

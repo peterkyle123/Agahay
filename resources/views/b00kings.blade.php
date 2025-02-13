@@ -8,7 +8,7 @@
     @vite('resources/js/app.js')
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-green-100">
+<body class="bg-green-100"> 
     <div class="min-h-screen p-6">
         <header class="bg-gradient-to-r from-green-500 to-green-700 text-white font-bold text-2xl p-4 rounded-xl mb-6 flex justify-between items-center">
             <span class="text-white">Bookings</span>
@@ -44,6 +44,7 @@
                             <th class="px-4 py-2 text-left">Customer Name</th>
                             <th class="px-4 py-2 text-left">Check-in Date</th>
                             <th class="px-4 py-2 text-left">Check-out Date</th>
+                            <th class="px-4 py-2 text-left">Days Staying</th>
                             <th class="px-4 py-2 text-left">Phone</th>
                             <th class="px-4 py-2 text-left">Extra Pax</th>
                             <th class="px-4 py-2 text-left">Special Request</th>
@@ -53,7 +54,6 @@
                     </thead>
                     <tbody>
                         @foreach ($bookings as $booking)
-                            <tr>
                                 <td class="px-4 py-2">
                                     <input type="checkbox" name="bookings[]" value="{{ $booking->id }}" class="booking-checkbox">
                                 </td>
@@ -61,10 +61,10 @@
                                 <td class="px-4 py-2">{{ $booking->customer_name }}</td>
                                 <td class="px-4 py-2">{{ $booking->check_in_date }}</td>
                                 <td class="px-4 py-2">{{ $booking->check_out_date }}</td>
+                                <td class="px-4 py-2 text-center"> {{ $booking->days_staying }} </td> 
                                 <td class="px-4 py-2 text-green-600">{{ $booking->phone }}</td>
                                 <td class="px-4 py-2">{{ $booking->extra_pax }}</td>
                                 <td class="px-4 py-2">{{ $booking->special_request ?? 'None' }}</td>
-        
                                 <td class="px-4 py-2">
                                     {{ $booking->status ?? 'Pending' }}
                                 </td>

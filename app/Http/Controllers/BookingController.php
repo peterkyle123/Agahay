@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Models\Package;
-
+use Carbon\Carbon; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -36,8 +36,20 @@ class BookingController extends Controller
            if (!session()->has('admin')) {
         return redirect()->route('adminlogin'); // Redirects to login page if no session
     }
-        $bookings = Booking::all();
 
+    
+        $bookings = Booking::all();
+        // Sort by check-in date, newest first
+    $bookings = $bookings->sortByDesc('check_in_date'); // Key change
+
+ // Calculate "Number of Days Staying" for each booking
+ foreach ($bookings as $booking) {
+    $checkInDate = Carbon::parse($booking->check_in_date);
+    $checkOutDate = Carbon::parse($booking->check_out_date);
+
+    $booking->days_staying = $checkInDate->diffInDays($checkOutDate); // Calculate the difference in days
+
+}
         // Return the view with the bookings data
         return view('b00kings', compact('bookings'));
     }
@@ -89,13 +101,14 @@ class BookingController extends Controller
     // Find the booking by the tracking code
     $booking = Booking::where('tracking_code', $request->tracking_code)->first();
 
-    if ($booking->status == "Canceled") {
-        // If a booking is found, return it to the view
-       
-        return back()->withErrors(['tracking_code' => 'No booking found for this tracking code.']);
+    if ($booking) { // Check if a booking EXISTS first
+        if ($booking->status == "Canceled" || $booking->status == "Done") {
+            return back()->withErrors(['tracking_code' => 'Booking is ' . strtolower($booking->status) . '.']); // More informative message
+        } else {
+            return view('trackbooking', compact('booking')); // Booking found and not canceled/done
+        }
     } else {
-        // If no booking is found, return with an error
-        return view('trackbooking', compact('booking'));
+        return back()->withErrors(['tracking_code' => 'No booking found for this tracking code.']); // No booking at all
     }
 }
 public function showBookingPage()
@@ -146,6 +159,17 @@ public function showBookings()
         'bookings' => $bookings,
         'canceledBookingsCount' => $canceledBookingsCount
     ]);
+     // Calculate "Number of Days Staying" for each booking
+     foreach ($bookings as $booking) {
+        $checkInDate = Carbon::parse($booking->check_in_date);
+        $checkOutDate = Carbon::parse($booking->check_out_date);
+
+        $booking->days_staying = $checkOutDate->diffInDays($checkInDate); // Calculate the difference in days
+
+    }
+
+    return view('b00kings', compact('bookings'));
+}
 
 }
-}
+

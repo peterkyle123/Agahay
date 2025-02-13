@@ -25,18 +25,26 @@
         }
         .gallery-container {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Larger images on PC */
             gap: 16px;
             width: 100%;
-            max-width: 1200px;
+            max-width: 1400px;
             margin-top: 16px;
         }
         .gallery-item img {
             width: 100%;
-            height: 200px;
-            object-cover: cover;
+            height: 300px; /* Larger height for PC */
+            object-fit: cover;
             border-radius: 8px;
             cursor: pointer;
+        }
+        @media (max-width: 768px) {
+            .gallery-container {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+            .gallery-item img {
+                height: 150px; /* Smaller height for mobile */
+            }
         }
     </style>
 </head>
