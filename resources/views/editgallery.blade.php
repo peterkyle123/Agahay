@@ -120,7 +120,7 @@
     </style>
 </head>
 <body>
-<header class="bg-gradient-to-r from-green-500 to-green-700 text-white font-bold text-2xl p-6 rounded-xl mb-6 w-full flex justify-between items-center">
+<header class="bg-gradient-to-r from-green-500 to-green-800 text-white font-bold text-2xl p-4 rounded-xl mb-6 w-full flex justify-between items-center">
     <span class="text-white">Bookings</span>
     <a href="dashboard" class="bg-white text-green-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition text-sm sm:text-base">
         Home

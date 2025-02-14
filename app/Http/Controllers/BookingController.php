@@ -10,19 +10,31 @@ use Illuminate\Support\Str;
 class BookingController extends Controller
 {
     
-    public function deleteBookings(Request $request)
-    {
-        $bookingIds = $request->input('bookings'); // Array of selected booking IDs
+  public function deleteBookings(Request $request)
+{
+    $bookingIds = $request->input('bookings'); // Array of selected booking IDs
+
+    if ($bookingIds) {
+        // Retrieve only the bookings with 'Done' or 'Canceled' status from selected IDs
+        $validBookingIds = Booking::whereIn('id', $bookingIds)
+            ->whereIn('status', ['Done', 'Canceled'])
+            ->pluck('id'); // Get only valid IDs
     
-        if ($bookingIds) {
-            // Delete selected bookings
-            Booking::whereIn('id', $bookingIds)->delete();
-    
-            return redirect()->back()->with('success', 'SUCCESFULLY DELETED');
+        if ($validBookingIds->isEmpty()) {
+            return redirect()->back()->with('error', 'Pending bookings cannot be deleted.');
         }
     
-        return redirect()->back()->with('error', 'error');
-    }  
+        // Now safely delete only the filtered valid bookings
+        Booking::whereIn('id', $validBookingIds)->delete();
+    
+        return redirect()->back()->with('success', 'Successfully deleted only Done and Canceled bookings.');
+    }
+    
+    return redirect()->back()->with('error', 'No valid bookings selected for deletion.');
+    
+    
+}
+
     //
     public function index()
     {

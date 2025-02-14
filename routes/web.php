@@ -115,15 +115,19 @@ Route::get('/viewreviews', function () {
     return view('viewreviews'); // Admin logout page view
 })->name('viewreviews');
 
-Route::get('/revenues', function () {
-    return view('revenues'); // Admin logout page view
-})->name('revenues');
+// Route::get('/revenues', function () {
+//     return view('revenues'); // Admin logout page view
+// })->name('revenues');
 
 
 // Admin home page route
 Route::get('/adminhome', function () {
     return view('adminhome'); // Admin home page view
 })->name('adminhome');
+
+Route::get('/archives', function () {
+    return view('archives'); 
+})->name('archives');
 
 // Admin logout and session invalidate route
 Route::get('/adminhome12', function () {
@@ -154,5 +158,7 @@ Route::post('/bookform', [BookingController::class, 'store'])->name('bookform.st
 Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
 Route::get('/reviews', [ReviewController::class, 'reviews'])->name('reviews.index'); //If you have an index page
-Route::get('/revenue-data', [RevenueController::class, 'getRevenueData']);
+// Route::get('/revenue-data', [RevenueController::class, 'getRevenueData']);
+Route::get('/archives', [AdminController::class, 'archivedBookings'])->name('admin.archivedBookings');
+Route::delete('/admin/bookings/archives/{id}', [AdminController::class, 'deleteArchivedBooking'])->name('admin.deleteArchivedBooking');
 

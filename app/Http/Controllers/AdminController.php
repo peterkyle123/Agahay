@@ -19,18 +19,56 @@ class AdminController extends Controller
     $action = $request->input('action');
 
     if ($action === 'done') {
-        // Update selected bookings' status to "Done"
-        Booking::whereIn('id', $request->bookings)->update(['status' => 'Done']);
-        return redirect()->back()->with('success', 'Selected bookings marked as Done');
-    }
+        // Only update "Pending" bookings to "Done" (Prevent "Canceled" bookings from being updated)
+        $updated = Booking::whereIn('id', $request->bookings)
+            ->where('status', 'Pending') // Allow only Pending bookings
+            ->update(['status' => 'Done']);
 
-    if ($action === 'delete') {
-        // Delete selected bookings
-        Booking::whereIn('id', $request->bookings)->delete();
-        return redirect()->back()->with('success', 'Selected bookings deleted');
+        if ($updated) {
+            return redirect()->back()->with('success', 'Selected bookings marked as Done.');
+        } else {
+            return redirect()->back()->with('error', 'Only Pending bookings can be marked as Done.');
+        }
     }
+    if ($action === 'delete') {
+        // Retrieve only bookings with 'Done' or 'Canceled' status
+        $validBookingIds = Booking::whereIn('id', $request->bookings)
+            ->whereIn('status', ['Canceled'])
+            ->pluck('id') // Get only valid IDs
+            ->toArray(); // Convert to array
+    
+        if (empty($validBookingIds)) {
+            return redirect()->back()->with('error', 'No valid bookings selected for deletion. Only Canceled bookings can be deleted.');
+        }
+    
+        // Delete only the valid bookings (Done and Canceled)
+        Booking::whereIn('id', $validBookingIds)->delete();
+    
+        return redirect()->back()->with('success', 'Successfully deleted Canceled bookings.');
+    }
+    
 
     return redirect()->back()->with('error', 'Invalid action');
+}
+public function archivedBookings()
+{
+    // Fetch only completed bookings with "Done" status
+    $archivedBookings = Booking::where('status', 'Done')->get();
+
+    return view('archives', compact('archivedBookings'));
+}
+public function deleteArchivedBooking($id)
+{
+    // Find the booking by ID and ensure it's "Done" before deletion
+    $booking = Booking::where('id', $id)->where('status', 'Done')->first();
+
+    if (!$booking) {
+        return redirect()->back()->with('error', 'Only completed bookings can be deleted.');
+    }
+
+    $booking->delete();
+
+    return redirect()->back()->with('success', 'Booking permanently deleted.');
 }
 
 }

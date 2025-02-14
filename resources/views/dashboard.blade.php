@@ -133,13 +133,21 @@
                         <span class="material-icons-outlined float-right">keyboard_arrow_right</span>
                     </a>
                     <a href="reviews" class="inline-block text-green-600 hover:text-green-800 my-4 w-full">
-                        <span class="material-icons-outlined float-left pr-2">settings</span>Reviews
+                        <span class="material-icons-outlined float-left pr-2">inventory_2</span>Reviews
                         <span class="material-icons-outlined float-right">keyboard_arrow_right</span>
                     </a>
+
+                    <a href="archives" class="inline-block text-green-600 hover:text-green-800 my-4 w-full">
+                        <span class="material-icons-outlined float-left pr-2">archive</span> Archives
+                        <span class="material-icons-outlined float-right">keyboard_arrow_right</span>
+                    </a>
+
                     <a href="adminlogout" class="inline-block text-green-600 hover:text-green-800 my-4 w-full">
                         <span class="material-icons-outlined float-left pr-2">power_settings_new</span> Log out
                         <span class="material-icons-outlined float-right">keyboard_arrow_right</span>
                     </a>
+
+                   
                 </div>
             </div>
 
