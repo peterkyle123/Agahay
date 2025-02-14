@@ -21,7 +21,7 @@
         </header>
 
         <div class="bg-white rounded-xl shadow-lg p-6">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">List of Completed Bookings (Archived)</h2>
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">List of Completed Bookings (Done)</h2>
             
             @if(session('success'))
                 <div class="bg-green-200 text-green-800 p-2 rounded-lg mb-4">
@@ -47,6 +47,7 @@
                         <th class="px-4 py-2 text-left">Check-out Date</th>
                         <th class="px-4 py-2 text-left">Phone</th>
                         <th class="px-4 py-2 text-left">Status</th>
+                        <th class="px-4 py-2 text-left">Category</th>
                         <th class="px-4 py-2 text-center">Action</th>
                     </tr>
                 </thead>
@@ -59,6 +60,7 @@
                             <td class="px-4 py-2">{{ $booking->check_out_date }}</td>
                             <td class="px-4 py-2 text-gray-600">{{ $booking->phone }}</td>
                             <td class="px-4 py-2 text-green-600 font-bold">{{ $booking->status }}</td>
+                            <td class="px-4 py-2 font-bold">{{ $booking->package_name }}</td>
                             <td class="px-4 py-2 text-center">
                                 <!-- Delete Button -->
                                 <form action="{{ route('admin.deleteArchivedBooking', $booking->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this booking permanently?');">

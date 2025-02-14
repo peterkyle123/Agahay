@@ -27,7 +27,7 @@
                 <label class="block font-semibold mb-1">Package Name</label>
                 <input type="text" name="name" value="{{ $packages->package_name }}" class="w-full border p-2 rounded" required>
             </div>
-
+    
             <div class="mb-4">
                 <label class="block font-semibold mb-1">Base Price (₱)</label>
                 <input type="number" name="base_price" value="{{ $bookings->package_price }}" class="w-full border p-2 rounded" required>

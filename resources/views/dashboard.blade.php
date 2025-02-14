@@ -197,7 +197,7 @@
 
         <!-- Canceled Bookings -->
         <div class="bg-gradient-green border-gradient rounded-xl w-4/12 p-6 card"> 
-    <p class="text-3xl text-green-900">Canceled <br><strong>Bookings</strong></p>
+    <p class="text-3xl text-green-900">Cancelled <br><strong>Bookings</strong></p>
     <p class="text-xl text-white mt-4">{{ $canceledBookingsCount }}</p> <!-- Displays actual canceled bookings count -->
         </div>
     </div>

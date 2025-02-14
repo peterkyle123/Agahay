@@ -119,6 +119,12 @@ Route::get('/viewreviews', function () {
 //     return view('revenues'); // Admin logout page view
 // })->name('revenues');
 
+Route::get('/editpackages', function () {
+       $packages = Package::all();
+    return view('editpackages'); 
+})->name('editpackages');
+
+
 
 // Admin home page route
 Route::get('/adminhome', function () {
@@ -161,4 +167,5 @@ Route::get('/reviews', [ReviewController::class, 'reviews'])->name('reviews.inde
 // Route::get('/revenue-data', [RevenueController::class, 'getRevenueData']);
 Route::get('/archives', [AdminController::class, 'archivedBookings'])->name('admin.archivedBookings');
 Route::delete('/admin/bookings/archives/{id}', [AdminController::class, 'deleteArchivedBooking'])->name('admin.deleteArchivedBooking');
-
+Route::get('/admin/packages/{id}/edit', [AdminController::class, 'editPackage'])->name('admin.editPackage');
+Route::put('/editpackages{id}', [AdminController::class, 'updatePackage'])->name('admin.updatePackage');

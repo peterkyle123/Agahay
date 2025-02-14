@@ -15,23 +15,19 @@ class BookingController extends Controller
     $bookingIds = $request->input('bookings'); // Array of selected booking IDs
 
     if ($bookingIds) {
-        // Retrieve only the bookings with 'Done' or 'Canceled' status from selected IDs
-        $validBookingIds = Booking::whereIn('id', $bookingIds)
-            ->whereIn('status', ['Done', 'Canceled'])
-            ->pluck('id'); // Get only valid IDs
+        // Filter out only bookings that are 'Done' or 'Canceled' (Prevent 'Pending' from deletion)
+        $deleted = Booking::whereIn('id', $bookingIds)
+            ->whereIn('status', ['Canceled'])
+            ->delete();
     
-        if ($validBookingIds->isEmpty()) {
-            return redirect()->back()->with('error', 'Pending bookings cannot be deleted.');
+        if ($deleted) {
+            return redirect()->back()->with('success', 'Successfully deleted Canceled bookings.');
+        } else {
+            return redirect()->back()->with('error', 'Pending and Done bookings cannot be deleted.');
         }
-    
-        // Now safely delete only the filtered valid bookings
-        Booking::whereIn('id', $validBookingIds)->delete();
-    
-        return redirect()->back()->with('success', 'Successfully deleted only Done and Canceled bookings.');
     }
     
     return redirect()->back()->with('error', 'No valid bookings selected for deletion.');
-    
     
 }
 
@@ -150,6 +146,7 @@ public function cancel($bookingId)
 public function showPackages() {
     $packages = Package::all(); // Retrieve all available packages
     return view('book', compact('packages'));
+    
 }
 
 public function showForm($package_id) {

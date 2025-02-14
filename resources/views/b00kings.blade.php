@@ -76,7 +76,9 @@
                                 <td class="px-4 py-2 text-center"> {{ $booking->days_staying }} </td> 
                                 <td class="px-4 py-2 text-green-600">{{ $booking->phone }}</td>
                                 <td class="px-4 py-2">{{ $booking->extra_pax }}</td>
-                                <td class="px-4 py-2">{{ $booking->special_request ?? 'None' }}</td>
+                                <td class="px-4 py-2 text-left whitespace-normal break-words max-w-xs">
+                                    <p class="block">{{ $booking->special_request ?? 'None' }}</p>
+                                </td>
                                 <td class="px-4 py-2">
                                     {{ $booking->status ?? 'Pending' }}
                                 </td>
@@ -90,7 +92,7 @@
                 <div class="mt-4 flex justify-end space-x-4">
                     <!-- Delete Button -->
                     <button type="submit" name="action" value="delete" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-800">
-                        Delete Selected Bookings
+                        Delete Cancelled Bookings
                     </button>
 
                     <!-- Done Button -->
