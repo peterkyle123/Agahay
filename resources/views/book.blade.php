@@ -121,16 +121,20 @@
 </header>
 
 <div class="content-wrapper"> <div class="option-container">  @foreach ($packages as $package)
-    <a href="{{ route('frm', ['package_id' => $package->package_id]) }}"
-        class="option" 
-        style="background-image: url('{{ asset($package->image) }}');">
-        <div class="option-text">{{ $package->package_name }}</div>
-        <div class="description-text">
-            {{ $package->description }} <br>
-            <strong>₱{{ number_format($package->price, 2) }}</strong> | 
-            Up to {{ $package->number_of_guests }} guests
-        </div>
-    </a>
+<a href="{{ route('frm', ['package_id' => $package->package_id]) }}"
+    class="option" 
+    style="background-image: url('{{ asset($package->image) }}');">
+    
+    <div class="option-text">{{ $package->package_name }}</div>
+    
+    <div class="description-text">
+        {{ $package->description }} <br>
+        <strong>₱{{ number_format($package->price, 2) }}</strong> | 
+        Up to {{ $package->number_of_guest }} guests <br>
+        <span style="color: red;">Extra Pax: ₱{{ number_format($package->extra_pax_price, 2) }} per person</span>
+    </div>
+</a>
+
     @endforeach
 </div> </div> </body>
 </html>
