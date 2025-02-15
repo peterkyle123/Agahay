@@ -9,9 +9,13 @@
 </head>
 <body class="bg-gradient-to-b from-green-50 to-green-100 min-h-screen">
 
-    <div class="container mx-auto p-4 md:p-8">  <div class="flex flex-col md:flex-row justify-between items-center mb-4 md:mb-6"> <a href="/dashboard" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded md:order-first"> Back
-            </a>
-            <h1 class="text-2xl md:text-3xl font-bold text-green-700 text-center md:text-left">User Reviews</h1> </div>
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-green-500 to-green-800 text-white text-xl font-bold p-4 rounded-lg w-full flex justify-between items-center">
+        <span>Reviews</span>
+        <a href="/dashboard" class="bg-white text-green-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition mr-2 sm:mr-4 text-sm sm:text-base">
+            Home
+        </a>
+    </header>
 
         @if(session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
@@ -26,7 +30,7 @@
                         <th scope="col" class="px-3 py-2 md:px-6 md:py-3 text-left text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wider">Email</th>
                         <th scope="col" class="px-3 py-2 md:px-6 md:py-3 text-left text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wider">Rating</th>
                         <th scope="col" class="px-3 py-2 md:px-6 md:py-3 text-left text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wider">Message</th>
-                        <th scope="col" class="px-3 py-2 md:px-6 md:py-3 text-left text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        <th scope="col" class="px-3 py-2 md:px-6 md:py-3 text-right text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
                 <tbody>

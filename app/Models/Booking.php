@@ -22,5 +22,10 @@ class Booking extends Model
         'tracking_code',  
         // Add this
     ];
+    public function package()
+    {
+        return $this->belongsTo(Package::class, 'package_id', 'package_id'); 
+    }
 }
+
 

@@ -146,7 +146,8 @@ public function cancel($bookingId)
 public function showPackages() {
 
     $packages = Package::all(); // Retrieve all available packages
-    return view('book', compact('packages'));   
+    return view('book', compact('packages')); 
+      
 }
 
 public function showForm($package_id) {

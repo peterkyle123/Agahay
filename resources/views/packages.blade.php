@@ -11,10 +11,8 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-color: #f4f4f4;
             margin: 0;
             padding: 20px;
-            background: url('{{ asset("images/GR.jpg") }}') no-repeat center center fixed;
             background-size: cover;
         }
 
@@ -115,10 +113,14 @@
         }
     </style>
 </head>
-<body>
-
-    <h1 class="black">Booking Options</h1>
-
+<body class="bg-green-100">
+            <!-- Header -->
+    <header class="bg-gradient-to-r from-green-500 to-green-800 text-white text-xl font-bold p-4 rounded-lg w-full flex justify-between items-center">
+        <span>Packages</span>
+        <a href="/dashboard" class="bg-white text-green-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition mr-2 sm:mr-4 text-sm sm:text-base">
+            Home
+        </a>
+    </header>
     <div class="option-container">
         <!-- Small Group Booking -->
         @foreach ($packages as $package)

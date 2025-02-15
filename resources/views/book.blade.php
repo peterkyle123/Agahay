@@ -131,7 +131,7 @@
     <div class="description-text">
         {{ $package->description }} <br>
         <strong>₱{{ number_format($package->price, 2) }}</strong> | 
-        Up to {{ $package->number_of_guest }} guests <br>
+        Up to {{ $package->number_of_guests }} guests <br>
         <span style="color: red;">Extra Pax: ₱{{ number_format($package->extra_pax_price, 2) }} per person</span>
     </div>
 </a>

@@ -10,7 +10,6 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #a8e6a3, #d4f5c5);
             color: #333;
             margin: 0;
             padding: 20px;
@@ -120,7 +119,7 @@
         }
     </style>
 </head>
-<body>
+<body class="bg-green-100">
 <header class="bg-gradient-to-r from-green-500 to-green-800 text-white font-bold text-2xl p-4 rounded-xl mb-6 w-full flex justify-between items-center">
     <span class="text-white">Bookings</span>
     <a href="dashboard" class="bg-white text-green-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition text-sm sm:text-base">

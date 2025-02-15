@@ -13,10 +13,17 @@
 
     <!-- Header -->
     <header class="bg-green-700 text-white text-xl font-bold p-4 rounded-lg w-full flex justify-between items-center">
-        <span>Gallery</span>
-        <a href="/dashboard" class="bg-white text-green-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition mr-2 sm:mr-4 text-sm sm:text-base">
+        <span>Packages</span>
+        <div> <a href="/dashboard" class="bg-white text-green-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition mr-2 sm:mr-4 text-sm sm:text-base">
             Home
         </a>
+        <a href="/packages" class="bg-white text-green-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition mr-2 sm:mr-4 text-sm sm:text-base">
+           Back
+        </a>
+        </div>
+       
+    
+
     </header>
  <!-- Main Container -->
  <div class="flex-grow flex items-center justify-center w-full">
@@ -46,6 +53,18 @@
     <div class="mb-4">
         <label class="block font-semibold mb-1">Package Name</label>
         <input type="text" name="package_name" value="{{ $packages->package_name }}" 
+               class="w-full border p-2 rounded" required>
+    </div>
+    <!-- Description -->
+    <div class="mb-4">
+        <label class="block font-semibold mb-1">Description</label>
+        <input type="text" name="description" value="{{ $packages->description }}" 
+               class="w-full border p-2 rounded" required>
+    </div>
+    <!-- Number of Persons -->
+    <div class="mb-4">
+        <label class="block font-semibold mb-1">Number of Persons</label>
+        <input type="text" name="number_of_guests" value="{{ $packages->number_of_guests }}" 
                class="w-full border p-2 rounded" required>
     </div>
 
@@ -83,7 +102,6 @@
 
     <!-- Submit & Cancel Buttons -->
     <div class="mt-6 flex justify-between">
-        <a href="/admin/packages" class="px-4 py-2 bg-gray-500 text-white rounded">Cancel</a>
         <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Save Changes</button>
     </div>
 </form>

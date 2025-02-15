@@ -50,6 +50,8 @@ class PackageController extends Controller
             'number_of_days' => 'required|integer|min:1',
             'extra_pax_price' => 'required|numeric|min:0',
             'per_day_price' => 'required|numeric|min:0',
+            'description' => 'required|string|max:255',
+            'number_of_guests' => 'required|integer|min:2',
         ]);
 
         // Find the package by ID
@@ -61,7 +63,8 @@ class PackageController extends Controller
         $package->number_of_days = $request->number_of_days;
         $package->extra_pax_price = $request->extra_pax_price;
         $package->per_day_price = $request->per_day_price;
-
+        $package->description = $request->description;
+        $package->number_of_guests = $request->number_of_guests;
         // Save changes to the database
         $package->save();
 
