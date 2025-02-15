@@ -6,6 +6,7 @@
     <title>Admin Panel</title>
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
+    <link rel="icon" href="{{asset('images/palm-tree.png')}}" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
@@ -74,7 +75,7 @@
         <!-- Header Section -->
         <div class="fixed top-0 bg-white text-green-800 px-10 py-1 z-10 w-full shadow-md">
             <div class="flex items-center justify-between py-2 text-xl">
-                <div class="font-bold text-green-900">Admin<span class="text-green-600">Panel</span></div>
+                <div class="font-bold text-green-900">Aga<span class="text-green-600">hay</span></div>
                 <div class="flex items-center text-gray-500 float-left w-full">
                    
                 </div>

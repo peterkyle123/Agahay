@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reviews - Admin</title>
     @vite('resources/css/app.css')
+    <link rel="icon" href="{{asset('images/palm-tree.png')}}" type="image/x-icon">
 </head>
 <body class="bg-gradient-to-b from-green-50 to-green-100 min-h-screen">
 

@@ -15,6 +15,8 @@ class Package extends Model
 
     public $incrementing = false; // If `package_id` is NOT an auto-incrementing integer
 
+    public $timestamps = false; // Disable timestamps
+
     protected $keyType = 'string'; // Use 'integer' if it's a numeric ID
 
     protected $fillable = [

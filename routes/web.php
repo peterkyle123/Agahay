@@ -11,7 +11,7 @@ use App\Models\Admin;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\RevenueController;
-
+use App\Models\Package;
 
 Route::get('/booking31/{package_id}', [BookingController::class, 'showForm'])->name('frm');
 
@@ -48,7 +48,11 @@ Route::get('/booking', function () {
     return view('booking'); // Booking form page view
 })->name('booking');
 Route::get('/packages', function () {
-    return view('packages'); // Booking form page view
+    if (!session()->has('admin')) {
+        return redirect()->route('adminlogin'); // Redirects to login page if no session
+    }
+    $packages = Package::all();
+    return view('packages', compact('packages')); // packages form page view
 })->name('packages');
 Route::get('/adminlogin', function () {
     return view('adminlogin'); // Admin login page view
@@ -119,11 +123,12 @@ Route::get('/viewreviews', function () {
 //     return view('revenues'); // Admin logout page view
 // })->name('revenues');
 
-Route::get('/editpackages', function () {
-       $packages = Package::all();
-    return view('editpackages'); 
-})->name('editpackages');
-
+// Route::get('/editpackages', function () {
+//        $packages = Package::all();
+//     return view('editpackages',compact('packages')); 
+// })->name('editpackages');
+Route::get('/editpackages/{id}', [BookingController::class, 'edit'])->name('editpackages');
+Route::put('/editpackages/{id}', [PackageController::class, 'update'])->name('editpackages.update'); // Handle Update Request
 
 
 // Admin home page route
@@ -167,5 +172,3 @@ Route::get('/reviews', [ReviewController::class, 'reviews'])->name('reviews.inde
 // Route::get('/revenue-data', [RevenueController::class, 'getRevenueData']);
 Route::get('/archives', [AdminController::class, 'archivedBookings'])->name('admin.archivedBookings');
 Route::delete('/admin/bookings/archives/{id}', [AdminController::class, 'deleteArchivedBooking'])->name('admin.deleteArchivedBooking');
-Route::get('/admin/packages/{id}/edit', [AdminController::class, 'editPackage'])->name('admin.editPackage');
-Route::put('/editpackages{id}', [AdminController::class, 'updatePackage'])->name('admin.updatePackage');

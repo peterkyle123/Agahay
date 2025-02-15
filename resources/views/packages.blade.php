@@ -6,6 +6,7 @@
     <title>Document</title>
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
+    <link rel="icon" href="{{asset('images/palm-tree.png')}}" type="image/x-icon">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -75,6 +76,13 @@
             text-align: justify;
             background: rgba(0, 0, 0, 0.6);
         }
+        .price-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: #27ae60; /* Green color for pricing */
+            white-space: nowrap; /* Prevents price from wrapping */
+            background: rgba(0, 0, 0, 0.6);
+}
 
         .edit-btn-container {
             display: flex;
@@ -95,7 +103,7 @@
         }
 
         .option-1 {
-            background-image: url('{{ asset("images/8.jpg") }}');
+            background-image: url('{{ asset("images/VIP.jpg") }}');
         }
 
         .option-2 {
@@ -113,21 +121,27 @@
 
     <div class="option-container">
         <!-- Small Group Booking -->
-        <div class="option option-1">
-            <div class="option-text">Small Group Package</div>
-            <div class="description-text">
-                Enjoy a private stay for 10 guests at Agahay Guesthouse. 
-                Rates: ₱6000 (Mon-Thurs) / ₱6500 (Fri-Sun). 
-                Includes full house access, free Wi-Fi, billiards, and videoke. 
-                Extra guests: ₱75 each. Check-in: 2 PM | Check-out: 12 NN.
-            </div>
-            <!-- Edit Button -->
-            <div class="edit-btn-container">
-                <a href="/editpackages" class="edit-btn">Edit</a>
-            </div>
+        @foreach ($packages as $package)
+        <div class="option option-{{ $loop->index + 1 }}" 
+             style="background-image: url('{{ asset($package->image) }}');">
+    
+        <div class="option-text">{{ $package->package_name }}</div>
+    
+        <div class="description-container">
+                <div class="description-text">
+            {{ $package->description }}
         </div>
+        <div class="price-text">
+                 ₱{{ number_format($package->price, 2) }}
+        </div>
+     </div>
 
-        <!-- VIP Booking -->
+        <div class="edit-btn-container">
+                    <a href="{{ url('/editpackages/' . $package->package_id) }}" class="edit-btn">Edit</a>
+        </div>
+</div>
+    @endforeach
+        <!--VIP Booking
         <div class="option option-2">
             <div class="option-text">VIP Booking</div>
             <div class="description-text">
@@ -135,13 +149,13 @@
                 Private amenities, enhanced comfort, and exclusive services. 
                 Contact us for pricing and details.
             </div>
-            <!-- Edit Button -->
+            
             <div class="edit-btn-container">
                 <a href="/editpackages" class="edit-btn">Edit</a>
             </div>
         </div>
 
-        <!-- Large Group Booking -->
+        
         <div class="option option-3">
             <div class="option-text">Large Group Booking</div>
             <div class="description-text">
@@ -149,11 +163,11 @@
                 Full access to all amenities and discounts for extended stays. 
                 Message us for group rates!
             </div>
-            <!-- Edit Button -->
+            
             <div class="edit-btn-container">
                 <a href="/editpackages" class="edit-btn">Edit</a>
             </div>
-        </div>
+        </div> -->
     </div>
 
 </body>

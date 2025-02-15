@@ -144,17 +144,20 @@ public function cancel($bookingId)
     return redirect()->back()->with('error', 'Booking not found.');
 }
 public function showPackages() {
+
     $packages = Package::all(); // Retrieve all available packages
-    return view('book', compact('packages'));
-    
+    return view('book', compact('packages'));   
 }
 
 public function showForm($package_id) {
+
     $packages = Package::findOrFail($package_id);
     return view('booking', compact('packages'));
+    
 }
 public function showBookings()
 {
+    
     // Fetch all bookings
     $bookings = Booking::all(); 
 
@@ -178,6 +181,18 @@ public function showBookings()
     }
 
     return view('b00kings', compact('bookings'));
+}
+
+public function edit($id) {
+
+    
+    $packages = Package::where('package_id', $id)->first(); // Fetch a single package
+    
+    if (!$packages) {
+        return abort(404); // Return a 404 error if package not found
+    }
+
+    return view('editpackages', compact('packages')); // Pass single package to the view
 }
 
 }

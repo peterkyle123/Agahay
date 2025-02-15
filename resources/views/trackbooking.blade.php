@@ -8,6 +8,7 @@
     <title>Track Your Booking | Agahay Guesthouse</title>
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
+    <link rel="icon" href="{{asset('images/palm-tree.png')}}" type="image/x-icon">
     <style>
         body {
             font-family: Arial, sans-serif;

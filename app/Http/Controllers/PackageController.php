@@ -17,14 +17,21 @@ class PackageController extends Controller
         return view('packages', compact('packages'));
     }
 
-    public function editpackages()
-    {
-        $package = Package::all(); // Fetch all packages
-        return view('editpackages', compact('package'));
+    public function editpackages($id) {
+        $packages = Package::find($id); // Fetch package details
+        if (!session()->has('admin')) {
+            return redirect()->route('adminlogin'); // Redirects to login page if no session
+        }
+        if (!$packages) {
+            return abort(404); // Show a 404 error if no package is found
+        }
+    
+        return view('editpackages', compact('packages')); // Pass $packages to the view
     }
     // Show the edit form for a specific package
     public function edit($slug)
     {
+        
         $package = Package::where('slug', $slug)->first(); // Find the package by slug
         if (!$package) {
             return redirect()->route('admin.dashboard')->with('error', 'Package not found');
@@ -33,39 +40,32 @@ class PackageController extends Controller
     }
 
     // Handle the update of the package
-    public function update(Request $request, $slug)
+    public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'description' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        
+         // Validate input data
+         $request->validate([
+            'package_name' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'number_of_days' => 'required|integer|min:1',
+            'extra_pax_price' => 'required|numeric|min:0',
+            'per_day_price' => 'required|numeric|min:0',
         ]);
 
-        // Find the package
-        $package = Package::where('slug', $slug)->first();
+        // Find the package by ID
+        $package = Package::findOrFail($id);
 
-        if (!$package) {
-            return redirect()->route('admin.dashboard')->with('error', 'Package not found');
-        }
+        // Update package details
+        $package->package_name = $request->package_name;
+        $package->price = $request->price;
+        $package->number_of_days = $request->number_of_days;
+        $package->extra_pax_price = $request->extra_pax_price;
+        $package->per_day_price = $request->per_day_price;
 
-        // Update the package description
-        $package->description = $validated['description'];
-
-        // Handle image upload if provided
-        if ($request->hasFile('image')) {
-            // Delete the old image if exists (optional, depending on your use case)
-            if ($package->image) {
-                \Storage::delete('public/' . $package->image);
-            }
-
-            // Store the new image and update the image field in the database
-            $imagePath = $request->file('image')->store('images', 'public');
-            $package->image = $imagePath;
-        }
-
-        // Save the updated package
+        // Save changes to the database
         $package->save();
 
-        return redirect()->route('admin.edit', ['slug' => $package->slug])
-                         ->with('success', 'Package updated successfully!');
+        // Redirect with success message
+        return redirect()->back()->with('success', 'Package updated successfully.');
     }
 }
