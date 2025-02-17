@@ -36,6 +36,11 @@
                 </div>
             @endif
 
+            <div class="mb-4">
+                <a href="{{ route('admin.bookings', ['sort' => 'asc', 'search' => request('search')]) }}" class="text-green-600 hover:text-green-800">Sort Ascending (Check-in)</a> |
+                <a href="{{ route('admin.bookings', ['sort' => 'desc', 'search' => request('search')]) }}" class="text-green-600 hover:text-green-800">Sort Descending (Check-in)</a>
+            </div>
+
             @if (session('error'))
                 <div class="bg-red-500 text-white p-3 rounded-md mb-4">
                     {{ session('error') }}

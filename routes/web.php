@@ -131,6 +131,11 @@ Route::get('/editpackages/{id}', [BookingController::class, 'edit'])->name('edit
 Route::put('/editpackages/{id}', [PackageController::class, 'update'])->name('editpackages.update'); // Handle Update Request
 
 
+// Route::get('/admin_calendar', function () {
+//     return view('admin_calendar'); // calendar
+// })->name('admin_calendar');
+
+
 // Admin home page route
 Route::get('/adminhome', function () {
     return view('adminhome'); // Admin home page view

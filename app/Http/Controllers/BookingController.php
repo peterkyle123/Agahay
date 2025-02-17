@@ -174,10 +174,11 @@ public function showForm($package_id) {
 public function showBookings(Request $request)
 {
     $search = $request->input('search');
-
+    $sortOrder = $request->input('sort', 'asc'); // Default to ascending
     $bookingsQuery = Booking::query();
 
     // Fetch the bookings based on the query
+    $bookings = $bookingsQuery->orderBy('check_in_date', $sortOrder)->get();
     $bookings = $bookingsQuery->get(); // Get the bookings BEFORE the foreach loop
 
     if ($search) {

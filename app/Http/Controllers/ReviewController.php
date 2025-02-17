@@ -6,18 +6,25 @@ use Illuminate\Http\Request;
 class ReviewController extends Controller
 {
     public function store(Request $request)
-{
-    $validatedData = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'nullable|email|max:255', // Email is optional
-        'rating' => 'required|integer|min:1|max:5',
-        'message' => 'required|string',
-    ]);
-
-    Review::create($validatedData);
-
-    return back()->with('success', 'Thank you for your review!'); // Success message
-}
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'rating' => 'required|integer|min:1|max:5',
+            'message' => 'required|string',
+            'img_upld' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10000', // Corrected validation
+        ]);
+    
+        // Handle the image upload
+        if ($request->hasFile('img_upld')) {
+            $imagePath = $request->file('img_upld')->store('reviews', 'public'); // Store in 'public/reviews'
+            $validatedData['img_upld'] = $imagePath; // Store the path in the database
+        }
+    
+        Review::create($validatedData);
+    
+        return back()->with('success', 'Thank you for your review!');
+    }
 public function edit(Review $review)
 {
     return view('reviews.edit', compact('review')); // Create an edit view
@@ -30,6 +37,7 @@ public function update(Request $request, Review $review)
             'email' => 'nullable|email|max:255',
             'rating' => 'required|integer|min:1|max:5',
             'message' => 'required|string',
+            'img_upld' => 'nullable|string|max:255',
         ]);
 
         $review->update($validatedData);

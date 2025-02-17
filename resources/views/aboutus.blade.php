@@ -96,11 +96,13 @@
                 </ul>
             </div>
         @endif
-        <form action="{{ route('reviews.store') }}" method="POST" class="mt-8 space-y-4">
+        <form action="{{ route('reviews.store') }}" method="POST" class="mt-8 space-y-4 " enctype="multipart/form-data">
             @csrf  
             <input type="text" name="name" placeholder="Your Name" required class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
 
             <input type="email" name="email" placeholder="Your Email (Optional)" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+
+            <input type="file" name="img_upld" placeholder="Upload Image (Optional)" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
 
             <textarea name="message" rows="4" placeholder="Your Message" required class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"></textarea>
 
