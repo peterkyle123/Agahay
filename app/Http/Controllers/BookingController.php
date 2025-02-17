@@ -58,6 +58,7 @@ class BookingController extends Controller
     $booking->days_staying = $checkInDate->diffInDays($checkOutDate); // Calculate the difference in days
 
 }
+
         // Return the view with the bookings data
         return view('b00kings', compact('bookings'));
     }
@@ -77,6 +78,7 @@ class BookingController extends Controller
             'phone' => 'required|digits:11',
             'extra_pax' => 'nullable|integer|min:0',
 'package_name' => 'nullable|string|max:255',
+            'total_payment'=>'nullable|string|max:500',
             'special_request' => 'nullable|string|max:500',
         ]);
 
@@ -91,6 +93,7 @@ class BookingController extends Controller
             'extra_pax' => $request->extra_pax,
             'special_request' => $request->special_request,
             'package_name' => $request->package_name,
+            'payment' => $request->total_payment,
          'tracking_code' => $trackingCode, // Save the generated tracking code
         ]);
    

@@ -11,7 +11,7 @@
 </head>
 <body class="bg-green-100"> 
     <div class="min-h-screen p-6">
-        <header class="bg-gradient-to-r from-green-500 to-green-800 text-white font-bold text-2xl p-4 rounded-xl mb-6 flex justify-between items-center">
+        <header class="bg-gradient-to-r from-green-500 to-green-700 text-white font-bold text-2xl p-4 rounded-xl mb-6 flex justify-between items-center">
             <span class="text-white">Bookings</span>
 
             <!-- Home Button -->
@@ -63,6 +63,7 @@
                             <th class="px-4 py-2 text-left">Special Request</th>
                             <th class="px-4 py-2 text-left">Status</th>
                             <th class="px-4 py-2 text-left">Category</th>
+                            <th class="px-4 py-2 text-left">Payment</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -84,6 +85,7 @@
                                     {{ $booking->status ?? 'Pending' }}
                                 </td>
                                 <td class="px-4 py-2">{{ $booking->package_name}}</td>
+                                <td class="px-4 py-2">{{ $booking->payment }}</td>
                             </tr>
                         @endforeach
                     </tbody>
