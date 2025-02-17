@@ -178,3 +178,4 @@ Route::get('/reviews', [ReviewController::class, 'reviews'])->name('reviews.inde
 Route::get('/archives', [AdminController::class, 'archivedBookings'])->name('admin.archivedBookings');
 Route::delete('/admin/bookings/archives/{id}', [AdminController::class, 'deleteArchivedBooking'])->name('admin.deleteArchivedBooking');
 Route::get('/admin/bookings', [BookingController::class, 'showBookings'])->name('admin.bookings');
+Route::get('/calendar', [BookingController::class, 'calendar'])->name('bookings.calendar');

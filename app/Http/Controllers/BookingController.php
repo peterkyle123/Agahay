@@ -220,6 +220,19 @@ public function edit($id) {
 
     return view('editpackages', compact('packages')); // Pass single package to the view
 }
+public function calendar()
+{
+    // Fetch bookings and format them for FullCalendar
+    $bookings = Booking::all()->map(function ($booking) {
+        return [
+            'title' => $booking->customer_name . ' - ' . $booking->package_name,
+            'start' => $booking->check_in_date,
+            'end' => Carbon::parse($booking->check_out_date)->addDay()->toDateString(), // Ensure full-day booking display
+            'color' => $booking->status == 'Done' ? '#28a745' : ($booking->status == 'Pending' ? '#ffc107' : '#dc3545'), // Green for confirmed, yellow for pending, red for canceled
+        ];
+    });
 
+    return view('calendar', compact('bookings'));
 }
 
+}
