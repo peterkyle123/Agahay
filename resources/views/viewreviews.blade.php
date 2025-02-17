@@ -7,7 +7,7 @@
     @vite('resources/css/app.css')
     <link rel="icon" href="{{asset('images/palm-tree.png')}}" type="image/x-icon">
 </head>
-<body class="bg-gradient-to-b from-green-50 to-green-100 min-h-screen">
+<body class="white min-h-screen">
 
     <!-- Header -->
     <header class="bg-gradient-to-r from-green-500 to-green-800 text-white text-xl font-bold p-4 rounded-lg w-full flex justify-between items-center">

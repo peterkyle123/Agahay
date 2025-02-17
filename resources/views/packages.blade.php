@@ -113,7 +113,7 @@
         }
     </style>
 </head>
-<body class="bg-green-100">
+<body class="white">
             <!-- Header -->
     <header class="bg-gradient-to-r from-green-500 to-green-800 text-white text-xl font-bold p-4 rounded-lg w-full flex justify-between items-center">
         <span>Packages</span>
@@ -143,33 +143,7 @@
         </div>
 </div>
     @endforeach
-        <!--VIP Booking
-        <div class="option option-2">
-            <div class="option-text">VIP Booking</div>
-            <div class="description-text">
-                Experience premium luxury with our VIP package. 
-                Private amenities, enhanced comfort, and exclusive services. 
-                Contact us for pricing and details.
-            </div>
-            
-            <div class="edit-btn-container">
-                <a href="/editpackages" class="edit-btn">Edit</a>
-            </div>
-        </div>
-
-        
-        <div class="option option-3">
-            <div class="option-text">Large Group Booking</div>
-            <div class="description-text">
-                Perfect for big gatherings! Accommodates up to 16 guests. 
-                Full access to all amenities and discounts for extended stays. 
-                Message us for group rates!
-            </div>
-            
-            <div class="edit-btn-container">
-                <a href="/editpackages" class="edit-btn">Edit</a>
-            </div>
-        </div> -->
+       
     </div>
 
 </body>

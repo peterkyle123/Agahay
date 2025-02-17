@@ -105,7 +105,7 @@
         padding: 20px;
         font-size: 24px;
         font-weight: bold;
-        background: rgba(0, 0, 0, 0.6);
+        background: rgba(0, 0, 0, 0.6); 
     }
 
     .description-text {

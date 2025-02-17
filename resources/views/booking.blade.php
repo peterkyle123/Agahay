@@ -190,7 +190,12 @@
                 </div>
             @endif
 
-
+            
+            @if (session('error1'))
+                <div class="bg-red-500 text-white p-3 rounded-md mb-4 mx-auto w-fit">
+                    {{ session('error1') }}
+                </div>
+            @endif
         
             <div class="input-container">
                 <label for="name">Full Name</label>

@@ -70,7 +70,7 @@
         }
     </style>
 </head>
-<body class="bg-green-100">
+<body class="white">
     <div class="min-h-screen" >
         <!-- Header Section -->
         <div class="fixed top-0 bg-white text-green-800 px-10 py-1 z-10 w-full shadow-md">
@@ -187,13 +187,13 @@
         <!-- Bookings Revenue for This Month -->
         <div class="bg-gradient-green border-gradient rounded-xl w-4/12 p-6 card">
             <p class="text-3xl text-green-900">Bookings Revenue <br><strong>This Month</strong></p>
-            <p class="text-xl text-white mt-4">$10,000</p> <!-- This would be dynamic in your real app -->
+            <p class="text-xl text-white mt-4"></p> <!-- This would be dynamic in your real app -->
         </div>
 
         <!-- Total Revenues -->
         <div class="bg-gradient-green border-gradient rounded-xl w-4/12 p-6 card">
             <p class="text-3xl text-green-900">Total Revenues</p>
-            <p class="text-xl text-white mt-4">$150,000</p> <!-- Dynamic data as well -->
+            <p class="text-xl text-white mt-4"></p> <!-- Dynamic data as well -->
         </div>
 
         <!-- Canceled Bookings -->

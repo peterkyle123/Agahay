@@ -9,7 +9,7 @@
     <link rel="icon" href="{{asset('images/palm-tree.png')}}" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100"> 
+<body class="white"> 
     <div class="min-h-screen p-6">
         <!-- Header -->
         <header class="bg-gradient-to-r from-green-500 to-green-800 text-white font-bold text-2xl p-4 rounded-xl mb-6 flex justify-between items-center">
@@ -47,7 +47,7 @@
                         <th class="px-4 py-2 text-left">Check-in Date</th>
                         <th class="px-4 py-2 text-left">Check-out Date</th>
                         <th class="px-4 py-2 text-left">Phone</th>
-                        <th class="px-4 py-2 text-left">Status</th>
+                        <th class="px-4 py-2 text-left">Payment</th>
                         <th class="px-4 py-2 text-left">Category</th>
                         <th class="px-4 py-2 text-center">Action</th>
                     </tr>
@@ -60,7 +60,7 @@
                             <td class="px-4 py-2">{{ $booking->check_in_date }}</td>
                             <td class="px-4 py-2">{{ $booking->check_out_date }}</td>
                             <td class="px-4 py-2 text-gray-600">{{ $booking->phone }}</td>
-                            <td class="px-4 py-2 text-green-600 font-bold">{{ $booking->status }}</td>
+                            <td class="px-4 py-2">{{ $booking->payment }}</td>
                             <td class="px-4 py-2 font-bold">{{ $booking->package_name }}</td>
                             <td class="px-4 py-2 text-center">
                                 <!-- Delete Button -->

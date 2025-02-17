@@ -39,12 +39,12 @@ class BookingController extends Controller
         $bookings = Booking::all();
         return view('admin.bookings', compact('bookings'));
     }
-    public function b00kings()
+    public function b00kings( )
     {
            if (!session()->has('admin')) {
         return redirect()->route('adminlogin'); // Redirects to login page if no session
     }
-
+        
     
         $bookings = Booking::all();
         // Sort by check-in date, newest first
@@ -82,26 +82,38 @@ class BookingController extends Controller
             'special_request' => 'nullable|string|max:500',
         ]);
 
-        $trackingCode = 'BK' . strtoupper(Str::random(1)) . '-' . str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT) . '-' . strtoupper(Str::random(1));
+        $checkInDate = $request->check_in_date;
+    $checkOutDate = $request->check_out_date;
 
-        // Save to database
-        Booking::create([
-            'customer_name' => $request->customer_name,
-            'check_in_date' => $request->check_in_date,
-            'check_out_date' => $request->check_out_date,
-            'phone' => $request->phone,
-            'extra_pax' => $request->extra_pax,
-            'special_request' => $request->special_request,
-            'package_name' => $request->package_name,
-            'payment' => $request->total_payment,
-         'tracking_code' => $trackingCode, // Save the generated tracking code
-        ]);
-   
-        session(['tracking_code' => $trackingCode]);
+    // Check for overlapping bookings
+    $overlappingBookings = Booking::where(function ($query) use ($checkInDate, $checkOutDate) {
+        $query->where('check_in_date', '<', $checkOutDate)
+            ->where('check_out_date', '>', $checkInDate);
+    })->exists();
 
-        // Redirect with success message
-        return redirect()->back()->with('success', 'Booking submitted successfully!');
+    if ($overlappingBookings) {
+        return redirect()->back()->with('error1', 'These dates are already booked. Please choose different dates.');
     }
+
+    $trackingCode = 'BK' . strtoupper(Str::random(1)) . '-' . str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT) . '-' . strtoupper(Str::random(1));
+
+    // Save to database
+    Booking::create([
+        'customer_name' => $request->customer_name,
+        'check_in_date' => $checkInDate,
+        'check_out_date' => $checkOutDate,
+        'phone' => $request->phone,
+        'extra_pax' => $request->extra_pax,
+        'special_request' => $request->special_request,
+        'package_name' => $request->package_name,
+        'payment' => $request->total_payment,
+        'tracking_code' => $trackingCode,
+    ]);
+
+    session(['tracking_code' => $trackingCode]);
+
+    return redirect()->back()->with('success', 'Booking submitted successfully!');
+}
     public function trackBooking(Request $request)
 {
     // Validate the input
@@ -159,34 +171,43 @@ public function showForm($package_id) {
     return view('booking', compact('packages'));
     
 }
-public function showBookings()
+public function showBookings(Request $request)
 {
-    
-    // Fetch all bookings
-    $bookings = Booking::all(); 
+    $search = $request->input('search');
 
-    // Fetch only the count of canceled bookings
-    $canceledBookingsCount = Booking::where('status', 'Canceled')->count(); 
+    $bookingsQuery = Booking::query();
 
-    // Debug to check if the variable is set
-    if($canceledBookingsCount); // This will stop execution and show the value
+    // Fetch the bookings based on the query
+    $bookings = $bookingsQuery->get(); // Get the bookings BEFORE the foreach loop
 
-    return view('admin.bookings', [
-        'bookings' => $bookings,
-        'canceledBookingsCount' => $canceledBookingsCount
-    ]);
-     // Calculate "Number of Days Staying" for each booking
-     foreach ($bookings as $booking) {
-        $checkInDate = Carbon::parse($booking->check_in_date);
-        $checkOutDate = Carbon::parse($booking->check_out_date);
-
-        $booking->days_staying = $checkOutDate->diffInDays($checkInDate); // Calculate the difference in days
-
+    if ($search) {
+        foreach ($bookings as $booking) {
+            if (
+                Str::contains($booking->tracking_code, $search, true) ||
+                Str::contains($booking->customer_name, $search, true) ||
+                Str::contains($booking->check_in_date, $search, true)
+            ) {
+                $booking->highlight = true; // Add highlight property if search matches
+            } else {
+                $booking->highlight = false; // Add highlight property, set to false if it does not match.
+            }
+        }
+    } else {
+        foreach($bookings as $booking){
+            $booking->highlight = false;
+        }
     }
 
-    return view('b00kings', compact('bookings'));
-}
+    $canceledBookingsCount = Booking::where('status', 'Canceled')->count();
+    
+    foreach ($bookings as $booking) {
+        $checkInDate = Carbon::parse($booking->check_in_date);
+        $checkOutDate = Carbon::parse($booking->check_out_date);
+        $booking->days_staying = $checkInDate->diffInDays($checkOutDate);
+    }
 
+    return view('b00kings', compact('bookings', 'canceledBookingsCount'));
+}
 public function edit($id) {
 
     

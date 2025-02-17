@@ -9,7 +9,7 @@
     <link rel="icon" href="{{asset('images/palm-tree.png')}}" type="image/x-icon">
 </head>
 
-<body class="bg-gray-100 flex flex-col items-center min-h-screen">
+<body class="white flex flex-col items-center min-h-screen">
 
     <!-- Header -->
     <header class="bg-green-700 text-white text-xl font-bold p-4 rounded-lg w-full flex justify-between items-center">
@@ -94,7 +94,7 @@
 
     <!-- Price Per Night -->
     <div class="mb-4">
-        <label class="block font-semibold mb-1">Price Per Day (₱)</label>
+        <label class="block font-semibold mb-1">Extra Day Price (₱)</label>
         <input type="number" name="per_day_price" value="{{ $packages->per_day_price }}" 
                class="w-full border p-2 rounded" required min="0" 
                oninput="validatePrice(this)">
