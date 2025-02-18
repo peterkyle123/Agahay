@@ -103,11 +103,6 @@
                     </tbody>
                 </table>
 
-                <!-- <div class="mt-4 flex justify-end space-x-4">
-                    <button type="submit" name="action" value="delete" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-800">
-                        Delete Cancelled Bookings
-                    </button> -->
-
                     <button type="submit" name="action" value="done" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-800">
                         Mark Selected as Done
                     </button>

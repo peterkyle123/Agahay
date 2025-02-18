@@ -26,9 +26,17 @@
             <h1 class="text-4xl lg:text-6xl font-bold">Experience comfort and serenity at a reasonable price</h1>
             <div class="w-20 h-2 bg-green-700 my-4"></div>
             <p class="text-xl text-justify mb-10">Agahay Guesthouse offers an exclusive and luxurious retreat, ensuring complete privacy with the entire property reserved for guests. The guesthouse features spacious, elegantly designed rooms that provide comfort and relaxation. With no other guests on-site, it guarantees an intimate, undisturbed atmosphere, making it the perfect getaway for those seeking both serenity and sophistication. Every detail is crafted with care, offering high-end amenities and a refined environment for a truly luxurious experience.</p>
-            <button class="bg-gradient-to-r from-green-500 to-green-700 text-white text-2xl font-medium px-4 py-2 rounded shadow"><a href="{{ route('book') }}">Book Now!</a></button>
-            <button class="bg-gradient-to-r from-green-500 to-green-700 text-white text-2xl font-medium px-4 py-2 rounded shadow"><a href="{{ route('aboutus') }}">About Us</a></button>
-            <button class="bg-gradient-to-r from-green-500 to-green-700 text-white text-2xl font-medium px-4 py-2 rounded shadow"><a href="{{ route('trackbooking') }}">Track Booking</a></button>
+            <div class="flex space-x-4">
+    <button class="bg-gradient-to-r from-green-500 to-green-700 text-white text-xl font-medium px-2 py-1 rounded shadow">
+        <a href="{{ route('book') }}">Book Now!</a>
+    </button>
+    <button class="bg-gradient-to-r from-green-500 to-green-700 text-white text-xl font-medium px-2 py-1 rounded shadow">
+        <a href="{{ route('aboutus') }}">About Us</a>
+    </button>
+    <button class="bg-gradient-to-r from-green-500 to-green-700 text-white text-xl font-medium px-2 py-1 rounded shadow">
+        <a href="{{ route('trackbooking') }}">Track Booking</a>
+    </button>
+</div>
           </div>
         </header>
       </div>
@@ -158,7 +166,7 @@
         </section>
         <div class="w-full justify-center"></div>
         <button class="bg-gradient-to-r from-green-500 to-green-700 text-white text-2xl font-medium px-4 py-2 rounded shadow"><a href="{{ route('gallerysection') }}">Gallery</a></button>
-        
+
     </section>
 </section>
 </body>
