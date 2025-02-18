@@ -158,6 +158,16 @@ public function cancel($bookingId)
 
     return redirect()->back()->with('error', 'Booking not found.');
 }
+public function canceledBookings()
+{
+    if (!session()->has('admin')) {
+        return redirect()->route('adminlogin'); // Redirects to login page if no session
+    }
+    $canceledBookings = Booking::where('status', 'Canceled')->get();
+    return view('cancelrequestA', ['canceledBookings' => $canceledBookings]); // Fix the variable name
+}
+
+
 public function showPackages() {
 
     $packages = Package::all(); // Retrieve all available packages

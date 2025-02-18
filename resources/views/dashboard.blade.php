@@ -199,7 +199,8 @@
         <!-- Canceled Bookings -->
         <div class="bg-gradient-green border-gradient rounded-xl w-4/12 p-6 card"> 
     <p class="text-3xl text-green-900">Cancelled <br><strong>Bookings</strong></p>
-    <p class="text-xl text-white mt-4">{{ $canceledBookingsCount }}</p> <!-- Displays actual canceled bookings count -->
+    <a href="cancelrequestA" class="bg-gradient-btn text-xl text-white underline hover:bg-gradient-btn inline-block rounded-full mt-12 px-8 py-2"><strong>Cancellation Requests</strong></a>
+    <p class="text-xl text-white mt-4"><strong>{{ $canceledBookingsCount }}</strong></p> <!-- Displays actual canceled bookings count -->
         </div>
     </div>
 </div>

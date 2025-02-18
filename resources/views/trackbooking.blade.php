@@ -128,7 +128,7 @@
                 <p><strong>Check-out:</strong> {{ $booking->check_out_date }}</p>
                 <p><strong>Status:</strong> {{ $booking->status }}</p>
                 <p><strong>Package:</strong> {{ $booking->package_name }}</p>
-                <button onclick="cancelBooking({{ $booking->id }})" class="cancel-btn">Cancel Booking</button>
+                <button onclick="cancelBooking({{ $booking->id }})" class="cancel-btn">Apply for Cancellation</button>
 
             </div>
 

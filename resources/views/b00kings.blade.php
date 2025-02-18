@@ -66,10 +66,12 @@
                             <th class="px-4 py-2 text-left">Status</th>
                             <th class="px-4 py-2 text-left">Category</th>
                             <th class="px-4 py-2 text-left">Payment</th>
+                            <th class="px-4 py-2 text-left">Downpayment</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($bookings as $booking)
+                         @if ($booking->status !== 'Canceled')
                         <tr class="@if($booking->highlight) bg-green-200 @endif">
                                 <td class="px-4 py-2">
                                     <input type="checkbox" name="bookings[]" value="{{ $booking->id }}" class="booking-checkbox">
@@ -89,15 +91,22 @@
                                 </td>
                                 <td class="px-4 py-2">{{ $booking->package_name}}</td>
                                 <td class="px-4 py-2">{{ $booking->payment }}</td>
+                                <td class="px-4 py-2">
+                                <select name="downpayment[{{ $booking->id }}]" class="border p-2 rounded-md" @if($booking->status === 'Done') disabled @endif>
+                                    <option value="Paid" @if($booking->downpayment === 'Paid') selected @endif>Paid</option>
+                                    <option value="Not Paid" @if($booking->downpayment === 'Not Paid') selected @endif>Not Paid</option>
+                                </select>
+                            </td>
                             </tr>
+                            @endif
                         @endforeach
                     </tbody>
                 </table>
 
-                <div class="mt-4 flex justify-end space-x-4">
+                <!-- <div class="mt-4 flex justify-end space-x-4">
                     <button type="submit" name="action" value="delete" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-800">
                         Delete Cancelled Bookings
-                    </button>
+                    </button> -->
 
                     <button type="submit" name="action" value="done" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-800">
                         Mark Selected as Done
