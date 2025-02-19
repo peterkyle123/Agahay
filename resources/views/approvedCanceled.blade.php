@@ -12,9 +12,18 @@
 <div class="min-h-screen p-6">
     <header class="bg-gradient-to-r from-green-500 to-green-700 text-white font-bold text-2xl p-4 rounded-xl mb-6 flex justify-between items-center">
         <span class="text-white">Approved Cancellations</span>
-        <a href="/dashboard" class="bg-white text-green-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition text-sm sm:text-base">
-            Home
-        </a>
+        <div class="flex space-x-4">
+    <!-- Back Button -->
+    <a href="{{ url('/archives') }}" class="bg-white text-gray-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition text-sm sm:text-base">
+        Back
+    </a>
+   
+    <!-- Home Button -->
+    <a href="/dashboard" class="bg-white text-green-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition text-sm sm:text-base">
+        Home
+    </a>
+</div>
+
     </header>
 
     <div class="bg-white rounded-xl shadow-lg p-6">
@@ -38,6 +47,7 @@
                     <th class="px-4 py-2 text-left">Extra Pax</th>
                     <th class="px-4 py-2 text-left">Special Request</th>
                     <th class="px-4 py-2 text-left">Category</th>
+                    <th class="px-4 py-2 text-center">Action</th>
                 </tr>   
             </thead>
             <tbody>
@@ -58,6 +68,16 @@
                                 <p class="block">{{ $booking->special_request ?? 'None' }}</p>
                             </td>
                             <td class="px-4 py-2">{{ $booking->package_name }}</td>
+                               
+                                <td>
+                               <form action="{{ route('admin.deleteApprovedBooking', $booking->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this booking permanently?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-800">
+                                        Delete
+                                    </button>
+                                </form>
+                                </td>
                         </tr>
                     @endforeach
                 @endif

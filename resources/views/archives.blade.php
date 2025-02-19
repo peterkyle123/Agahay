@@ -15,10 +15,18 @@
         <header class="bg-gradient-to-r from-green-500 to-green-800 text-white font-bold text-2xl p-4 rounded-xl mb-6 flex justify-between items-center">
             <span class="text-white">Archived Bookings</span>
             
-            <!-- Home Button -->
-            <a href="{{ route('dashboard') }}" class="bg-white text-gray-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition text-sm sm:text-base">
-                Home
-            </a>
+            <div class="flex space-x-4">
+    <!-- Canceled Bookings Button -->
+    <a href="{{ url('/approvedCanceled') }}" class="bg-white text-red-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition text-sm sm:text-base">
+        Canceled Bookings
+    </a>
+    <!-- Home Button -->
+    <a href="{{ route('dashboard') }}" class="bg-white text-gray-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition text-sm sm:text-base">
+        Home
+    </a>
+ 
+</div>
+
         </header>
 
         <div class="bg-white rounded-xl shadow-lg p-6">

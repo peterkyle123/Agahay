@@ -6,6 +6,8 @@ use App\Models\Package;
 use Carbon\Carbon; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use DateTime;
+
 
 class BookingController extends Controller
 {
@@ -69,7 +71,7 @@ class BookingController extends Controller
         return view('booking');
     }
     
-        public function store(Request $request)
+    public function store(Request $request)
     {
         // Validate input
         $request->validate([
@@ -78,43 +80,46 @@ class BookingController extends Controller
             'check_out_date' => 'required|date|after:check_in_date',
             'phone' => 'required|digits:11',
             'extra_pax' => 'nullable|integer|min:0',
-'package_name' => 'nullable|string|max:255',
-            'total_payment'=>'nullable|string|max:500',
+            'package_name' => 'nullable|string|max:255',
+            'total_payment' => 'nullable|string|max:500',
             'special_request' => 'nullable|string|max:500',
         ]);
-
+    
         $checkInDate = $request->check_in_date;
-    $checkOutDate = $request->check_out_date;
-
-    // Check for overlapping bookings
-    $overlappingBookings = Booking::where(function ($query) use ($checkInDate, $checkOutDate) {
-        $query->where('check_in_date', '<', $checkOutDate)
-            ->where('check_out_date', '>', $checkInDate);
-    })->exists();
-
-    if ($overlappingBookings) {
-        return redirect()->back()->with('error1', 'These dates are already booked. Please choose different dates.');
+        $checkOutDate = $request->check_out_date;
+    
+        // Check if dates are available (excluding "Canceled" bookings)
+        $overlappingBookings = Booking::where('status', '!=', 'Canceled') // Exclude canceled bookings
+            ->where(function ($query) use ($checkInDate, $checkOutDate) {
+                $query->where('check_in_date', '<', $checkOutDate)
+                      ->where('check_out_date', '>', $checkInDate);
+            })->exists();
+    
+        if ($overlappingBookings) {
+            return redirect()->back()->with('error1', 'These dates are already booked. Please choose different dates.');
+        }
+    
+        // Generate a unique tracking code
+        $trackingCode = 'BK' . strtoupper(Str::random(1)) . '-' . str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT) . '-' . strtoupper(Str::random(1));
+    
+        // Save to database
+        Booking::create([
+            'customer_name' => $request->customer_name,
+            'check_in_date' => $checkInDate,
+            'check_out_date' => $checkOutDate,
+            'phone' => $request->phone,
+            'extra_pax' => $request->extra_pax,
+            'special_request' => $request->special_request,
+            'package_name' => $request->package_name,
+            'payment' => $request->total_payment,
+            'tracking_code' => $trackingCode,
+        ]);
+    
+        session(['tracking_code' => $trackingCode]);
+    
+        return redirect()->back()->with('success', 'Booking submitted successfully!');
     }
-
-    $trackingCode = 'BK' . strtoupper(Str::random(1)) . '-' . str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT) . '-' . strtoupper(Str::random(1));
-
-    // Save to database
-    Booking::create([
-        'customer_name' => $request->customer_name,
-        'check_in_date' => $checkInDate,
-        'check_out_date' => $checkOutDate,
-        'phone' => $request->phone,
-        'extra_pax' => $request->extra_pax,
-        'special_request' => $request->special_request,
-        'package_name' => $request->package_name,
-        'payment' => $request->total_payment,
-        'tracking_code' => $trackingCode,
-    ]);
-
-    session(['tracking_code' => $trackingCode]);
-
-    return redirect()->back()->with('success', 'Booking submitted successfully!');
-}
+    
     public function trackBooking(Request $request)
 {
     // Validate the input
@@ -280,4 +285,25 @@ public function approveBooking($id)
 
         return redirect()->back()->with('success', 'Booking has been canceled successfully.');
     }
+    public function getUnavailableDates()
+{
+    // Get all booked check-in and check-out dates where status is NOT "Canceled"
+    $unavailableBookings = Booking::where('status', '!=', 'Canceled')->get(['check_in_date', 'check_out_date']);
+
+    $unavailableDates = [];
+
+    // Loop through bookings and add booked dates to the unavailable list
+    foreach ($unavailableBookings as $booking) {
+        $checkIn = new DateTime($booking->check_in_date);
+        $checkOut = new DateTime($booking->check_out_date);
+
+        while ($checkIn <= $checkOut) {
+            $unavailableDates[] = $checkIn->format('Y-m-d');
+            $checkIn->modify('+1 day');
+        }
+    }
+
+    return response()->json(['unavailable_dates' => $unavailableDates]);
+}
+
 }

@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reviews - Admin</title>
     @vite('resources/css/app.css')
-    <link rel="icon" href="{{asset('images/palm-tree.png')}}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('images/palm-tree.png') }}" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="white min-h-screen">
 
@@ -17,56 +18,71 @@
         </a>
     </header>
 
-        @if(session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-                <strong class="font-bold">Success!</strong>
-                <span class="block sm:inline">{{ session('success') }}</span>
-            </div>
-        @endif
+    @if(session('success'))
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <strong class="font-bold">Success!</strong>
+            <span class="block sm:inline">{{ session('success') }}</span>
+        </div>
+    @endif
 
-        <div class="bg-white rounded-lg shadow-md p-4 md:p-6 overflow-x-auto">
-    <table class="min-w-full divide-y divide-gray-200 table-auto">
-        <thead class="bg-green-50">
-            <tr>
-                <th scope="col" class="px-3 py-2 md:px-6 md:py-3 text-left text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                <th scope="col" class="px-3 py-2 md:px-6 md:py-3 text-left text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                <th scope="col" class="px-3 py-2 md:px-6 md:py-3 text-left text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wider">Rating</th>
-                <th scope="col" class="px-3 py-2 md:px-6 md:py-3 text-left text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wider">Message</th>
-                <th scope="col" class="px-3 py-2 md:px-6 md:py-3 text-left text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wider">Uploaded Image</th>
-                <th scope="col" class="px-3 py-2 md:px-6 md:py-3 text-right text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($reviews as $review)
-                <tr class="hover:bg-green-50">
-                    <td class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap text-sm text-gray-800">{{ $review->name }}</td>
-                    <td class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap text-sm text-gray-800">{{ $review->email ?? 'N/A' }}</td>
-                    <td class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap text-sm text-gray-800">
-                        @for ($i = 0; $i < $review->rating; $i++)
-                            <span class="text-yellow-500">★</span>
-                        @endfor
-                    </td>
-                    <td class="px-3 py-2 md:px-6 md:py-4 text-sm text-gray-800">
-                        <p class="line-clamp-3">{{ $review->message }}</p>
-                    </td>
-                    <td class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap text-sm text-gray-800">
-                        @if ($review->img_upld)
-                            <a href="{{ asset('storage/' . $review->img_upld) }}" target="_blank">{{ Str::limit(asset('storage/' . $review->img_upld), 30) }}</a>
-                        @else
-                            No Image
-                        @endif
-                    </td>
-                    <td class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <form action="{{ route('reviews.destroy', $review) }}" method="POST" class="inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-600 hover:text-red-900 text-xs md:text-base" onclick="return confirm('Are you sure you want to delete this review?')">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
+    <!-- Reviews Container (4 per row on large screens) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
+        @foreach ($reviews as $review)
+            <div class="bg-white shadow-md rounded-lg p-4">
+                <h3 class="text-lg font-semibold text-green-800">{{ $review->name }}</h3>
+                <p class="text-sm text-gray-500">{{ $review->email ?? 'N/A' }}</p>
+                
+                <!-- Rating -->
+                <div class="flex my-2">
+                    @for ($i = 0; $i < $review->rating; $i++)
+                        <span class="text-yellow-500 text-lg">★</span>
+                    @endfor
+                </div>
+
+                <!-- Message -->
+                <p class="text-gray-700 line-clamp-3">{{ $review->message }}</p>
+
+                <!-- Uploaded Image -->
+                @if ($review->img_upld)
+                    <div class="mt-3">
+                        <img src="{{ asset('storage/' . $review->img_upld) }}" 
+                             alt="Uploaded Image" 
+                             class="w-full h-40 object-cover rounded-md cursor-pointer hover:opacity-80 transition"
+                             onclick="openModal('{{ asset('storage/' . $review->img_upld) }}')">
+                    </div>
+                @endif
+
+                <!-- Delete Button -->
+                <form action="{{ route('reviews.destroy', $review) }}" method="POST" class="mt-3">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700 transition w-full"
+                            onclick="return confirm('Are you sure you want to delete this review?')">
+                        Delete
+                    </button>
+                </form>
+            </div>
+        @endforeach
+    </div>
+
+    <!-- Modal -->
+    <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden">
+        <div class="relative">
+            <button onclick="closeModal()" class="absolute top-0 right-0 bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-xl">×</button>
+            <img id="modalImage" src="" class="max-w-full max-h-screen rounded-lg shadow-lg">
+        </div>
+    </div>
+
+    <script>
+        function openModal(imageSrc) {
+            document.getElementById('modalImage').src = imageSrc;
+            document.getElementById('imageModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').classList.add('hidden');
+        }
+    </script>
+
 </body>
 </html>

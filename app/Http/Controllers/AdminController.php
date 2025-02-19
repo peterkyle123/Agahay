@@ -88,7 +88,23 @@ public function deleteArchivedBooking($id)
 
     return redirect()->back()->with('success', 'Booking permanently deleted.');
 }
-   
+public function deleteApprovedBooking($id)
+{
+    // Find the booking by ID and ensure it's "Canceled" before deletion
+    $booking = Booking::where('id', $id)->where('status', 'Canceled')->first();
+
+    if (!$booking) {
+        return redirect()->back()->with('error', 'Only canceled bookings can be deleted.');
+    }
+
+    try {
+        $booking->delete();
+        return redirect()->back()->with('success', 'Booking permanently deleted.');
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Failed to delete booking. Please try again.');
+    }
+}
+
 
         
         

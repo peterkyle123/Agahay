@@ -196,3 +196,5 @@ Route::get('/approve_book', [BookingController::class, 'approve_book'])->name('a
 Route::get('/approve_book/{id}', [BookingController::class, 'approveBooking'])->name('approve.booking');
 Route::get('/reject_book/{id}', [BookingController::class, 'rejectBooking'])->name('reject.booking');
 Route::get('/approvedCanceled', [BookingController::class, 'showApprovedBookings'])->name('approved.bookings');
+Route::delete('/admin/bookings/approved/{id}', [AdminController::class, 'deleteApprovedBooking'])->name('admin.deleteApprovedBooking');
+Route::get('/get-unavailable-dates', [BookingController::class, 'getUnavailableDates'])->name('get.unavailable.dates');

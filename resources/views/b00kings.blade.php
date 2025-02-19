@@ -67,11 +67,12 @@
                             <th class="px-4 py-2 text-left">Category</th>
                             <th class="px-4 py-2 text-left">Payment</th>
                             <th class="px-4 py-2 text-left">Downpayment</th>
+                            <th class="px-4 py-2 text-left">Balance</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($bookings as $booking)
-                         @if ($booking->status !== 'Canceled')
+                        @if ($booking->status !== 'Canceled' && $booking->status !== 'Done')
                         <tr class="@if($booking->highlight) bg-green-200 @endif">
                                 <td class="px-4 py-2">
                                     <input type="checkbox" name="bookings[]" value="{{ $booking->id }}" class="booking-checkbox">
@@ -96,6 +97,13 @@
                                     <option value="Paid" @if($booking->downpayment === 'Paid') selected @endif>Paid</option>
                                     <option value="Not Paid" @if($booking->downpayment === 'Not Paid') selected @endif>Not Paid</option>
                                 </select>
+                            </td>
+                            <td class="px-4 py-2">
+                                @if ($booking->status == 'Pending' && $booking->downpayment == 'Paid' && $booking->package)
+                                  {{ number_format($booking->payment - $booking->package->initial_payment, 2) }}
+                                @else
+                                  N/A
+                             @endif
                             </td>
                             </tr>
                             @endif

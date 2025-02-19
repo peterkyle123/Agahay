@@ -13,9 +13,13 @@
 <div class="min-h-screen p-6">
     <header class="bg-gradient-to-r from-red-500 to-red-700 text-white font-bold text-2xl p-4 rounded-xl mb-6 flex justify-between items-center">
         <span class="text-white">Request for Cancellation</span>
-        <a href="/dashboard" class="bg-white text-red-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition text-sm sm:text-base">
-            Home
-        </a>
+        <div class="flex space-x-4">
+    <!-- Home Button -->
+    <a href="/dashboard" class="bg-white text-red-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition text-sm sm:text-base">
+        Home
+    </a>
+    
+</div>
     </header>
 
     <div class="bg-white rounded-xl shadow-lg p-6">
