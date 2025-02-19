@@ -71,55 +71,55 @@ class BookingController extends Controller
         return view('booking');
     }
     
-    public function store(Request $request)
-    {
-        // Validate input
-        $request->validate([
-            'customer_name' => 'required|string|max:255',
-            'check_in_date' => 'required|date',
-            'check_out_date' => 'required|date|after:check_in_date',
-            'phone' => 'required|digits:11',
-            'extra_pax' => 'nullable|integer|min:0',
-            'package_name' => 'nullable|string|max:255',
-            'total_payment' => 'nullable|string|max:500',
-            'special_request' => 'nullable|string|max:500',
-        ]);
-    
-        $checkInDate = $request->check_in_date;
-        $checkOutDate = $request->check_out_date;
-    
-        // Check if dates are available (excluding "Canceled" bookings)
-        $overlappingBookings = Booking::where('status', '!=', 'Canceled') // Exclude canceled bookings
-            ->where(function ($query) use ($checkInDate, $checkOutDate) {
-                $query->where('check_in_date', '<', $checkOutDate)
-                      ->where('check_out_date', '>', $checkInDate);
-            })->exists();
-    
-        if ($overlappingBookings) {
-            return redirect()->back()->with('error1', 'These dates are already booked. Please choose different dates.');
-        }
-    
-        // Generate a unique tracking code
-        $trackingCode = 'BK' . strtoupper(Str::random(1)) . '-' . str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT) . '-' . strtoupper(Str::random(1));
-    
-        // Save to database
-        Booking::create([
-            'customer_name' => $request->customer_name,
-            'check_in_date' => $checkInDate,
-            'check_out_date' => $checkOutDate,
-            'phone' => $request->phone,
-            'extra_pax' => $request->extra_pax,
-            'special_request' => $request->special_request,
-            'package_name' => $request->package_name,
-            'payment' => $request->total_payment,
-            'tracking_code' => $trackingCode,
-        ]);
-    
-        session(['tracking_code' => $trackingCode]);
-    
-        return redirect()->back()->with('success', 'Booking submitted successfully!');
+   public function store(Request $request)
+{
+    // Validate input
+    $request->validate([
+        'customer_name' => 'required|string|max:255',
+        'check_in_date' => 'required|date',
+        'check_out_date' => 'required|date|after:check_in_date',
+        'phone' => 'required|digits:11',
+        'extra_pax' => 'nullable|integer|min:0',
+        'package_name' => 'nullable|string|max:255',
+        'total_payment' => 'nullable|string|max:500',
+        'special_request' => 'nullable|string|max:500',
+    ]);
+
+    $checkInDate = $request->check_in_date;
+    $checkOutDate = $request->check_out_date;
+
+    // Check if dates are available (excluding "Canceled" bookings)
+    $overlappingBookings = Booking::where('status', '!=', 'Canceled') // Exclude canceled bookings
+        ->where(function ($query) use ($checkInDate, $checkOutDate) {
+            $query->where('check_in_date', '<', $checkOutDate)
+                  ->where('check_out_date', '>', $checkInDate);
+        })->exists();
+
+    if ($overlappingBookings) {
+        return redirect()->back()->with('error1', 'These dates are already booked. Please choose different dates.');
     }
-    
+
+    // Generate a unique tracking code
+    $trackingCode = 'BK' . strtoupper(Str::random(1)) . '-' . str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT) . '-' . strtoupper(Str::random(1));
+
+    // Save to database
+    Booking::create([
+        'customer_name' => $request->customer_name,
+        'check_in_date' => $checkInDate,
+        'check_out_date' => $checkOutDate,
+        'phone' => $request->phone,
+        'extra_pax' => $request->extra_pax,
+        'special_request' => $request->special_request,
+        'package_name' => $request->package_name,
+        'payment' => $request->total_payment,
+        'tracking_code' => $trackingCode,
+    ]);
+
+    session(['tracking_code' => $trackingCode]);
+
+    return redirect()->back()->with('success', 'Booking submitted successfully!');
+}
+
     public function trackBooking(Request $request)
 {
     // Validate the input
@@ -227,7 +227,9 @@ public function showBookings(Request $request)
 }
 public function edit($id) {
 
-    
+    if (!session()->has('admin')) {
+        return redirect()->route('adminlogin'); // Redirects to login page if no session
+    }
     $packages = Package::where('package_id', $id)->first(); // Fetch a single package
     
     if (!$packages) {
@@ -238,6 +240,9 @@ public function edit($id) {
 }
 public function calendar()
 {
+    if (!session()->has('admin')) {
+        return redirect()->route('adminlogin'); // Redirects to login page if no session
+    }
     // Fetch bookings and format them for FullCalendar
     $bookings = Booking::all()->map(function ($booking) {
         return [
@@ -268,6 +273,9 @@ public function approveBooking($id)
 
     public function showApprovedBookings()
 {
+    if (!session()->has('admin')) {
+        return redirect()->route('adminlogin'); // Redirects to login page if no session
+    }
     $approvedBookings = Booking::where('status', 'Canceled')->get();
     return view('approvedCanceled', compact('approvedBookings'));
 }

@@ -70,6 +70,9 @@ class AdminController extends Controller
 }
 public function archivedBookings()
 {
+    if (!session()->has('admin')) {
+        return redirect()->route('adminlogin'); // Redirects to login page if no session
+    }
     // Fetch only completed bookings with "Done" status
     $archivedBookings = Booking::where('status', 'Done')->get();
 

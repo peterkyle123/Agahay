@@ -143,6 +143,11 @@
                         <span class="material-icons-outlined float-right">keyboard_arrow_right</span>
                     </a>
 
+                    <a href="calendar" class="inline-block text-green-600 hover:text-green-800 my-4 w-full">
+                    <span class="material-icons-outlined float-left pr-2">event</span> Calendar
+                        <span class="material-icons-outlined float-right">keyboard_arrow_right</span>
+                    </a>
+
                     <a href="adminlogout" class="inline-block text-green-600 hover:text-green-800 my-4 w-full">
                         <span class="material-icons-outlined float-left pr-2">power_settings_new</span> Log out
                         <span class="material-icons-outlined float-right">keyboard_arrow_right</span>
