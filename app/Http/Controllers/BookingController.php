@@ -46,7 +46,8 @@ class BookingController extends Controller
     }
         
     
-        $bookings = Booking::all();
+    $bookings = Booking::whereIn('status', ['Pending', 'Done'])->get();
+
         // Sort by check-in date, newest first
     $bookings = $bookings->sortByDesc('check_in_date'); // Key change
 
@@ -149,7 +150,7 @@ public function cancel($bookingId)
 
     if ($booking) {
         // Update the booking status to "Canceled"
-        $booking->status = 'Canceled';
+        $booking->status = 'Request for Cancellation';
         $booking->save();
 
         // Redirect with success message
@@ -163,7 +164,7 @@ public function canceledBookings()
     if (!session()->has('admin')) {
         return redirect()->route('adminlogin'); // Redirects to login page if no session
     }
-    $canceledBookings = Booking::where('status', 'Canceled')->get();
+    $canceledBookings = Booking::where('status', 'Request for Cancellation')->get();
     return view('cancelrequestA', ['canceledBookings' => $canceledBookings]); // Fix the variable name
 }
 
@@ -245,4 +246,38 @@ public function calendar()
     return view('calendar', compact('bookings'));
 }
 
+public function approveBooking($id)
+    {
+        
+        $booking = Booking::find($id);
+        
+        if (!$booking) {
+            return redirect()->back()->with('error', 'Booking not found.');
+        }
+
+        $booking->status = 'Canceled'; // Change status to Canceled
+        $booking->save();
+
+        return redirect()->back()->with('success', 'Booking has been canceled successfully.');
+    }
+
+    public function showApprovedBookings()
+{
+    $approvedBookings = Booking::where('status', 'Canceled')->get();
+    return view('approvedCanceled', compact('approvedBookings'));
+}
+
+    public function RejectBooking($id)
+    {
+        $booking = Booking::find($id);
+        
+        if (!$booking) {
+            return redirect()->back()->with('error', 'Booking not found.');
+        }
+
+        $booking->status = 'Pending'; // Change status to Canceled
+        $booking->save();
+
+        return redirect()->back()->with('success', 'Booking has been canceled successfully.');
+    }
 }

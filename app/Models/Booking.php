@@ -19,6 +19,7 @@ class Booking extends Model
         'payment',
         'extra_pax',        // Add this
         'special_request',
+        'cancellation_requested',
         'tracking_code',  
         // Add this
     ];

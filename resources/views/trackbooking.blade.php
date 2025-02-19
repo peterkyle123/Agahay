@@ -128,13 +128,13 @@
                 <p><strong>Check-out:</strong> {{ $booking->check_out_date }}</p>
                 <p><strong>Status:</strong> {{ $booking->status }}</p>
                 <p><strong>Package:</strong> {{ $booking->package_name }}</p>
-                @if ($booking->cancellation_requested === 'none' && $booking->status !== 'canceled')
-            <form id="cancel-form" action="{{ route('booking.cancel', $booking->id) }}" method="POST">
-                @csrf
-                @method('PATCH')  {{-- Or @method('POST') to match your route --}}
-                <button type="submit" class="cancel-btn">Apply for Cancellation</button>
-            </form>
-        @endif
+                @if ($booking->status == 'Pending')
+                    <form id="cancel-form" action="{{ route('booking.cancel', $booking->id) }}" method="POST">
+                        @csrf
+                        @method('PATCH')  {{-- Or @method('POST') to match your route --}}
+                        <button type="submit" class="cancel-btn">Apply for Cancellation</button>
+                    </form>
+                @endif
             </div>
             
 
@@ -175,10 +175,10 @@
             } else {
                 alert(data.error);
             }
-        })
+        })  
         .catch(error => {
             console.error('Error:', error);
-            alert("An error occurred. Please try again later.");
+            alert("Cancellation request pending.");
         });
     });
 </script>

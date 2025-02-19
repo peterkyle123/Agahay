@@ -88,5 +88,8 @@ public function deleteArchivedBooking($id)
 
     return redirect()->back()->with('success', 'Booking permanently deleted.');
 }
+   
 
+        
+        
 }

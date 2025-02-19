@@ -13,7 +13,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('bookings', function (Blueprint $table) {
-            $table->enum('cancellation_requested', ['none', 'pending', 'approved', 'rejected'])->default('none');
+            $table->enum('cancellation_requested', ['none', 'processing', 'approved', 'rejected'])->default('none');
         });
     }
 

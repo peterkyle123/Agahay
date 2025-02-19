@@ -180,6 +180,7 @@ Route::delete('/admin/bookings/archives/{id}', [AdminController::class, 'deleteA
 Route::get('/admin/bookings', [BookingController::class, 'showBookings'])->name('admin.bookings');
 Route::get('/calendar', [BookingController::class, 'calendar'])->name('bookings.calendar');
 Route::get('/cancelrequestA', [BookingController::class, 'canceledBookings'])->name('admin.canceledBookings');
+Route::get('/approve_book', [BookingController::class, 'approve_book'])->name('approve_book');  
 // Route to handle cancellation request
 // Route::post('/apply-for-cancellation', [BookingController::class, 'applyForCancellation'])->name('apply-for-cancellation');
 // // Route to show all cancellation requests
@@ -190,3 +191,8 @@ Route::get('/cancelrequestA', [BookingController::class, 'canceledBookings'])->n
 // Route::patch('/update-booking-status', [BookingController::class, 'updateBookingStatus'])->name('updateBookingStatus');
 // Route::patch('/admin/bookings/{bookingId}/approve-cancellation', [AdminController::class, 'approveCancellation'])->name('admin.bookings.approveCancellation');
 // Route::patch('/admin/bookings/{bookingId}/reject-cancellation', [AdminController::class, 'rejectCancellation'])->name('admin.bookings.rejectCancellation');
+
+
+Route::get('/approve_book/{id}', [BookingController::class, 'approveBooking'])->name('approve.booking');
+Route::get('/reject_book/{id}', [BookingController::class, 'rejectBooking'])->name('reject.booking');
+Route::get('/approvedCanceled', [BookingController::class, 'showApprovedBookings'])->name('approved.bookings');

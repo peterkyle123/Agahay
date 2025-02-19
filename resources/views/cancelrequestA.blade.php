@@ -37,29 +37,66 @@
                     <th class="px-4 py-2 text-left">Phone</th>
                     <th class="px-4 py-2 text-left">Extra Pax</th>
                     <th class="px-4 py-2 text-left">Special Request</th>
-                    <th class="px-4 py-2 text-left">Status</th>
+                    <!-- <th class="px-4 py-2 text-left">Status</th> -->
                     <th class="px-4 py-2 text-left">Category</th>
-                    <th class="px-4 py-2 text-left">Downpayment</th>
-                </tr>
+                    <th class="px-4 py-2 text-left">Action</th>
+                    
+                    <!-- <th class="px-4 py-2 text-left">Downpayment</th> -->
+                </tr>   
             </thead>
             <tbody>
-                @foreach ($canceledBookings as $booking)
-                <tr class="bg-red-100">
-                    <td class="px-4 py-2">{{ $booking->tracking_code }}</td>
-                    <td class="px-4 py-2">{{ $booking->customer_name }}</td>
-                    <td class="px-4 py-2">{{ $booking->check_in_date }}</td>
-                    <td class="px-4 py-2">{{ $booking->check_out_date }}</td>
-                    <td class="px-4 py-2 text-red-600">{{ $booking->phone }}</td>
-                    <td class="px-4 py-2">{{ $booking->extra_pax }}</td>
-                    <td class="px-4 py-2 text-left whitespace-normal break-words max-w-xs">
-                        <p class="block">{{ $booking->special_request ?? 'None' }}</p>
-                    </td>
-                    <td class="px-4 py-2">Canceled</td>
-                    <td class="px-4 py-2">{{ $booking->package_name }}</td>
-                    <td class="px-4 py-2">{{ $booking->downpayment }}</td>
-                </tr>
-                @endforeach
+            @if ($canceledBookings->isEmpty())
+    <tr>
+        <td colspan="9" class="text-center py-4 text-gray-500">No canceled bookings available</td>
+    </tr>
+@else
+    @foreach ($canceledBookings as $booking)
+        <tr class="bg-red-100">
+            <td class="px-4 py-2">{{ $booking->tracking_code }}</td>
+            <td class="px-4 py-2">{{ $booking->customer_name }}</td>
+            <td class="px-4 py-2">{{ $booking->check_in_date }}</td>
+            <td class="px-4 py-2">{{ $booking->check_out_date }}</td>
+            <td class="px-4 py-2 text-red-600">{{ $booking->phone }}</td>
+            <td class="px-4 py-2">{{ $booking->extra_pax }}</td>
+            <td class="px-4 py-2 text-left whitespace-normal break-words max-w-xs">
+                <p class="block">{{ $booking->special_request ?? 'None' }}</p>
+            </td>
+            <td class="px-4 py-2">{{ $booking->package_name }}</td>
+            <td>
+                <span style="padding-bottom:10px;">
+                    <a class="btn btn-success approve-btn bg-green-500 p-2 rounded-lg m-1" href="{{ route('approve.booking', $booking->id) }}">
+                        Approve
+                    </a>
+                </span>
+                <a class="btn btn-warning reject-btn bg-red-500 p-2 rounded-lg m-1" href="{{ route('reject.booking', $booking->id) }}">Reject</a>
+            </td>
+        </tr>
+    @endforeach
+@endif
+
             </tbody>
+<!-- <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Select all approve buttons
+        document.querySelectorAll(".approve-btn").forEach(button => {
+            button.addEventListener("click", function (event) {
+                event.preventDefault(); // Prevent default link behavior
+                // alert("Approve button clicked! Implement action here.");
+            });
+        });
+
+        // Select all reject buttons
+        document.querySelectorAll(".reject-btn").forEach(button => {
+            button.addEventListener("click", function (event) {
+                event.preventDefault(); // Prevent default link behavior
+                // alert("Reject button clicked! Implement action here.");
+            });
+        });
+    });
+</script> -->
+
+                 
+            
         </table>
     </div>
 </div>
