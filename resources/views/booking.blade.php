@@ -36,7 +36,7 @@
                 flex-wrap: wrap;
                 justify-content: space-between;
                 align-items: flex-start;
-                margin-top: 100px;
+                margin-top: 150px;
                 position: absolute;
                 top: 50%;
                 left: 50%;
@@ -226,6 +226,11 @@
                 <label for="special_requests">Special Requests</label>
                 <textarea id="special_requests" name="special_request" class="input-field" placeholder="Any special requests?" rows="4"></textarea>
             </div>
+            <div class="input-container full-width">
+            <label for="downpayment">Downpayment</label>
+            <input type="text" id="downpayment" name="downpayment" class="input-field" value="₱{{ number_format($packages->initial_payment, 2) }}" readonly>
+        </div>
+
 
             <!-- Hidden fields for price calculations -->
             <input type="hidden" id="package_price" value="{{ $packages->price }}">
@@ -237,6 +242,7 @@
                 <label for="total_payment">Total Payment</label>
                 <input type="text" id="total_payment" name="total_payment" class="input-field" readonly>
             </div>
+
 
             <button class="bg-gradient-to-r from-green-500 to-green-700 submit-btn full-width" type="submit">Submit Booking</button>
         </div>

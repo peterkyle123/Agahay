@@ -177,7 +177,7 @@
 
         <!-- Inbox Panel -->
         <div class="bg-gradient-green border-gradient rounded-xl w-5/12 p-6 card">
-            <p class="text-5xl text-green-900">Bookings <br><strong>{{ $bookingCount }}</strong></p>
+            <p class="text-5xl text-green-900">Bookings</p>
             <a href="b00kings1" class="bg-gradient-btn text-xl text-white underline hover:bg-gradient-btn inline-block rounded-full mt-12 px-8 py-2"><strong>See bookings</strong></a>
         </div>
     </div>

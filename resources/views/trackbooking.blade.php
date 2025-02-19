@@ -128,9 +128,15 @@
                 <p><strong>Check-out:</strong> {{ $booking->check_out_date }}</p>
                 <p><strong>Status:</strong> {{ $booking->status }}</p>
                 <p><strong>Package:</strong> {{ $booking->package_name }}</p>
-                <button onclick="cancelBooking({{ $booking->id }})" class="cancel-btn">Apply for Cancellation</button>
-
+                @if ($booking->cancellation_requested === 'none' && $booking->status !== 'canceled')
+            <form id="cancel-form" action="{{ route('booking.cancel', $booking->id) }}" method="POST">
+                @csrf
+                @method('PATCH')  {{-- Or @method('POST') to match your route --}}
+                <button type="submit" class="cancel-btn">Apply for Cancellation</button>
+            </form>
+        @endif
             </div>
+            
 
             <script>
                 // Hide booking details after 5 seconds (5000ms)
@@ -143,38 +149,39 @@
         @endif
     </div>
     <script>
-    function cancelBooking(bookingId) {
-        const confirmCancel = confirm("Are you sure you want to cancel this booking?");
-        if (confirmCancel) {
-            fetch(`/cancel-booking/${bookingId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({
-                    _method: 'POST'
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Hide the canceled booking immediately
-                    const bookingElement = document.getElementById(`booking-${bookingId}`);
-                    if (bookingElement) {
-                        bookingElement.style.display = 'none';
-                    }
+    document.getElementById('cancel-form')?.addEventListener('submit', function(event) {
+        event.preventDefault();
 
-                    document.getElementById("bookingResult").innerHTML = "<p class='success-message'>Your booking has been canceled.</p>";
-                } else {
-                    document.getElementById("bookingResult").innerHTML = "<p class='error-message'>Failed to cancel the booking. Please try again.</p>";
-                }
+        const form = this;
+
+        fetch(form.action, {
+            method: 'POST', // Or PATCH, depending on your route
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                _method: 'PATCH' // Important for Laravel if using POST method
             })
-            .catch(error => {
-                document.getElementById("bookingResult").innerHTML = "<p class='error-message'>An error occurred. Please try again later.</p>";
-            });
-        }
-    }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.success);
+                form.style.display = 'none';
+                const messageElement = document.createElement('p');
+                messageElement.textContent = "Cancellation request pending.";
+                form.parentNode.insertBefore(messageElement, form.nextSibling);
+            } else {
+                alert(data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("An error occurred. Please try again later.");
+        });
+    });
 </script>
+
 </body>
 </html>

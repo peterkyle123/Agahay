@@ -7,6 +7,24 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
+    // public function approveCancellation($bookingId)
+    // {
+    //     $booking = Booking::find($bookingId);
+
+    //     if (!$booking) {
+    //         return redirect()->back()->with('error', 'Booking not found.');
+    //     }
+
+    //     if ($booking->cancellation_requested !== 'pending') {
+    //         return redirect()->back()->with('error', 'Invalid cancellation request.');
+    //     }
+
+    //     $booking->status = 'Canceled';
+    //     $booking->cancellation_requested = 'approved';
+    //     $booking->save();
+
+    //     return redirect()->back()->with('success', 'Cancellation approved.');
+    // }
     // Update selected bookings' status to 'Done'
     public function updateBookingsStatus(Request $request)
 {

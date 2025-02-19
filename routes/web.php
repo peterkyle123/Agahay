@@ -160,7 +160,7 @@ Route::post('/clear-tracking-code', function() {
 // Route to display booking data by tracking code
 Route::post('/trackbooking', [BookingController::class, 'trackBooking'])->name('trackbooking');
 
-Route::post('/cancel-booking/{bookingId}', [BookingController::class, 'cancel'])->name('booking.cancel');
+Route::patch('/cancel-booking/{bookingId}', [BookingController::class, 'cancel'])->name('booking.cancel');
 
 // ** New Route to Update Booking Status to "Done" **
 Route::patch('/admin/bookings/update-status', [AdminController::class, 'updateBookingsStatus'])->name('admin.updateBookingsStatus');
@@ -181,10 +181,12 @@ Route::get('/admin/bookings', [BookingController::class, 'showBookings'])->name(
 Route::get('/calendar', [BookingController::class, 'calendar'])->name('bookings.calendar');
 Route::get('/cancelrequestA', [BookingController::class, 'canceledBookings'])->name('admin.canceledBookings');
 // Route to handle cancellation request
-Route::post('/apply-for-cancellation', [BookingController::class, 'applyForCancellation'])->name('apply-for-cancellation');
-// Route to show all cancellation requests
-Route::get('/cancel-requests', [BookingController::class, 'showCancellationRequests'])->name('cancelrequestA');
-Route::post('/delete-bookings', [BookingController::class, 'deleteSelectedBookings']);
-Route::get('/cancel-requests', [BookingController::class, 'canceledBookings'])->name('cancelrequestA');
-Route::patch('/cancel-requests', [BookingController::class, 'cancelRequests'])->name('cancelrequestA');
-Route::patch('/update-booking-status', [BookingController::class, 'updateBookingStatus'])->name('updateBookingStatus');
+// Route::post('/apply-for-cancellation', [BookingController::class, 'applyForCancellation'])->name('apply-for-cancellation');
+// // Route to show all cancellation requests
+// Route::get('/cancel-requests', [BookingController::class, 'showCancellationRequests'])->name('cancelrequestA');
+// Route::post('/delete-bookings', [BookingController::class, 'deleteSelectedBookings']);
+// Route::get('/cancel-requests', [BookingController::class, 'canceledBookings'])->name('cancelrequestA');
+// Route::patch('/cancel-requests', [BookingController::class, 'cancelRequests'])->name('cancelrequestA');
+// Route::patch('/update-booking-status', [BookingController::class, 'updateBookingStatus'])->name('updateBookingStatus');
+// Route::patch('/admin/bookings/{bookingId}/approve-cancellation', [AdminController::class, 'approveCancellation'])->name('admin.bookings.approveCancellation');
+// Route::patch('/admin/bookings/{bookingId}/reject-cancellation', [AdminController::class, 'rejectCancellation'])->name('admin.bookings.rejectCancellation');
