@@ -76,6 +76,14 @@
                oninput="validatePrice(this)">
     </div>
 
+    <div class="mb-4">
+    <label class="block font-semibold mb-1">Additional Price For Friday-Sunday (₱)</label>
+    <input type="number" name="fri_sun_price" value="{{ $packages->fri_sun_price }}" 
+           class="w-full border p-2 rounded" required min="0" 
+           oninput="validatePrice(this)">
+</div>
+
+
     
     <!-- Initial Payment -->
     <div class="mb-4">

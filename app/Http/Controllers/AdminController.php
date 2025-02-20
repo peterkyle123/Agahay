@@ -99,22 +99,28 @@ public function bulkDeleteArchivedBookings(Request $request)
         return redirect()->back()->with('error', 'Some selected bookings could not be deleted.');
     }
 }
-public function deleteApprovedBooking($id)
+public function bulkDeleteApprovedBookings(Request $request)
 {
-    // Find the booking by ID and ensure it's "Canceled" before deletion
-    $booking = Booking::where('id', $id)->where('status', 'Canceled')->first();
-
-    if (!$booking) {
-        return redirect()->back()->with('error', 'Only canceled bookings can be deleted.');
+    // Check if any bookings are selected
+    if (!$request->has('booking_ids')) {
+        return redirect()->back()->with('error', 'No bookings selected for deletion.');
     }
 
-    try {
-        $booking->delete();
-        return redirect()->back()->with('success', 'Booking permanently deleted.');
-    } catch (\Exception $e) {
-        return redirect()->back()->with('error', 'Failed to delete booking. Please try again.');
+    // Get selected booking IDs
+    $bookingIds = $request->input('booking_ids');
+
+    // Delete only the bookings that have the "Canceled" status
+    $deletedCount = Booking::whereIn('id', $bookingIds)
+        ->where('status', 'Canceled')
+        ->delete();
+
+    if ($deletedCount > 0) {
+        return redirect()->back()->with('success', "Successfully deleted $deletedCount canceled bookings.");
+    } else {
+        return redirect()->back()->with('error', 'No valid canceled bookings found for deletion.');
     }
 }
+
 
 
         

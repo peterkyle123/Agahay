@@ -237,6 +237,7 @@
             <input type="hidden" id="package_days" value="{{ $packages->days_included }}">
             <input type="hidden" id="extra_pax_price" value="{{ $packages->extra_pax_price }}">
             <input type="hidden" id="extra_day_price" value="{{ $packages->extra_day_price }}">
+            <input type="hidden" id="fri_sun_price" value="{{ $packages->fri_sun_price}}">
             <input type="hidden" id="package_name" name="package_name" value="{{ $packages->package_name }}">
             <div class="input-container full-width">
                 <label for="total_payment">Total Payment</label>
@@ -254,6 +255,7 @@
     const checkoutInput = document.getElementById('checkout');
     const extraPaxInput = document.getElementById('extra_pax');
     const totalPaymentField = document.getElementById('total_payment');
+    const friSunPrice = {{ $packages->fri_sun_price }};
 
     // Package details (replace with actual values from your database)
     const packagePrice = {{ $packages->price }}; // Price for the full package
@@ -292,6 +294,11 @@
 
         // Add extra pax charges
         totalPayment += extraPax * extraPaxRate;
+
+        // Check if check-in is Friday, Saturday, or Sunday
+        if (checkinDate.getDay() === 5 || checkinDate.getDay() === 6 || checkinDate.getDay() === 0) {
+                totalPayment += friSunPrice;
+            }
 
         // Display the calculated total
         totalPaymentField.value = totalPayment.toLocaleString("en-PH", { style: "currency", currency: "PHP" });

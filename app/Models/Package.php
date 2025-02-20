@@ -27,7 +27,8 @@ class Package extends Model
         'image',
         'price',
         'initial_payment',
-        'number_of_guests',  
+        'number_of_guests', 
+        'fri_sun_price',// New field 
     ];
 
     protected $casts = [

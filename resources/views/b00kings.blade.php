@@ -96,10 +96,10 @@
                                 <select name="downpayment[{{ $booking->id }}]" 
                                     class="border p-2 rounded-md" 
                                     @if($booking->status === 'Done' || $booking->downpayment_locked) disabled @endif
-                                    onchange="confirmLock(this, {{ $booking->id }})">
+                                 onchange="confirmLock(this, {{ $booking->id }})">
                                     <option value="Not Paid" @if($booking->downpayment === 'Not Paid') selected @endif>Not Paid</option>
                                     <option value="Paid" @if($booking->downpayment === 'Paid') selected @endif>Paid</option>
-            </select>
+</select>
                                 </td>
                             <td class="px-4 py-2">
                                 @if ($booking->status == 'Pending' && $booking->downpayment == 'Paid' && $booking->package)

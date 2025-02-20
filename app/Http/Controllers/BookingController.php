@@ -274,13 +274,16 @@ public function approveBooking($id)
     }
 
     public function showApprovedBookings()
-{
-    if (!session()->has('admin')) {
-        return redirect()->route('adminlogin'); // Redirects to login page if no session
+    {
+        if (!session()->has('admin')) {
+            return redirect()->route('adminlogin'); // Redirects to login page if no session
+        }
+    
+        $approvedCanceledBookings = Booking::where('status', 'Canceled')->get();
+    
+        return view('approvedCanceled', compact('approvedCanceledBookings'));
     }
-    $approvedBookings = Booking::where('status', 'Canceled')->get();
-    return view('approvedCanceled', compact('approvedBookings'));
-}
+    
 
     public function RejectBooking($id)
     {
