@@ -93,11 +93,14 @@
                                 <td class="px-4 py-2">{{ $booking->package_name}}</td>
                                 <td class="px-4 py-2">{{ $booking->payment }}</td>
                                 <td class="px-4 py-2">
-                                <select name="downpayment[{{ $booking->id }}]" class="border p-2 rounded-md" @if($booking->status === 'Done') disabled @endif>
-                                    <option value="Paid" @if($booking->downpayment === 'Paid') selected @endif>Paid</option>
+                                <select name="downpayment[{{ $booking->id }}]" 
+                                    class="border p-2 rounded-md" 
+                                    @if($booking->status === 'Done' || $booking->downpayment_locked) disabled @endif
+                                    onchange="confirmLock(this, {{ $booking->id }})">
                                     <option value="Not Paid" @if($booking->downpayment === 'Not Paid') selected @endif>Not Paid</option>
-                                </select>
-                            </td>
+                                    <option value="Paid" @if($booking->downpayment === 'Paid') selected @endif>Paid</option>
+            </select>
+                                </td>
                             <td class="px-4 py-2">
                                 @if ($booking->status == 'Pending' && $booking->downpayment == 'Paid' && $booking->package)
                                   {{ number_format($booking->payment - $booking->package->initial_payment, 2) }}
@@ -111,11 +114,6 @@
                     </tbody>
                 </table>
 
-                <!-- <div class="mt-4 flex justify-end space-x-4">
-                    <button type="submit" name="action" value="delete" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-800">
-                        Delete Cancelled Bookings
-                    </button> -->
-
                     <button type="submit" name="action" value="done" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-800">
                         Mark Selected as Done
                     </button>
@@ -125,6 +123,37 @@
     </div>
 
     <script>
+       function confirmLock(selectElement, bookingId) {
+        let confirmation = confirm("Are you sure you want to lock this selection? Once locked, it cannot be changed.");
+
+        if (confirmation) {
+            // Disable the dropdown to prevent further changes
+            selectElement.disabled = true;
+
+            // Send an AJAX request to update the locked status in the database
+            fetch('/lock-downpayment/' + bookingId, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ locked: true })
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error(error));
+        } else {
+            // Revert selection if canceled
+            selectElement.value = selectElement.dataset.previousValue;
+        }
+    }
+
+    // Store the initial value
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll("select[name^='downpayment']").forEach(select => {
+            select.dataset.previousValue = select.value;
+        });
+    });
         // Select/Deselect all checkboxes
         document.getElementById('select-all').addEventListener('change', function() {
             const checkboxes = document.querySelectorAll('.booking-checkbox');

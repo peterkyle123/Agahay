@@ -243,19 +243,21 @@ public function calendar()
     if (!session()->has('admin')) {
         return redirect()->route('adminlogin'); // Redirects to login page if no session
     }
+
     // Fetch bookings and format them for FullCalendar
     $bookings = Booking::all()->map(function ($booking) {
         return [
             'title' => $booking->customer_name . ' - ' . $booking->package_name,
             'start' => $booking->check_in_date,
             'end' => Carbon::parse($booking->check_out_date)->addDay()->toDateString(), // Ensure full-day booking display
-            'color' => $booking->status == 'Done' ? '#28a745' : ($booking->status == 'Pending' ? '#ffc107' : '#dc3545'), // Green for confirmed, yellow for pending, red for canceled
+            'extendedProps' => [
+                'status' => $booking->status, // Pass status to FullCalendar
+            ],
         ];
     });
 
     return view('calendar', compact('bookings'));
 }
-
 public function approveBooking($id)
     {
         

@@ -134,66 +134,55 @@
     </div>
 
     <!-- Legend -->
-    <div class="legend-container">
-        <div class="legend-item">
-            <span class="legend-color small-group"></span> Small Group Booking
-        </div>
-        <div class="legend-item">
-            <span class="legend-color vip"></span> VIP Booking
-        </div>
-        <div class="legend-item">
-            <span class="legend-color large-group"></span> Large Group Booking
-        </div>
-        <div class="legend-item">
-            <span class="legend-color canceled"></span> Canceled Booking
-        </div>
+<div class="legend-container">
+    <div class="legend-item">
+        <span class="legend-color" style="background-color: #28a745;"></span> Done
     </div>
+    <div class="legend-item">
+        <span class="legend-color" style="background-color: #ffc107;"></span> Pending
+    </div>
+    <div class="legend-item">
+        <span class="legend-color" style="background-color: #dc3545;"></span> Canceled
+    </div>
+    <div class="legend-item">
+        <span class="legend-color" style="background-color:rgb(78, 53, 220);"></span> Requesting for Cancellation
+    </div>
+</div>
 
     <!-- FullCalendar Script -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-    var today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+      document.addEventListener('DOMContentLoaded', function () {
+    let bookings = @json($bookings);
+    let calendarEl = document.getElementById('calendar');
 
-    setTimeout(() => {
-        let todayCell = document.querySelector(`[data-date="${today}"]`);
-        if (todayCell) {
-            todayCell.classList.add('highlight');
+    let calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        events: bookings,
+        selectable: true,
+        editable: false,
+        eventClick: function (info) {
+            alert('Booking: ' + info.event.title);
+        },
+        eventDidMount: function (info) {
+            var bookingStatus = info.event.extendedProps.status; // Get status
+
+            // Set colors dynamically based on booking status
+            if (bookingStatus === 'Done') {
+                info.el.style.backgroundColor = '#28a745'; // Green for completed
+            } else if (bookingStatus === 'Pending') {
+                info.el.style.backgroundColor = '#ffc107'; // Yellow for pending
+            } else if (bookingStatus === 'Canceled') {
+                info.el.style.backgroundColor = '#dc3545'; // Red for canceled
+            } else if (bookingStatus === 'Requesting for Cancellation') {
+                info.el.style.backgroundColor = 'rgb(78, 53, 220)'; // Blue for request cancel
+            }
         }
-    }, 500);
+    });
+
+    calendar.render();
 });
-        let bookings = @json($bookings);
-        let calendar;
 
-        document.addEventListener('DOMContentLoaded', function () {
-            var calendarEl = document.getElementById('calendar');
-
-            calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                events: bookings,
-                selectable: true,
-                editable: false,
-                eventClick: function (info) {
-                    alert('Booking: ' + info.event.title);
-                },
-                eventDidMount: function(info) {
-                    var eventType = info.event.extendedProps.type; 
-
-                    if (eventType === 'Small Group') {
-                        info.el.style.backgroundColor = '#4CAF50'; // Green
-                    } else if (eventType === 'VIP') {
-                        info.el.style.backgroundColor = '#FFA500'; // Orange
-                    } else if (eventType === 'Large Group') {
-                        info.el.style.backgroundColor = '#FF4500'; // Red
-                    } else if (eventType === 'Canceled') {
-                        info.el.style.backgroundColor = '#808080'; // Gray
-                    }
-                }
-            });
-
-            calendar.render();
-        });
-
-        function searchByDate() {
+function searchByDate() {
     let searchDate = document.getElementById('searchDate').value;
     if (!searchDate) {
         alert("Please select a date.");
@@ -222,6 +211,7 @@
             // Remove highlights
             document.querySelectorAll('.highlight').forEach(el => el.classList.remove('highlight'));
         }
+
     </script>
 
 </body>
