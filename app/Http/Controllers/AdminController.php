@@ -78,18 +78,26 @@ public function archivedBookings()
 
     return view('archives', compact('archivedBookings'));
 }
-public function deleteArchivedBooking($id)
+public function bulkDeleteArchivedBookings(Request $request)
 {
-    // Find the booking by ID and ensure it's "Done" before deletion
-    $booking = Booking::where('id', $id)->where('status', 'Done')->first();
-
-    if (!$booking) {
-        return redirect()->back()->with('error', 'Only completed bookings can be deleted.');
+    if (!session()->has('admin')) {
+        return redirect()->route('adminlogin'); // Redirect to login if not authenticated
     }
 
-    $booking->delete();
+    $bookingIds = $request->input('booking_ids');
 
-    return redirect()->back()->with('success', 'Booking permanently deleted.');
+    if (!$bookingIds) {
+        return redirect()->back()->with('error', 'No bookings selected for deletion.');
+    }
+
+    // Find and delete only 'Done' bookings
+    $deleted = Booking::whereIn('id', $bookingIds)->where('status', 'Done')->delete();
+
+    if ($deleted) {
+        return redirect()->back()->with('success', 'Selected bookings permanently deleted.');
+    } else {
+        return redirect()->back()->with('error', 'Some selected bookings could not be deleted.');
+    }
 }
 public function deleteApprovedBooking($id)
 {

@@ -176,7 +176,9 @@ Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('
 Route::get('/reviews', [ReviewController::class, 'reviews'])->name('reviews.index'); //If you have an index page
 // Route::get('/revenue-data', [RevenueController::class, 'getRevenueData']);
 Route::get('/archives', [AdminController::class, 'archivedBookings'])->name('admin.archivedBookings');
-Route::delete('/admin/bookings/archives/{id}', [AdminController::class, 'deleteArchivedBooking'])->name('admin.deleteArchivedBooking');
+Route::delete('/admin/bookings/archives/bulk-delete', [AdminController::class, 'bulkDeleteArchivedBookings'])
+    ->name('admin.bulkDeleteArchivedBookings');
+
 Route::get('/admin/bookings', [BookingController::class, 'showBookings'])->name('admin.bookings');
 Route::get('/calendar', [BookingController::class, 'calendar'])->name('bookings.calendar');
 Route::get('/cancelrequestA', [BookingController::class, 'canceledBookings'])->name('admin.canceledBookings');
