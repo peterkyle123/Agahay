@@ -202,4 +202,4 @@ Route::delete('/admin/bookings/approved/bulk-delete', [AdminController::class, '
     ->name('admin.bulkDeleteApprovedBookings');
 
 Route::get('/get-unavailable-dates', [BookingController::class, 'getUnavailableDates'])->name('get.unavailable.dates');
-
+Route::get('/total-revenues', [RevenueController::class, 'totalRevenues'])->name('total.revenues');
