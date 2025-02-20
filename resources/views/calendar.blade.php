@@ -111,7 +111,7 @@
         .canceled { background-color: #808080; } /* Gray */
         
         .highlight {
-             background-color: #FFD700 !important; /* Gold color */
+             background-color:rgb(0, 255, 55) !important; /* Gold color */
              color: black !important;
              font-weight: bold;
              border-radius: 5px;
@@ -151,68 +151,71 @@
 
     <!-- FullCalendar Script -->
     <script>
-      document.addEventListener('DOMContentLoaded', function () {
-    let bookings = @json($bookings);
-    let calendarEl = document.getElementById('calendar');
+    document.addEventListener('DOMContentLoaded', function () {
+        var today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+        let bookings = @json($bookings);
+        let calendarEl = document.getElementById('calendar');
 
-    let calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        events: bookings,
-        selectable: true,
-        editable: false,
-        eventClick: function (info) {
-            alert('Booking: ' + info.event.title);
-        },
-        eventDidMount: function (info) {
-            var bookingStatus = info.event.extendedProps.status; // Get status
+        // Declare the calendar globally
+        window.calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: bookings,
+            selectable: true,
+            editable: false,
+            eventClick: function (info) {
+                alert('Booking: ' + info.event.title);
+            },
+            eventDidMount: function (info) {
+                var bookingStatus = info.event.extendedProps.status; // Get status
 
-            // Set colors dynamically based on booking status
-            if (bookingStatus === 'Done') {
-                info.el.style.backgroundColor = '#28a745'; // Green for completed
-            } else if (bookingStatus === 'Pending') {
-                info.el.style.backgroundColor = '#ffc107'; // Yellow for pending
-            } else if (bookingStatus === 'Canceled') {
-                info.el.style.backgroundColor = '#dc3545'; // Red for canceled
-            } else if (bookingStatus === 'Requesting for Cancellation') {
-                info.el.style.backgroundColor = 'rgb(78, 53, 220)'; // Blue for request cancel
+                // Set colors dynamically based on booking status
+                if (bookingStatus === 'Done') {
+                    info.el.style.backgroundColor = '#28a745'; // Green for completed
+                } else if (bookingStatus === 'Pending') {
+                    info.el.style.backgroundColor = '#ffc107'; // Yellow for pending
+                } else if (bookingStatus === 'Canceled') {
+                    info.el.style.backgroundColor = '#dc3545'; // Red for canceled
+                } else if (bookingStatus === 'Requesting for Cancellation') {
+                    info.el.style.backgroundColor = 'rgb(78, 53, 220)'; // Blue for request cancel
+                }
             }
-        }
+        });
+
+        calendar.render();
     });
 
-    calendar.render();
-});
+    // 🔍 Search By Date
+    function searchByDate() {
+        let searchDate = document.getElementById('searchDate').value;
+        if (!searchDate) {
+            alert("Please select a date.");
+            return;
+        }
 
-function searchByDate() {
-    let searchDate = document.getElementById('searchDate').value;
-    if (!searchDate) {
-        alert("Please select a date.");
-        return;
-    }
+        // Move calendar to the selected date
+        calendar.gotoDate(searchDate);
 
-    // Move calendar to the selected date
-    calendar.gotoDate(searchDate);
-
-    // Wait for FullCalendar to update, then highlight the searched date
-    setTimeout(() => {
+        // Remove previous highlights
         document.querySelectorAll('.highlight').forEach(el => el.classList.remove('highlight'));
 
-        let targetCell = document.querySelector(`[data-date="${searchDate}"]`);
-        if (targetCell) {
-            targetCell.classList.add('highlight');
-        }
-    }, 500);
-}
+        // Wait for FullCalendar to update, then highlight the searched date
+        setTimeout(() => {
+            let targetCell = document.querySelector(`[data-date="${searchDate}"]`);
+            if (targetCell) {
+                targetCell.classList.add('highlight');
+            }
+        }, 500);
+    }
 
-        function resetCalendar() {
-            document.getElementById('searchDate').value = '';
-            calendar.removeAllEvents();
-            calendar.addEventSource(bookings);
-            
-            // Remove highlights
-            document.querySelectorAll('.highlight').forEach(el => el.classList.remove('highlight'));
-        }
+    // 🔄 Reset Calendar
+    function resetCalendar() {
+        document.getElementById('searchDate').value = '';
+        calendar.gotoDate(new Date()); // Reset calendar to today's date
 
-    </script>
+        // Remove highlights
+        document.querySelectorAll('.highlight').forEach(el => el.classList.remove('highlight'));
+    }
+</script>
 
 </body>
 </html>
