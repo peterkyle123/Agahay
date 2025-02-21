@@ -88,6 +88,7 @@
         background-position: center;
         text-decoration: none;
         overflow: hidden;
+        position: relative;
     }
 
     .option:hover {
@@ -115,6 +116,49 @@
         text-align: justify;
         background: rgba(0, 0, 0, 0.6);
     }
+    .option.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+.overlay.red-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 0, 0, 0.7);
+    width: auto; /* Allow width to adjust to content */
+    height: auto; /* Allow height to adjust to content */
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 0; /* Ensure the filter is behind the text */
+}
+
+.overlay-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    white-space: nowrap;
+    z-index: 100; /* Ensure the text is in front of the filter */
+}
+
+@media (max-width: 768px) {
+    .overlay.red-overlay {
+        padding: 8px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .overlay.red-overlay {
+        padding: 6px 12px;
+    }
+}
+
 </style>
 
 <header class="header">
@@ -122,10 +166,10 @@
 </header>
 
 <div class="content-wrapper"> <div class="option-container">  @foreach ($packages as $package)
-<a href="{{ route('frm', ['package_id' => $package->package_id]) }}"
-    class="option" 
-    style="background-image: url('{{ asset($package->image) }}');">
-    
+<a href="{{ $package->available ? route('frm', ['package_id' => $package->package_id]) : '#' }}"
+   class="option {{ $package->available ? '' : 'disabled' }}" 
+   style="background-image: url('{{ asset($package->image) }}');">
+
     <div class="option-text">{{ $package->package_name }}</div>
     
     <div class="description-text">
@@ -135,6 +179,15 @@
         <span style="color: red;">Extra Pax: ₱{{ number_format($package->extra_pax_price, 2) }} per person</span>
         <strong>Downpayment ₱{{ number_format($package->initial_payment, 2) }}</strong> | 
     </div>
+    
+    @if(!$package->available)
+    <div class="overlay red-overlay">
+    <strong style="font-size:24px;">Not Available</strong>
+    </div>
+@endif
+
+
+
 </a>
 
     @endforeach

@@ -28,11 +28,13 @@ class Package extends Model
         'price',
         'initial_payment',
         'number_of_guests', 
-        'fri_sun_price',// New field 
+        'fri_sun_price',
+        'available', 
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
+        'available' => 'boolean', //optional but recommended
     ];
 }
 

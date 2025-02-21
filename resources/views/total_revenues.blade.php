@@ -43,6 +43,7 @@
                     </div>
 
                     <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">Filter</button>
+                    <button type="button" onclick="window.print()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Print Report</button>
                 </div>
             </form>
 
@@ -67,7 +68,7 @@
                     <tbody>
                         @foreach($bookingsForTable as $booking)
                             <tr class="border-b">
-                                <td class="px-4 py-2">{{ $booking->tracking_code }}</td>
+                                <td class="px-4 py-2">{{ $booking->tracking_code}}</td>
                                 <td class="px-4 py-2">{{ $booking->customer_name }}</td>
                                 <td class="px-4 py-2">{{ $booking->package_name }}</td>
                                 <td class="px-4 py-2">{{ $booking->check_in_date }}</td>
