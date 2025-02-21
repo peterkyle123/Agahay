@@ -7,7 +7,7 @@
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
     <link rel="icon" href="{{ asset('images/palm-tree.png') }}" type="image/x-icon">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">     
 </head>
 <body class="white">
     <div class="min-h-screen p-6">
@@ -25,13 +25,21 @@
 
             <form action="{{ route('total.revenues') }}" method="GET" class="mb-4">
                 <div class="flex items-center space-x-4">
+                    <label for="package_name" class="block text-sm font-medium text-gray-700">Filter by Package:</label>
+                    <select name="package_name" id="package_name" class="mt-1 p-2 border rounded-md">
+                        <option value="">All Packages</option>
+                        @foreach($packages as $package)
+                            <option value="{{ $package }}" {{ request('package_name') == $package ? 'selected' : '' }}>{{ $package }}</option>
+                        @endforeach
+                    </select>
+
                     <label for="filter" class="block text-sm font-medium text-gray-700">Filter By:</label>
                     <select name="filter" id="filter" class="mt-1 p-2 border rounded-md">
                         <option value="total">Total</option>
                         <option value="date_range">Date Range</option>
                     </select>
 
-                    <div id="dateRangeInputs" class="flex space-x-4 hidden">
+                    <div id="dateRangeInputs" class="flex space-x-4 {{ request('filter', 'total') == 'date_range' ? '' : 'hidden' }}">
                         <div>
                             <label for="start_date" class="block text-sm font-medium text-gray-700">Start Date</label>
                             <input type="date" name="start_date" id="start_date" class="mt-1 p-2 border rounded-md" value="{{ $startDate ?? '' }}">
