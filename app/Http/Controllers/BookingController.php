@@ -238,25 +238,33 @@ public function edit($id) {
 
     return view('editpackages', compact('packages')); // Pass single package to the view
 }
-public function calendar()
+public function calendar(Request $request)
 {
-    if (!session()->has('admin')) {
-        return redirect()->route('adminlogin'); // Redirects to login page if no session
+    if (!session()->has('admin') && !$request->has('userView')) {
+        return redirect()->route('adminlogin');
     }
 
-    // Fetch bookings and format them for FullCalendar
-    $bookings = Booking::all()->map(function ($booking) {
-        return [
-            'title' => $booking->customer_name . ' - ' . $booking->package_name,
+    $bookings = Booking::all()->map(function ($booking) use ($request) {
+        $event = [
             'start' => $booking->check_in_date,
-            'end' => Carbon::parse($booking->check_out_date)->addDay()->toDateString(), // Ensure full-day booking display
+            'end' => Carbon::parse($booking->check_out_date)->addDay()->toDateString(),
             'extendedProps' => [
-                'status' => $booking->status, // Pass status to FullCalendar
+                'status' => $booking->status,
             ],
         ];
-    });
 
-    return view('calendar', compact('bookings'));
+        if (!$request->has('userView')) {
+            $event['title'] = $booking->customer_name . ' - ' . $booking->package_name;
+        }
+
+        return $event;
+    }); // Corrected: Closure ends here
+
+    if ($request->has('userView')) {
+        return view('user_calendar', compact('bookings'));
+    } else {
+        return view('calendar', compact('bookings'));
+    }
 }
 public function approveBooking($id)
     {
@@ -319,4 +327,32 @@ public function approveBooking($id)
     return response()->json(['unavailable_dates' => $unavailableDates]);
 }
 
+public function calendars(Request $request)
+{
+    if (!session()->has('admin') && !$request->has('userView')) {
+        return redirect()->route('adminlogin');
+    }
+
+    $bookings = Booking::all()->map(function ($booking) use ($request) {
+        $event = [
+            'start' => $booking->check_in_date,
+            'end' => Carbon::parse($booking->check_out_date)->addDay()->toDateString(),
+            'extendedProps' => [
+                'status' => $booking->status,
+            ],
+        ];
+
+        if (!$request->has('userView')) {
+            $event['title'] = $booking->package_name;
+        }
+
+        return $event;
+    }); // Corrected: Closure ends here
+
+    if ($request->has('userView')) {
+        return view('user_calendar', compact('bookings'));
+    } else {
+        return view('user_calendar', compact('bookings'));
+    }
+}
 }

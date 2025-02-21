@@ -203,3 +203,4 @@ Route::delete('/admin/bookings/approved/bulk-delete', [AdminController::class, '
 
 Route::get('/get-unavailable-dates', [BookingController::class, 'getUnavailableDates'])->name('get.unavailable.dates');
 Route::get('/total-revenues', [RevenueController::class, 'totalRevenues'])->name('total.revenues');
+Route::get('/user/calendar', [BookingController::class, 'calendars'])->name('user.calendar')->defaults('userView', true);

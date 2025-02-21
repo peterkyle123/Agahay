@@ -160,14 +160,21 @@
         });
     </script>
     @endif
-    <div class="absolute top-4 left-4 flex space-x-4 z-50">
-    <button class="bg-white text-green-800 px-4 py-2 rounded-md font-semibold mr-5 shadow-sm hover:bg-gray-100 transition-colors duration-300 ease-in-out no-border-button">
-    <a href="/">Home</a>
-</button>
-        <button class="bg-white text-green-700 px-4 py-2 rounded-md font-semibold mr-5 shadow-sm hover:bg-gray-100 transition-colors duration-300 ease-in-out">
+    <div class="absolute top-4 left-4 flex justify-between w-full z-50">
+    <div class="flex space-x-4">
+        <button class="bg-white text-green-800 px-4 py-2 rounded-md font-semibold shadow-sm hover:bg-gray-100 transition-colors duration-300 ease-in-out no-border-button">
+            <a href="/">Home</a>
+        </button>
+        <button class="bg-white text-green-700 px-4 py-2 rounded-md font-semibold shadow-sm hover:bg-gray-100 transition-colors duration-300 ease-in-out">
             <a href="{{ route('book') }}">Back</a>
         </button>
     </div>
+    <div class="flex">
+        <button class="bg-white text-green-700 px-4 py-2 rounded-md font-semibold shadow-sm hover:bg-gray-100 transition-colors duration-300 ease-in-out mr-8">
+            <a href="{{ route('user.calendar') }}">Calendar</a>
+        </button>
+    </div>
+</div>
 
     <!-- Position the success message at the top -->
 
