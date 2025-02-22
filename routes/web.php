@@ -207,3 +207,4 @@ Route::get('/user/calendar', [BookingController::class, 'calendars'])->name('use
 // Route::get('/admin/bookings/{booking}/mark-downpayment-paid', [BookingController::class, 'showMarkDownpaymentPaid'])->name('admin.mark.downpayment.paid');
 // Route::post('/admin/bookings/{booking}/mark-downpayment-paid/process', [BookingController::class, 'processMarkDownpaymentPaid'])->name('admin.mark.downpayment.paid.process');
 Route::post('/bookings/{booking}/upload-proof', [BookingController::class, 'uploadProofOfPayment'])->name('booking.upload.proof');
+Route::get('/statistics', [RevenueController::class, 'statistics'])->name('statistics');

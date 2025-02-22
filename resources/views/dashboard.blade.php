@@ -191,13 +191,13 @@
     <div class="flex flex-row space-x-6"> <!-- Increased spacing between panels -->
         <!-- Bookings Revenue for This Month -->
         <div class="bg-gradient-green border-gradient rounded-xl w-4/12 p-6 card">
-            <p class="text-3xl text-green-900">Bookings Revenue <br><strong>This Month</strong></p>
+            <p class="text-3xl text-green-900">Canceled Revenues <br><strong>Initial Downpayment</strong></p>
             <p class="text-xl text-white mt-4"></p> <!-- This would be dynamic in your real app -->
         </div>
 
         <!-- Total Revenues -->
         <div class="bg-gradient-green border-gradient rounded-xl w-4/12 p-6 card">
-            <p class="text-3xl text-green-900">Total Revenues</p>
+            <p class="text-3xl text-green-900">Done Revenues</p>
             <a href="total-revenues" class="bg-gradient-btn text-xl text-white underline hover:bg-gradient-btn inline-block rounded-full mt-12 px-8 py-2"><strong>Revenues</strong></a>
             <p class="text-xl text-white mt-4"></p> <!-- Dynamic data as well -->
         </div>
