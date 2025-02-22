@@ -50,41 +50,60 @@
 
                 <!-- Table displaying only 'Canceled' bookings -->
                 <table class="min-w-full bg-white shadow-md rounded-lg">
-                    <thead>
-                        <tr class="text-gray-800 border-b">
-                            <th class="px-4 py-2 text-left">
-                                <input type="checkbox" id="select-all">
-                            </th>
-                            <th class="px-4 py-2 text-left">Tracking Code</th>
-                            <th class="px-4 py-2 text-left">Customer Name</th>
-                            <th class="px-4 py-2 text-left">Check-in Date</th>
-                            <th class="px-4 py-2 text-left">Check-out Date</th>
-                            <th class="px-4 py-2 text-left">Phone</th>
-                            <th class="px-4 py-2 text-left">Payment</th>
-                            <th class="px-4 py-2 text-left">Category</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($approvedCanceledBookings as $booking)
-                            <tr class="border-b">
-                                <td class="px-4 py-2">
-                                    <input type="checkbox" name="booking_ids[]" value="{{ $booking->id }}" class="booking-checkbox">
-                                </td>
-                                <td class="px-4 py-2">{{ $booking->tracking_code }}</td>
-                                <td class="px-4 py-2">{{ $booking->customer_name }}</td>
-                                <td class="px-4 py-2">{{ $booking->check_in_date }}</td>
-                                <td class="px-4 py-2">{{ $booking->check_out_date }}</td>
-                                <td class="px-4 py-2 text-gray-600">{{ $booking->phone }}</td>
-                                <td class="px-4 py-2">{{ $booking->payment }}</td>
-                                <td class="px-4 py-2 font-bold">{{ $booking->package_name }}</td>
-                            </tr>
-                        @empty
+                <thead>
+                    <tr class="text-gray-800 border-b">
+                        <th class="px-4 py-2 text-left">
+                            <input type="checkbox" id="select-all">
+                        </th>
+                        <th class="px-4 py-2 text-left">Tracking Code</th>
+                        <th class="px-4 py-2 text-left">Customer Name</th>
+                        <th class="px-4 py-2 text-left">Check-in Date</th>
+                        <th class="px-4 py-2 text-left">Check-out Date</th>
+                        <th class="px-4 py-2 text-left">Phone</th>
+                        <th class="px-4 py-2 text-left">Payment</th>
+                        <th class="px-4 py-2 text-left">Downpayment</th>
+                        <th class="px-4 py-2 text-left">Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        @php
+                            $totalDownpayment = 0; // Initialize the total variable to 0
+                        @endphp
+
+                            @forelse ($approvedCanceledBookings as $booking)
+                                <tr class="border-b">
+                                    <td class="px-4 py-2">
+                                        <input type="checkbox" name="booking_ids[]" value="{{ $booking->id }}" class="booking-checkbox">
+                                    </td>
+                                    <td class="px-4 py-2">{{ $booking->tracking_code }}</td>
+                                    <td class="px-4 py-2">{{ $booking->customer_name }}</td>
+                                    <td class="px-4 py-2">{{ $booking->check_in_date }}</td>
+                                    <td class="px-4 py-2">{{ $booking->check_out_date }}</td>
+                                    <td class="px-4 py-2 text-gray-600">{{ $booking->phone }}</td>
+                                    <td class="px-4 py-2">{{ $booking->payment }}</td>
+                                    <td class="px-4 py-2">
+                                        @if ($booking->package && $booking->package->initial_payment)
+                                            ₱{{ number_format($booking->package->initial_payment, 2) }}
+                                            @php
+                                                $totalDownpayment += $booking->package->initial_payment; // Accumulate the downpayments
+                                            @endphp
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
+                                    <td class="px-4 py-2 font-bold">{{ $booking->package_name }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="9" class="text-center text-gray-600 py-4">No canceled bookings found.</td>
+                                </tr>
+                            @endforelse
                             <tr>
-                                <td colspan="8" class="text-center text-gray-600 py-4">No canceled bookings found.</td>
+                                <td colspan="8" class="px-4 py-2 text-right font-bold">Total Downpayments:</td>
+                                <td class="px-4 py-2 font-bold">₱{{ number_format($totalDownpayment, 2) }}</td>
                             </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
 
                 <!-- Bulk Delete Button -->
                 <button type="submit" class="bg-red-600 text-white px-4 py-2 mt-4 rounded-lg hover:bg-red-800">
