@@ -120,7 +120,11 @@
 </head>
 <body>
 
-    <header>Booking Calendar</header>
+    <header>Booking Calendar
+    <a href="/dashboard" class="bg-white text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition text-sm sm:text-base">
+                Home
+            </a>
+    </header>
 
     <!-- Search Bar -->
     <div class="search-container">

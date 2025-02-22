@@ -156,15 +156,16 @@ public function cancel($bookingId)
     $booking = Booking::find($bookingId);
 
     if ($booking) {
-        // Update the booking status to "Canceled"
+        // Update the booking status to "Request for Cancellation"
         $booking->status = 'Request for Cancellation';
         $booking->save();
 
-        // Redirect with success message
-        return redirect()->route('booking.show', $bookingId)->with('success', 'Your booking has been canceled.');
+        // Return a JSON success response
+        return response()->json(['success' => 'Cancellation request submitted.']);
     }
 
-    return redirect()->back()->with('error', 'Booking not found.');
+    // Return a JSON error response
+    return response()->json(['error' => 'Booking not found.']);
 }
 public function canceledBookings()
 {
@@ -383,5 +384,24 @@ public function lockDownpayment(Request $request, $bookingId)
 
 //     return redirect()->route('admin.mark.downpayment.paid', $booking->id)->with('success', 'Downpayment marked as Paid.');
 // }
+public function uploadProofOfPayment(Request $request, Booking $booking)
+{
+    $request->validate([
+        'proof_of_payment' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
 
+    if ($request->hasFile('proof_of_payment')) {
+        $file = $request->file('proof_of_payment');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $path = $file->storeAs('proofs', $filename, 'public'); // Store in storage/app/public/proofs
+
+        // Update the booking's proof_of_payment field
+        $booking->proof_of_payment = 'proofs/' . $filename;
+        $booking->save();
+
+        return response()->json(['success' => 'Proof of payment uploaded successfully.']);
+    }
+
+    return response()->json(['error' => 'Failed to upload proof of payment.']);
+}
 }

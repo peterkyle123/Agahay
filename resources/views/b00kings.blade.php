@@ -66,8 +66,8 @@
                             <th class="px-4 py-2 text-left">Status</th>
                             <th class="px-4 py-2 text-left">Category</th>
                             <th class="px-4 py-2 text-left">Payment</th>
-                            <th class="px-4 py-2 text-left">Downpayment</th>
-                            <th class="px-4 py-2 text-left">Balance</th>
+                            <!-- <th class="px-4 py-2 text-left">Downpayment</th>
+                            <th class="px-4 py-2 text-left">Balance</th> -->
                         </tr>
                     </thead>
                     <tbody>

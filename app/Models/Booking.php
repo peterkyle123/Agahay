@@ -20,11 +20,12 @@ class Booking extends Model
         'extra_pax',        // Add this
         'special_request',
         'cancellation_requested',
-        'tracking_code',  
+        'tracking_code',
+        'proof_of_payment'  
         // Add this
     ];
     public function package()
     {
-        return $this->belongsTo(Package::class, 'package_id', 'package_id'); 
+        return $this->belongsTo(Package::class, 'package_name', 'package_name'); 
     }
 }
