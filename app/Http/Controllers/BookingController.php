@@ -69,6 +69,8 @@ class BookingController extends Controller
     {
         // Return the view with the bookings data
         return view('booking');
+
+        
     }
     
    public function store(Request $request)
@@ -329,9 +331,6 @@ public function approveBooking($id)
 
 public function calendars(Request $request)
 {
-    if (!session()->has('admin') && !$request->has('userView')) {
-        return redirect()->route('adminlogin');
-    }
 
     $bookings = Booking::all()->map(function ($booking) use ($request) {
         $event = [
@@ -355,4 +354,34 @@ public function calendars(Request $request)
         return view('user_calendar', compact('bookings'));
     }
 }
+public function lockDownpayment(Request $request, $bookingId)
+{
+    $booking = Booking::find($bookingId);
+
+    if (!$booking) {
+        return response()->json(['error' => 'Booking not found'], 404);
+    }
+
+    $downpaymentStatus = $request->input('downpayment');
+
+    $booking->downpayment = $downpaymentStatus;
+    $booking->downpayment_locked = true;
+
+    $booking->save(); // The model's boot() method will calculate the balance
+
+    return response()->json(['success' => 'Downpayment status updated']);
+}
+// public function showMarkDownpaymentPaid(Booking $booking)
+// {
+//     return view('downpayment-paid', compact('booking'));
+// }
+
+// public function processMarkDownpaymentPaid(Request $request, Booking $booking)
+// {
+//     $booking->downpayment = 'Paid';
+//     $booking->save();
+
+//     return redirect()->route('admin.mark.downpayment.paid', $booking->id)->with('success', 'Downpayment marked as Paid.');
+// }
+
 }

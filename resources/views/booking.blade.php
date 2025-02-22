@@ -238,7 +238,7 @@
                 <textarea id="special_requests" name="special_request" class="input-field" placeholder="Any special requests?" rows="4"></textarea>
             </div>
             <div class="input-container full-width">
-            <label for="downpayment">Downpayment</label>
+            <label for="downpayment">Downpayment: Pay downpayment to avail cancellation of bookings</label>
             <input type="text" id="downpayment" name="downpayment" class="input-field" value="₱{{ number_format($packages->initial_payment, 2) }}" readonly>
         </div>
 
