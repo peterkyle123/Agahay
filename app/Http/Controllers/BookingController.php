@@ -404,4 +404,47 @@ public function uploadProofOfPayment(Request $request, Booking $booking)
 
     return response()->json(['error' => 'Failed to upload proof of payment.']);
 }
+// public function edituser($id)
+// {
+//     $booking = Booking::findOrFail($id);
+//     $packages = Package::all(); // Fetch packages for dropdown
+
+//     return view('editbooking', compact('booking', 'packages'));
+// }
+public function showEditUser($id)
+{
+    $booking = Booking::findOrFail($id);
+    return view('editbooking', compact('booking'));
+}
+
+public function updateUser(Request $request, $id)
+{
+    // Find the existing booking
+    $booking = Booking::findOrFail($id);
+
+    // Validate the request data
+    $request->validate([
+        'customer_name' => 'required|string|max:255',
+        'check_in_date' => 'required|date',
+        'check_out_date' => 'required|date|after:check_in_date',
+        'phone' => 'required|digits:11',
+        'extra_pax' => 'required|integer|min:0',
+        'special_request' => 'nullable|string',
+    ]);
+
+    // Update the existing booking (do not create a new one)
+    $booking->customer_name = $request->customer_name;
+    $booking->check_in_date = $request->check_in_date;
+    $booking->check_out_date = $request->check_out_date;
+    $booking->phone = $request->phone;
+    $booking->extra_pax = $request->extra_pax;
+    $booking->special_request = $request->special_request;
+    $booking->payment = $request->payment; // Ensure this is handled correctly
+
+    // Save the updated booking
+    $booking->save();
+
+    return redirect()->route('trackbooking')->with('success', 'Booking updated successfully!');
+}
+
 }

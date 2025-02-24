@@ -35,7 +35,7 @@
                         <th class="px-4 py-2 text-left font-semibold text-red-700">Extra Pax</th>
                         <th class="px-4 py-2 text-left font-semibold text-red-700">Special Request</th>
                         <th class="px-4 py-2 text-left font-semibold text-red-700">Category</th>
-                        <th class="px-4 py-2 text-left font-semibold text-red-700">Proof of Payment</th>
+                        <th class="px-4 py-2 text-left font-semibold text-red-700">Proof of Downpayment</th>
                         <th class="px-4 py-2 text-left font-semibold text-red-700">Action</th>
                     </tr>
                 </thead>

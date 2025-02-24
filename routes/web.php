@@ -208,3 +208,7 @@ Route::get('/user/calendar', [BookingController::class, 'calendars'])->name('use
 // Route::post('/admin/bookings/{booking}/mark-downpayment-paid/process', [BookingController::class, 'processMarkDownpaymentPaid'])->name('admin.mark.downpayment.paid.process');
 Route::post('/bookings/{booking}/upload-proof', [BookingController::class, 'uploadProofOfPayment'])->name('booking.upload.proof');
 Route::get('/statistics', [RevenueController::class, 'statistics'])->name('statistics');
+// Route::get('/booking/{id}/edit', [BookingController::class, 'edituser'])->name('booking.edit');
+// Route::post('/booking/{id}/update', [BookingController::class, 'update'])->name('booking.update');
+Route::put('/booking/{id}/update', [BookingController::class, 'updateUser'])->name('booking.update.user');
+Route::get('/booking/{id}/edit', [BookingController::class, 'showEditUser'])->name('booking.edit.user.page');
