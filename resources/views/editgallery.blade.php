@@ -125,6 +125,7 @@
     <a href="dashboard" class="bg-white text-green-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition text-sm sm:text-base">
         Home
     </a>
+    
 </header>
 
 <form class="upload-form" action="{{ route('gallery.store') }}" method="POST" enctype="multipart/form-data">

@@ -13,6 +13,7 @@ class Booking extends Model
         'customer_name',
         'check_in_date',
         'check_out_date',
+        'days_staying',
         'status',
         'package_name',
         'phone',
@@ -21,7 +22,9 @@ class Booking extends Model
         'special_request',
         'cancellation_requested',
         'tracking_code',
-        'proof_of_payment'  
+        'proof_of_payment', 
+        'decline_reason'
+      
         // Add this
     ];
     public function package()

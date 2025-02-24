@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+// use Illuminate\Support\Facades\Log;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+
+
 
 class AdminController extends Controller
 {
@@ -26,48 +28,34 @@ class AdminController extends Controller
     //     return redirect()->back()->with('success', 'Cancellation approved.');
     // }
     // Update selected bookings' status to 'Done'
-    public function updateBookingsStatus(Request $request)
+    public function updateBookingsStatus(Request $request, $id)
 {
-    // Validate that the bookings are selected
-    $request->validate([
-        'bookings' => 'required|array|min:1',
-        'bookings.*' => 'exists:bookings,id',
-    ]);
-
+    $booking = Booking::findOrFail($id);
     $action = $request->input('action');
-
-    if ($action === 'done') {
-        // Only update "Pending" bookings to "Done" (Prevent "Canceled" bookings from being updated)
-        $updated = Booking::whereIn('id', $request->bookings)
-            ->where('status', 'Pending') // Allow only Pending bookings
-            ->update(['status' => 'Done']);
-
-        if ($updated) {
-            return redirect()->back()->with('success', 'Selected bookings marked as Done.');
+    
+    if ($action === 'approve') {
+        $booking->status = 'Approved';
+        \Log::info('Booking ' . $id . ' approved.');
+    } elseif ($action === 'decline') {
+        $booking->status = 'Declined';
+        $booking->decline_reason = $request->input('decline_reason'); // Store the decline reason
+        $booking->save();
+        return response()->json(['success' => 'Booking has been declined successfully.']);
+    } elseif ($action === 'delete') {
+        if ($booking->status === 'Declined') {
+            $booking->delete();
+            \Log::info('Booking ' . $id . ' deleted.');
+            return redirect()->back()->with('success', 'Booking deleted successfully.');
         } else {
-            return redirect()->back()->with('error', 'Only Pending bookings can be marked as Done.');
+            return redirect()->back()->with('error', 'Only declined bookings can be deleted.');
         }
     }
-    if ($action === 'delete') {
-        // Retrieve only bookings with 'Done' or 'Canceled' status
-        $validBookingIds = Booking::whereIn('id', $request->bookings)
-            ->whereIn('status', ['Canceled'])
-            ->pluck('id') // Get only valid IDs
-            ->toArray(); // Convert to array
-    
-        if (empty($validBookingIds)) {
-            return redirect()->back()->with('error', 'No valid bookings selected for deletion. Only Canceled bookings can be deleted.');
-        }
-    
-        // Delete only the valid bookings (Done and Canceled)
-        Booking::whereIn('id', $validBookingIds)->delete();
-    
-        return redirect()->back()->with('success', 'Successfully deleted Canceled bookings.');
-    }
-    
 
-    return redirect()->back()->with('error', 'Invalid action');
+    $booking->save(); // Save the updated status
+    
+    return redirect()->back()->with('success', 'Booking status updated.');
 }
+
 public function archivedBookings()
 {
     if (!session()->has('admin')) {
@@ -120,7 +108,11 @@ public function bulkDeleteApprovedBookings(Request $request)
         return redirect()->back()->with('error', 'No valid canceled bookings found for deletion.');
     }
 }
-
+public function showApprovedBookings()
+    {
+        $bookings = Booking::where('status', 'Approved')->get();
+        return view('approved_bookings', compact('bookings'));
+    }
 
 
         

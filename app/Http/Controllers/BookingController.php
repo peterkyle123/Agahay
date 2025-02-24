@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use DateTime;
+use Illuminate\Support\Facades\Log;
 
 
 class BookingController extends Controller
@@ -59,7 +60,7 @@ class BookingController extends Controller
     $checkOutDate = Carbon::parse($booking->check_out_date);
 
     $booking->days_staying = $checkInDate->diffInDays($checkOutDate); // Calculate the difference in days
-
+    $booking->save(); // Add this line
 }
 
         // Return the view with the bookings data
@@ -195,6 +196,9 @@ public function showBookings(Request $request)
     $search = $request->input('search');
     $sortOrder = $request->input('sort', 'asc'); // Default to ascending
     $bookingsQuery = Booking::query();
+
+        // Filter bookings with status "Pending"
+        $bookingsQuery->where('status', 'Pending');
 
     // Fetch the bookings based on the query
     $bookings = $bookingsQuery->orderBy('check_in_date', $sortOrder)->get();
@@ -447,4 +451,5 @@ public function updateUser(Request $request, $id)
     return redirect()->route('trackbooking')->with('success', 'Booking updated successfully!');
 }
 
+    
 }

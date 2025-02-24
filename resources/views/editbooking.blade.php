@@ -20,7 +20,7 @@
 
     <!-- Form Container -->
     <div class="container max-w-lg mx-auto mt-6 p-4 sm:p-6 bg-white rounded-lg shadow-md">
-    <form action="{{ route('booking.update.user', $booking->id) }}" method="POST">
+    <form action="{{ route('b00kings.update.user', $booking->id) }}" method="POST">
     @csrf
     @method('PUT')
 
