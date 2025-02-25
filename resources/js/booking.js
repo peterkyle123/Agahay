@@ -2,6 +2,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const checkInInput = document.getElementById("checkin");
     const checkOutInput = document.getElementById("checkout");
 
+    // Set today's date as the minimum check-in date
+    const today = new Date().toISOString().split("T")[0];
+    checkInInput.setAttribute("min", today);
+
     // Fetch unavailable dates (excluding canceled bookings)
     fetch("/get-unavailable-dates")
         .then(response => response.json())
@@ -10,6 +14,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
             checkInInput.addEventListener("change", function () {
                 const selectedDate = checkInInput.value;
+
+                // Prevent selection of past dates
+                if (new Date(selectedDate) < new Date(today)) {
+                    alert("Check-in date cannot be in the past.");
+                    checkInInput.value = "";
+                    return;
+                }
 
                 // Allow check-out on the same date as previous check-ins
                 let availableCheckOutDates = [...unavailableDates];

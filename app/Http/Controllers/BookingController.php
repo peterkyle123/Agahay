@@ -79,6 +79,7 @@ class BookingController extends Controller
     // Validate input
     $request->validate([
         'customer_name' => 'required|string|max:255',
+        'guest_name' => 'nullable|string|max:255',
         'check_in_date' => 'required|date',
         'check_out_date' => 'required|date|after:check_in_date',
         'phone' => 'required|digits:11',
@@ -108,6 +109,7 @@ class BookingController extends Controller
     // Save to database
     Booking::create([
         'customer_name' => $request->customer_name,
+        'guest_name' => $request->guest_name, // Save guest name
         'check_in_date' => $checkInDate,
         'check_out_date' => $checkOutDate,
         'phone' => $request->phone,

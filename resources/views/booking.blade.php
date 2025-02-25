@@ -212,7 +212,10 @@
                 <label for="name">Full Name</label>
                 <input type="text" id="name" name="customer_name" required class="input-field" placeholder="Enter your full name" pattern="[A-Za-z\s]+" title="Only letters and spaces are allowed">
             </div>
-
+            <div class="input-container">
+                <label for="guest_name">Name of Guest (if different from customer)</label>
+                <input type="text" name="guest_name" id="guest_name" required class="input-field" placeholder="Enter guest name">
+            </div>
             <div class="input-container">
                 <label for="checkin">Check-in Date</label>
                 <input type="date" id="checkin" name="check_in_date" required class="input-field">
@@ -359,6 +362,8 @@
         // Get the check-in and check-out date inputs
         const checkInInput = document.getElementById('checkin');
         const checkOutInput = document.getElementById('checkout');
+
+        
 
         // Set the minimum check-out date to be the selected check-in date
         checkinInput.addEventListener('change', function() {
