@@ -466,5 +466,17 @@ public function deleteMultiple(Request $request) {
     Booking::whereIn('id', $bookingIds)->delete();
     return response()->json(['success' => true]);
 }
-    
+public function filterBookings($status)
+{
+    $bookings = Booking::where('status', $status)->paginate(5);
+
+    return view('bookings_table', compact('bookings'));
+}
+
+public function showFilteredBookings()
+{
+    $bookings = Booking::paginate(5);
+    return view('filter_bookings', compact('bookings'));
+}
+
 }

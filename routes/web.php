@@ -203,3 +203,9 @@ Route::get('/booking/{id}/edit', [BookingController::class, 'showEditUser'])->na
 
 Route::get('/approved-bookings', [AdminController::class, 'showApprovedBookings'])->name('approved.bookings');
 Route::post('/bookings/delete-multiple', [BookingController::class, 'deleteMultiple']);
+Route::get('/filter_bookings/{status}', [BookingController::class, 'filterBookings']);
+
+Route::get('/filter_bookings', function () {
+    $bookings = \App\Models\Booking::paginate(5);
+    return view('filter_bookings', compact('bookings'));
+});

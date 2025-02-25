@@ -12,13 +12,17 @@
 </head>
 <body class="white">
     <div class="min-h-screen p-6">
-        <header class="bg-gradient-to-r from-green-500 to-green-700 text-white font-bold text-2xl p-4 rounded-xl mb-6 flex justify-between items-center">
-            <span class="text-white">Bookings</span>
-            <a href="/dashboard" class="bg-white text-green-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition text-sm sm:text-base">
-                Home
-            </a>
+    <header class="bg-gradient-to-r from-green-500 to-green-800 text-white font-bold text-2xl p-4 rounded-xl mb-6 flex justify-between items-center">
+            <span class="text-white">Archived Bookings</span>
+            <div class="flex space-x-4">
+                <a href="{{ route('approved.bookings') }}"class="bg-white text-red-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition text-sm sm:text-base">
+                    Approved Bookings
+                </a>
+                <a href="{{ route('dashboard') }}" class="bg-white text-gray-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition text-sm sm:text-base">
+                    Home
+                </a>
+            </div>
         </header>
-
         <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
             <h2 class="text-xl font-semibold text-green-800 mb-4">Search Bookings</h2>
             <form action="{{ route('b00kings') }}" method="GET" class="flex items-center space-x-4">
@@ -103,7 +107,8 @@
                     </tbody>
                 </table>
             </form>
-
+            <!-- <a href="{{ route('b00kings1') }}" class="inline-block text-green-600 hover:text-green-800 my-4 w-full"></a> -->
+    
             <div id="declineModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden flex items-center justify-center">
                 <div class="relative p-5 border w-96 shadow-lg rounded-md bg-white">
                     <div class="mt-3 text-center">
