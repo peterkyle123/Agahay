@@ -179,7 +179,7 @@
     <!-- Position the success message at the top -->
 
 
-    <form action="/bookform" method="POST">
+    <form action="/bookform" method="POST" enctype="multipart/form-data">
         @csrf
 
         <div class="form-container">
@@ -201,12 +201,19 @@
                 </div>
             @endif
 
+                  <!-- Error for Proof of Payment -->
+            @if (session('error1'))
+                <div class="bg-red-500 text-white p-3 rounded-md mb-4 mx-auto w-fit">
+                        {{ session('error1') }}
+                </div>
+            @endif
             
             @if (session('error1'))
                 <div class="bg-red-500 text-white p-3 rounded-md mb-4 mx-auto w-fit">
                     {{ session('error1') }}
                 </div>
             @endif
+
         
             <div class="input-container">
                 <label for="name">Full Name</label>
@@ -244,6 +251,11 @@
             <label for="downpayment">Downpayment: Pay downpayment to avail cancellation of bookings</label>
             <input type="text" id="downpayment" name="downpayment" class="input-field" value="₱{{ number_format($packages->initial_payment, 2) }}" readonly>
         </div>
+            <div>
+                <label for="proof_of_payment">Proof of Downpayment (JPG, PNG, PDF only):</label>
+                <input type="file" name="proof_of_payment" id="proof_of_payment" required>
+            </div>
+
 
 
             <!-- Hidden fields for price calculations -->
@@ -257,8 +269,7 @@
                 <label for="total_payment">Total Payment</label>
                 <input type="text" id="total_payment" name="total_payment" class="input-field" readonly>
             </div>
-
-
+           
             <button class="bg-gradient-to-r from-green-500 to-green-700 submit-btn full-width" type="submit">Submit Booking</button>
         </div>
     </form>

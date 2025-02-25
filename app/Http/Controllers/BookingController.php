@@ -87,22 +87,29 @@ class BookingController extends Controller
         'package_name' => 'nullable|string|max:255',
         'total_payment' => 'nullable|string|max:500',
         'special_request' => 'nullable|string|max:500',
+        'proof_of_payment' => 'required|file|mimes:jpg,jpeg,png,pdf|max:3000', // Max 2MB
     ]);
 
     $checkInDate = $request->check_in_date;
     $checkOutDate = $request->check_out_date;
 
     // Check if dates are available (excluding "Canceled" bookings)
-    $overlappingBookings = Booking::where('status', '!=', 'Canceled') // Exclude canceled bookings
+    $overlappingBookings = Booking::whereNotIn('status', ['Canceled', 'Declined'])
         ->where(function ($query) use ($checkInDate, $checkOutDate) {
             $query->where('check_in_date', '<', $checkOutDate)
-                  ->where('check_out_date', '>', $checkInDate);
+                ->where('check_out_date', '>', $checkInDate);
         })->exists();
-
-    if ($overlappingBookings) {
-        return redirect()->back()->with('error1', 'These dates are already booked. Please choose different dates.');
+        if ($overlappingBookings) {
+            return redirect()->back()->with('error1', 'These dates are already booked. Please choose different dates.');
+        }
+     // Handle proof of payment upload
+     if ($request->hasFile('proof_of_payment')) {
+        $file = $request->file('proof_of_payment');
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $filePath = $file->storeAs('uploads/downpayments', $fileName, 'public'); // Save to storage/app/public/uploads/downpayments
+    } else {
+        return redirect()->back()->with('error', 'Proof of downpayment is required.');
     }
-
     // Generate a unique tracking code
     $trackingCode = 'BK' . strtoupper(Str::random(1)) . '-' . str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT) . '-' . strtoupper(Str::random(1));
 
@@ -118,6 +125,7 @@ class BookingController extends Controller
         'package_name' => $request->package_name,
         'payment' => $request->total_payment,
         'tracking_code' => $trackingCode,
+        'proof_of_payment' => $filePath, // Save file path in database
     ]);
 
     session(['tracking_code' => $trackingCode]);
@@ -318,7 +326,8 @@ public function approveBooking($id)
     public function getUnavailableDates()
 {
     // Get all booked check-in and check-out dates where status is NOT "Canceled"
-    $unavailableBookings = Booking::where('status', '!=', 'Canceled')->get(['check_in_date', 'check_out_date']);
+       $unavailableBookings = Booking::whereNotIn('status', ['Canceled', 'Declined'])
+        ->get(['check_in_date', 'check_out_date']);
 
     $unavailableDates = [];
 
@@ -452,6 +461,10 @@ public function updateUser(Request $request, $id)
 
     return redirect()->route('trackbooking')->with('success', 'Booking updated successfully!');
 }
-
+public function deleteMultiple(Request $request) {
+    $bookingIds = $request->bookingIds;
+    Booking::whereIn('id', $bookingIds)->delete();
+    return response()->json(['success' => true]);
+}
     
 }

@@ -1,31 +1,30 @@
 <?php
 
-namespace App\Console\Commands; // Add the correct namespace
+namespace App\Console\Commands;
 
-use Carbon\Carbon;
-use App\Models\Booking;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
+use App\Models\Booking;
+use Carbon\Carbon;
 
 class UpdateCompletedBookings extends Command
 {
     protected $signature = 'bookings:update-completed';
-    protected $description = 'Updates approved bookings to Done status after their checkout date.';
+    protected $description = 'Updates booking status to "Done" when check-out date has passed.';
 
-    public function handle() // Use handle() instead of fire()
+    public function handle()
     {
-        $today = Carbon::today();
+        $now = Carbon::now()->toDateString();
 
-        $bookings = Booking::where('status', 'Approved')
-            ->where('check_out_date', '<', $today)
+        $bookingsToUpdate = Booking::where('check_out_date', '<', $now)
+            ->where('status', '!=', 'Done') // Prevents already done bookings from being re-updated
             ->get();
 
-        foreach ($bookings as $booking) {
+        foreach ($bookingsToUpdate as $booking) {
             $booking->status = 'Done';
             $booking->save();
-            Log::info('Booking ' . $booking->id . ' marked as Done.');
+            $this->info("Booking {$booking->id} updated to 'Done'.");
         }
 
-        $this->info('Completed bookings updated.');
+        $this->info('Completed bookings update process finished.');
     }
 }

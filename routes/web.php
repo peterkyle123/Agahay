@@ -202,3 +202,4 @@ Route::put('/b00kings/{id}/update', [BookingController::class, 'updateUser'])->n
 Route::get('/booking/{id}/edit', [BookingController::class, 'showEditUser'])->name('booking.edit.user.page');
 
 Route::get('/approved-bookings', [AdminController::class, 'showApprovedBookings'])->name('approved.bookings');
+Route::post('/bookings/delete-multiple', [BookingController::class, 'deleteMultiple']);

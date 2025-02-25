@@ -122,38 +122,37 @@
         }
 
         .fc-prev-button, .fc-next-button {
-        font-size: 12px !important;
-        padding: 4px 6px !important;
-        height: auto !important;
-        min-width: auto !important;
-        background: #2E8B57 !important;
-        color: white !important;
-        border: 1px solid #2E8B57 !important;
-        border-radius: 4px !important;
-        margin: 0 4px !important; /* Adds space between the buttons */
+            font-size: 12px !important;
+            padding: 4px 6px !important;
+            height: auto !important;
+            min-width: auto !important;
+            background: #2E8B57 !important;
+            color: white !important;
+            border: 1px solid #2E8B57 !important;
+            border-radius: 4px !important;
+            margin: 0 4px !important;
         }
 
         .fc-prev-button:hover, .fc-next-button:hover {
-        background: #006400 !important;
-        border-color: #006400 !important;
+            background: #006400 !important;
+            border-color: #006400 !important;
         }
 
         .fc-today-button {
-        font-size: 12px !important;
-        padding: 4px 8px !important;
-        height: auto !important;
-        min-width: auto !important;
-        background: #2E8B57 !important;
-        color: white !important;
-        border: 1px solid #2E8B57 !important;
-        border-radius: 4px !important;
+            font-size: 12px !important;
+            padding: 4px 8px !important;
+            height: auto !important;
+            min-width: auto !important;
+            background: #2E8B57 !important;
+            color: white !important;
+            border: 1px solid #2E8B57 !important;
+            border-radius: 4px !important;
         }
 
-    .fc-today-button:hover {
-        background: #006400 !important;
-        border-color: #006400 !important;
+        .fc-today-button:hover {
+            background: #006400 !important;
+            border-color: #006400 !important;
         }
-
 
         @media (max-width: 768px) {
             .search-container {
@@ -171,10 +170,9 @@
             }
 
             .fc-prev-button, .fc-next-button {
-            margin: 0 6px !important; /* Slightly more spacing on smaller screens */
+                margin: 0 6px !important;
             }
         }
-        
     </style>
 </head>
 <body>
@@ -213,6 +211,12 @@
         <div class="legend-item">
             <span class="legend-color" style="background-color: rgb(78, 53, 220);"></span> Requesting for Cancellation
         </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background-color: #007bff;"></span> Approved
+        </div>
+        <div class="legend-item">
+            <span class="legend-color" style="background-color: #6c757d;"></span> Declined
+        </div>
     </div>
 </div>
 
@@ -222,57 +226,61 @@
         let bookings = @json($bookings);
         let calendarEl = document.getElementById('calendar');
 
-        window.calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            events: bookings,
-            selectable: true,
-            editable: false,
-            eventDidMount: function (info) {
-                var bookingStatus = info.event.extendedProps.status;
+window.calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    events: bookings,
+    selectable: true,
+    editable: false,
+    eventDidMount: function (info) {
+        var bookingStatus = info.event.extendedProps.status;
 
-                if (bookingStatus === 'Done') {
-                    info.el.style.backgroundColor = '#28a745';
-                } else if (bookingStatus === 'Pending') {
-                    info.el.style.backgroundColor = '#ffc107';
-                } else if (bookingStatus === 'Canceled') {
-                    info.el.style.backgroundColor = '#dc3545';
-                } else if (bookingStatus === 'Requesting for Cancellation') {
-                    info.el.style.backgroundColor = 'rgb(78, 53, 220)';
-                }
-            },
-            eventClick: function (info) {
-                // Prevent showing booking details for users
-            }
-        });
-
-        calendar.render();
-    });
-
-    function searchByDate() {
-        let searchDate = document.getElementById('searchDate').value;
-        if (!searchDate) {
-            alert("Please select a date.");
-            return;
+        if (bookingStatus === 'Done') {
+            info.el.style.backgroundColor = '#28a745';
+        } else if (bookingStatus === 'Pending') {
+            info.el.style.backgroundColor = '#ffc107';
+        } else if (bookingStatus === 'Canceled') {
+            info.el.style.backgroundColor = '#dc3545';
+        } else if (bookingStatus === 'Requesting for Cancellation') {
+            info.el.style.backgroundColor = 'rgb(78, 53, 220)';
+        } else if (bookingStatus === 'Approved') {
+            info.el.style.backgroundColor = '#007bff';
+        } else if (bookingStatus === 'Declined') {
+            info.el.style.backgroundColor = '#6c757d';
         }
-
-        calendar.gotoDate(searchDate);
-
-        document.querySelectorAll('.highlight').forEach(el => el.classList.remove('highlight'));
-
-        setTimeout(() => {
-            let targetCell = document.querySelector(`[data-date="${searchDate}"]`);
-            if (targetCell) {
-                targetCell.classList.add('highlight');
-            }
-        }, 500);
+    },
+    eventClick: function (info) {
+        // Prevent showing booking details for users
     }
+});
 
-    function resetCalendar() {
-        document.getElementById('searchDate').value = '';
-        calendar.gotoDate(new Date());
+calendar.render();
+});
 
-        document.querySelectorAll('.highlight').forEach(el => el.classList.remove('highlight'));
+function searchByDate() {
+let searchDate = document.getElementById('searchDate').value;
+if (!searchDate) {
+    alert("Please select a date.");
+    return;
+}
+
+calendar.gotoDate(searchDate);
+
+document.querySelectorAll('.highlight').forEach(el => el.classList.remove('highlight'));
+
+setTimeout(() => {
+    let targetCell = document.querySelector(`[data-date="${searchDate}"]`);
+    if (targetCell) {
+        targetCell.classList.add('highlight');
     }
+}, 500);
+}
+
+function resetCalendar() {
+document.getElementById('searchDate').value = '';
+calendar.gotoDate(new Date());
+
+document.querySelectorAll('.highlight').forEach(el => el.classList.remove('highlight'));
+}
 </script>
 
 </body>

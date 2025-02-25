@@ -49,67 +49,21 @@
         </div>
 
         @if ($booking->status == 'Pending')
-            <form id="proof-of-payment-form" action="{{ route('booking.upload.proof', $booking->id) }}" method="POST" enctype="multipart/form-data" class="mt-4 space-y-3">
-                @csrf
-                <label for="proofOfPayment" class="block text-sm font-medium text-gray-700">Upload Proof of Payment:</label>
-                <input type="file" name="proof_of_payment" id="proofOfPayment" required 
-                    class="w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500">
-                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-md transition">Upload</button>
-            </form>
-
-            <form id="cancel-form" action="{{ route('booking.cancel', $booking->id) }}" method="POST" style="display: none;" class="mt-4 space-y-3">
+            <form id="cancel-form" action="{{ route('booking.cancel', $booking->id) }}" method="POST" class="mt-4 space-y-3">
                 @csrf
                 @method('PATCH')
                 <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-md transition">Apply for Cancellation</button>
             </form>
+            <a href="{{ route('booking.edit.user.page', $booking->id) }}" class="block mt-4 text-center bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md transition">Edit Booking</a>
         @elseif($booking->status == 'Request for Cancellation')
             <p class="mt-4 text-center text-gray-600">Cancellation request pending.</p>
         @endif
-        
-        <a href="{{ route('booking.edit.user.page', $booking->id) }}" class="block mt-4 text-center bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md transition">Edit Booking</a>
+
     </div>
     @elseif(session('error'))
         <div class="container max-w-md mx-auto mt-6 text-center text-red-600">{{ session('error') }}</div>
     @endif
     <script>
-        // Proof of Payment Upload Handling
-        document.getElementById('proof-of-payment-form')?.addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const form = this;
-            const formData = new FormData(form);
-
-            fetch(form.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    alert(data.success);
-                    document.getElementById('cancel-form').style.display = 'block';
-                    form.style.display = 'none';
-                } else if (data.error) {
-                    alert(data.error);
-                } else {
-                    alert('An unexpected error occurred during upload.');
-                    console.error('Data returned without success or error property:', data);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert("An error occurred during proof of payment upload.");
-            });
-        });
-
         // Cancellation Form Handling
         document.getElementById('cancel-form')?.addEventListener('submit', function(event) {
             event.preventDefault();
@@ -135,10 +89,7 @@
             .then(data => {
                 if (data.success) {
                     alert(data.success);
-                    form.style.display = 'none';
-                    const messageElement = document.createElement('p');
-                    messageElement.textContent = "Cancellation request pending.";
-                    form.parentNode.insertBefore(messageElement, form.nextSibling);
+                    window.location.reload();
                 } else if (data.error) {
                     alert(data.error);
                 } else {
