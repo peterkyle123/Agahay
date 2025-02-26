@@ -25,10 +25,17 @@
         </div>
     @endif
 
+      <!-- Filter Options -->
+      <div class="p-6 flex justify-center space-x-4">
+        <button onclick="filterReviews('all')" class="bg-blue-500 text-white px-4 py-2 rounded-lg">All Reviews</button>
+        <button onclick="filterReviews('positive')" class="bg-green-500 text-white px-4 py-2 rounded-lg">Positive Reviews</button>
+        <button onclick="filterReviews('negative')" class="bg-red-500 text-white px-4 py-2 rounded-lg">Negative Reviews</button>
+    </div>
+
     <!-- Reviews Container (4 per row on large screens) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
         @foreach ($reviews as $review)
-            <div class="bg-white shadow-md rounded-lg p-4">
+        <div class="bg-white shadow-md rounded-lg p-4 review-item" data-rating="{{ $review->rating }}">
                 <h3 class="text-lg font-semibold text-green-800">{{ $review->name }}</h3>
                 <p class="text-sm text-gray-500">{{ $review->email ?? 'N/A' }}</p>
                 
@@ -74,6 +81,7 @@
     </div>
 
     <script>
+
         function openModal(imageSrc) {
             document.getElementById('modalImage').src = imageSrc;
             document.getElementById('imageModal').classList.remove('hidden');
@@ -82,6 +90,22 @@
         function closeModal() {
             document.getElementById('imageModal').classList.add('hidden');
         }
+        function filterReviews(type) {
+            let reviews = document.querySelectorAll('.review-item');
+            reviews.forEach(review => {
+                let rating = parseInt(review.getAttribute('data-rating'));
+                if (type === 'all') {
+                    review.style.display = 'block';
+                } else if (type === 'positive' && rating >= 3) {
+                    review.style.display = 'block';
+                } else if (type === 'negative' && rating <= 2) {
+                    review.style.display = 'block';
+                } else {
+                    review.style.display = 'none';
+                }
+            });
+        }
+      
     </script>
 
 </body>

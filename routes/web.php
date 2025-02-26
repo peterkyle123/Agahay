@@ -209,3 +209,7 @@ Route::get('/filter_bookings', function () {
     $bookings = \App\Models\Booking::paginate(5);
     return view('filter_bookings', compact('bookings'));
 });
+
+// Route::get('/total-revenues', [RevenueController::class, 'totalRevenues'])->name('total.revenues');
+// Route::post('/update-cogs', [RevenueController::class, 'updateCogs'])->name('update.cogs');
+
