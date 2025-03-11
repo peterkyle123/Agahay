@@ -20,7 +20,7 @@
 
         <form action="{{ route('trackbooking') }}" method="POST" class="space-y-4">
             @csrf
-            <input type="text" name="tracking_code" id="bookingCode" placeholder="E.g., BKABC123" value="{{ old('tracking_code') }}" required 
+            <input type="text" name="tracking_code" id="bookingCode" placeholder="E.g., BKABC123" value="{{ old('tracking_code') }}" required
                 class="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
             <button class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-md transition">Search</button>
         </form>

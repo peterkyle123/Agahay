@@ -25,13 +25,13 @@ class PackageController extends Controller
         if (!$packages) {
             return abort(404); // Show a 404 error if no package is found
         }
-    
+
         return view('editpackages', compact('packages')); // Pass $packages to the view
     }
     // Show the edit form for a specific package
     public function edit($slug)
     {
-        
+
         $package = Package::where('slug', $slug)->first(); // Find the package by slug
         if (!$package) {
             return redirect()->route('admin.dashboard')->with('error', 'Package not found');
@@ -42,7 +42,7 @@ class PackageController extends Controller
     // Handle the update of the package
     public function update(Request $request, $id)
     {
-        
+
          // Validate input data
          $request->validate([
             'package_name' => 'required|string|max:255',

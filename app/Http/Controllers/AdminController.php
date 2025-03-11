@@ -32,7 +32,7 @@ class AdminController extends Controller
 {
     $booking = Booking::findOrFail($id);
     $action = $request->input('action');
-    
+
     if ($action === 'approve') {
         $booking->status = 'Approved';
         \Log::info('Booking ' . $id . ' approved.');
@@ -52,7 +52,7 @@ class AdminController extends Controller
     }
 
     $booking->save(); // Save the updated status
-    
+
     return redirect()->back()->with('success', 'Booking status updated.');
 }
 
@@ -114,7 +114,20 @@ public function showApprovedBookings()
         return view('approved_bookings', compact('bookings'));
     }
 
+    // LATEST ADDED
+    public function updatePayment(Request $request, $id)
+    {
+        $booking = Booking::find($id);
+        if (!$booking) {
+            return response()->json(['error' => 'Booking not found'], 404);
+        }
 
-        
-        
+        $booking->payment = $request->payment;
+        $booking->save();
+
+        return response()->json(['success' => 'Payment updated successfully']);
+    }
+
+
+
 }

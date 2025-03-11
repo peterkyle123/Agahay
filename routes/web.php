@@ -40,7 +40,7 @@ Route::get('/', function () {
 });
 
 Route::get('/book', function () {
-    session()->flush(); 
+    session()->flush();
     return view('book'); // Booking page view
 })->name('book');
 
@@ -64,10 +64,10 @@ Route::get('/dashboard', function () {
         return redirect()->route('adminlogin'); // Redirects to login page if no session
     }
     $bookingCount = Booking::count();
-    $bookings = Booking::all(); 
+    $bookings = Booking::all();
 
     // Fetch only the count of canceled bookings
-    $canceledBookingsCount = Booking::where('status', 'Canceled')->count(); 
+    $canceledBookingsCount = Booking::where('status', 'Canceled')->count();
     return view('dashboard', compact('bookingCount','canceledBookingsCount')); // Displays the dashboard with booking count
 })->name('dashboard');
 
@@ -88,8 +88,8 @@ Route::get('/book', [BookingController::class, 'showPackages'])->name('book');
 
 
 // Booking-related routes
-Route::get('/b00kings1', [BookingController::class, 'b00kings'])->name('b00kings1'); 
-Route::post('/bookstore', [BookingController::class, 'bookstore'])->name('bookstore'); 
+Route::get('/b00kings1', [BookingController::class, 'b00kings'])->name('b00kings1');
+Route::post('/bookstore', [BookingController::class, 'bookstore'])->name('bookstore');
 Route::post('/bookform', [BookingController::class, 'store'])->name('bookform.store');
 
 // Static pages routes
@@ -125,7 +125,7 @@ Route::get('/viewreviews', function () {
 
 // Route::get('/editpackages', function () {
 //        $packages = Package::all();
-//     return view('editpackages',compact('packages')); 
+//     return view('editpackages',compact('packages'));
 // })->name('editpackages');
 Route::get('/editpackages/{id}', [BookingController::class, 'edit'])->name('editpackages');
 Route::put('/editpackages/{id}', [PackageController::class, 'update'])->name('editpackages.update'); // Handle Update Request
@@ -142,14 +142,14 @@ Route::get('/adminhome', function () {
 })->name('adminhome');
 
 Route::get('/archives', function () {
-    return view('archives'); 
+    return view('archives');
 })->name('archives');
 
 // Admin logout and session invalidate route
 Route::get('/adminhome12', function () {
-    Auth::logout(); 
-    session()->invalidate(); 
-    session()->regenerateToken(); 
+    Auth::logout();
+    session()->invalidate();
+    session()->regenerateToken();
     return redirect()->route('adminhome');
 });
 // Route to handle clear out of tracking code
@@ -209,6 +209,7 @@ Route::get('/filter_bookings', function () {
     $bookings = \App\Models\Booking::paginate(5);
     return view('filter_bookings', compact('bookings'));
 });
+Route::patch('/admin/bookings/update-discount/{id}', [BookingController::class, 'updateDiscount']);
 
 // Route::get('/total-revenues', [RevenueController::class, 'totalRevenues'])->name('total.revenues');
 // Route::post('/update-cogs', [RevenueController::class, 'updateCogs'])->name('update.cogs');

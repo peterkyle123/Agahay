@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Models\Package;
-use Carbon\Carbon; 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use DateTime;
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 
 class BookingController extends Controller
 {
-    
+
   public function deleteBookings(Request $request)
 {
     $bookingIds = $request->input('bookings'); // Array of selected booking IDs
@@ -22,23 +22,23 @@ class BookingController extends Controller
         $deleted = Booking::whereIn('id', $bookingIds)
             ->whereIn('status', ['Canceled'])
             ->delete();
-    
+
         if ($deleted) {
             return redirect()->back()->with('success', 'Successfully deleted Canceled bookings.');
         } else {
             return redirect()->back()->with('error', 'Pending and Done bookings cannot be deleted.');
         }
     }
-    
+
     return redirect()->back()->with('error', 'No valid bookings selected for deletion.');
-    
+
 }
 
     //
     public function index()
     {
-       
-       
+
+
         $bookings = Booking::all();
         return view('admin.bookings', compact('bookings'));
     }
@@ -47,8 +47,8 @@ class BookingController extends Controller
            if (!session()->has('admin')) {
         return redirect()->route('adminlogin'); // Redirects to login page if no session
     }
-        
-    
+
+
     $bookings = Booking::whereIn('status', ['Pending', 'Done'])->get();
 
         // Sort by check-in date, newest first
@@ -71,9 +71,9 @@ class BookingController extends Controller
         // Return the view with the bookings data
         return view('booking');
 
-        
+
     }
-    
+
    public function store(Request $request)
 {
     // Validate input
@@ -85,10 +85,14 @@ class BookingController extends Controller
         'phone' => 'required|digits:11',
         'extra_pax' => 'nullable|integer|min:0',
         'package_name' => 'nullable|string|max:255',
-        'total_payment' => 'nullable|string|max:500',
+        'payment'          => 'required|numeric',  // Original total payment
+        'discount'         => 'nullable|numeric|min:0', // Optional discount
         'special_request' => 'nullable|string|max:500',
         'proof_of_payment' => 'required|file|mimes:jpg,jpeg,png,pdf|max:3000', // Max 2MB
     ]);
+
+    // Default discount to 0 if not provided.
+    $discount = $request->discount ?? 0;
 
     $checkInDate = $request->check_in_date;
     $checkOutDate = $request->check_out_date;
@@ -123,7 +127,9 @@ class BookingController extends Controller
         'extra_pax' => $request->extra_pax,
         'special_request' => $request->special_request,
         'package_name' => $request->package_name,
-        'payment' => $request->total_payment,
+         // Convert payment to float and format as needed; stored as string but cast in model.
+        'payment'          => number_format((float)$request->payment, 2, '.', ''),
+        'discount'         => $discount,
         'tracking_code' => $trackingCode,
         'proof_of_payment' => $filePath, // Save file path in database
     ]);
@@ -191,15 +197,15 @@ public function canceledBookings()
 public function showPackages() {
 
     $packages = Package::all(); // Retrieve all available packages
-    return view('book', compact('packages')); 
-      
+    return view('book', compact('packages'));
+
 }
 
 public function showForm($package_id) {
 
     $packages = Package::findOrFail($package_id);
     return view('booking', compact('packages'));
-    
+
 }
 public function showBookings(Request $request)
 {
@@ -233,7 +239,7 @@ public function showBookings(Request $request)
     }
 
     $canceledBookingsCount = Booking::where('status', 'Canceled')->count();
-    
+
     foreach ($bookings as $booking) {
         $checkInDate = Carbon::parse($booking->check_in_date);
         $checkOutDate = Carbon::parse($booking->check_out_date);
@@ -248,7 +254,7 @@ public function edit($id) {
         return redirect()->route('adminlogin'); // Redirects to login page if no session
     }
     $packages = Package::where('package_id', $id)->first(); // Fetch a single package
-    
+
     if (!$packages) {
         return abort(404); // Return a 404 error if package not found
     }
@@ -285,9 +291,9 @@ public function calendar(Request $request)
 }
 public function approveBooking($id)
     {
-        
+
         $booking = Booking::find($id);
-        
+
         if (!$booking) {
             return redirect()->back()->with('error', 'Booking not found.');
         }
@@ -303,17 +309,17 @@ public function approveBooking($id)
         if (!session()->has('admin')) {
             return redirect()->route('adminlogin'); // Redirects to login page if no session
         }
-    
+
         $approvedCanceledBookings = Booking::where('status', 'Canceled')->get();
-    
+
         return view('approvedCanceled', compact('approvedCanceledBookings'));
     }
-    
+
 
     public function RejectBooking($id)
     {
         $booking = Booking::find($id);
-        
+
         if (!$booking) {
             return redirect()->back()->with('error', 'Booking not found.');
         }
@@ -478,5 +484,44 @@ public function showFilteredBookings()
     $bookings = Booking::paginate(5);
     return view('filter_bookings', compact('bookings'));
 }
+// added
+public function updateDiscount(Request $request, $id)
+{
+    $request->validate([
+        'discount' => 'required|numeric|min:0|max:100',
+    ]);
+
+    $booking = Booking::find($id);
+    if (!$booking) {
+        return response()->json(['error' => 'Booking not found.'], 404);
+    }
+
+    // Determine the original payment amount.
+    // If an old discount exists and is less than 100%, we reverse it.
+    if ($booking->discount > 0 && $booking->discount < 100) {
+        $originalPayment = $booking->payment / (1 - ($booking->discount / 100));
+    } else {
+        $originalPayment = $booking->payment;
+    }
+
+    // Get the new discount from the request.
+    $newDiscount = $request->discount;
+    // Calculate the final payment with the new discount.
+    $finalPayment = $originalPayment * (1 - ($newDiscount / 100));
+
+    // Update both discount and payment (storing the final payment)
+    $booking->discount = $newDiscount;
+    // Store as a numeric string with 2 decimals (or simply as a float)
+    $booking->payment = number_format($finalPayment, 2, '.', '');
+    $booking->save();
+
+    return response()->json([
+        'success' => 'Discount updated successfully!',
+        'final_payment' => $booking->payment // returns the updated final payment
+    ]);
+}
+
+
+
 
 }

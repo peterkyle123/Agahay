@@ -41,13 +41,13 @@ class GalleryController extends Controller
     public function destroyMultiple(Request $request)
     {
         $imageIds = $request->input('selectedImages');
-    
+
         if (!$imageIds) {
             return redirect()->back()->with('error', 'No images selected.');
         }
-    
+
         Gallery::whereIn('id', $imageIds)->delete();
-    
+
         return redirect()->back()->with('success', 'Selected images deleted successfully.');
     }
     public function gallerysection()

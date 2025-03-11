@@ -106,7 +106,7 @@
         padding: 20px;
         font-size: 24px;
         font-weight: bold;
-        background: rgba(0, 0, 0, 0.6); 
+        background: rgba(0, 0, 0, 0.6);
     }
 
     .description-text {
@@ -167,19 +167,19 @@
 
 <div class="content-wrapper"> <div class="option-container">  @foreach ($packages as $package)
 <a href="{{ $package->available ? route('frm', ['package_id' => $package->package_id]) : '#' }}"
-   class="option {{ $package->available ? '' : 'disabled' }}" 
+   class="option {{ $package->available ? '' : 'disabled' }}"
    style="background-image: url('{{ asset($package->image) }}');">
 
     <div class="option-text">{{ $package->package_name }}</div>
-    
+
     <div class="description-text">
         {{ $package->description }} <br>
-        <strong>₱{{ number_format($package->price, 2) }}</strong> | 
+        <strong>₱{{ number_format($package->price, 2) }}</strong> |
         Up to {{ $package->number_of_guests }} guests <br>
         <span style="color: red;">Extra Pax: ₱{{ number_format($package->extra_pax_price, 2) }} per person</span>
-        <strong>Downpayment ₱{{ number_format($package->initial_payment, 2) }}</strong> | 
+        <strong>Downpayment ₱{{ number_format($package->initial_payment, 2) }}</strong> |
     </div>
-    
+
     @if(!$package->available)
     <div class="overlay red-overlay">
     <strong style="font-size:24px;">Not Available</strong>

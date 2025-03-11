@@ -95,7 +95,7 @@
             const bookingId = document.getElementById('modalBookingId').value;
             const declineReason = document.getElementById('declineReason').value;
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            
+
             fetch(`/admin/bookings/${bookingId}`, {
                 method: 'PATCH',
                 headers: {
