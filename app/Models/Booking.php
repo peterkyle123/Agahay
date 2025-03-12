@@ -14,6 +14,8 @@ class Booking extends Model
         'guest_name',
         'check_in_date',
         'check_out_date',
+        'check_in_time',     // Add this
+        'check_out_time',    // And check out time if needed
         'days_staying',
         'status',
         'package_name',

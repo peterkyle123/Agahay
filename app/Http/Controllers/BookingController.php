@@ -97,6 +97,16 @@ class BookingController extends Controller
 
     $checkInDate = $request->check_in_date;
     $checkOutDate = $request->check_out_date;
+    // Retrieve package to get its check in/out times (assumes package_name is provided)
+    $package = Package::where('package_name', $request->package_name)->first();
+    if ($package) {
+        $checkInTime = $package->check_in_time;
+        $checkOutTime = $package->check_out_time;
+    } else {
+        // Set as null or default values if package not found
+        $checkInTime = null;
+        $checkOutTime = null;
+    }
 
     // Check if dates are available (excluding "Canceled" bookings)
     $overlappingBookings = Booking::whereNotIn('status', ['Canceled', 'Declined'])
@@ -124,6 +134,8 @@ class BookingController extends Controller
         'guest_name' => $request->guest_name, // Save guest name
         'check_in_date' => $checkInDate,
         'check_out_date' => $checkOutDate,
+        'check_in_time'   => $checkInTime,    // Added field
+        'check_out_time'  => $checkOutTime,   // Added field
         'phone' => $request->phone,
         'extra_pax' => $request->extra_pax,
         'special_request' => $request->special_request,
