@@ -234,9 +234,13 @@
         <textarea id="special_requests" name="special_request" class="input-field" placeholder="Any special requests?" rows="4"></textarea>
       </div>
       <div class="input-container full-width">
-        <label for="downpayment">Downpayment: Pay downpayment to avail cancellation of bookings</label>
+        <label for="downpayment">Downpayment: Check Payment Method</label>
         <input type="text" id="downpayment" name="downpayment" class="input-field" value="₱{{ number_format($packages->initial_payment, 2) }}" readonly>
-      </div>
+        <!-- Payment Methods Button -->
+        <button id="showPaymentBtn" class="bg-blue-500 text-white px-4 py-2 rounded-md mt-2">
+            View Payment Methods
+        </button>
+    </div>
       <div>
         <label for="proof_of_payment">Proof of Downpayment (JPG, PNG, PDF only):</label>
         <input type="file" name="proof_of_payment" id="proof_of_payment" required>
@@ -260,13 +264,48 @@
         <input type="text" id="total_payment" name="payment" class="input-field" readonly>
 
       </div>
-
       <button class="bg-gradient-to-r from-green-500 to-green-700 submit-btn full-width" type="submit">Submit Booking</button>
     </div>
   </form>
+<!-- Payment Methods Modal -->
+<div id="paymentModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
+    <div class="bg-white p-6 rounded-lg relative w-full max-w-sm overflow-y-auto max-h-screen text-center">
+        <h2 class="text-2xl font-bold mb-4">Payment Methods</h2>
+        <ul class="space-y-4">
+            @foreach($paymentMethods as $method)
+            <li class="mb-2">
+                <strong>{{ $method->name }}</strong>: {{ $method->account_number }} - {{ $method->account_name }}
+                @if($method->qr_code_image)
+                    <div class="mt-2">
+                        <img src="{{ asset('storage/' . $method->qr_code_image) }}" alt="QR Code for {{ $method->name }}" class="w-64 h-auto mx-auto">
+                    </div>
+                @endif
+            </li>
+            @endforeach
+        </ul>
+    </div>
+</div>
+
 
   <!-- JavaScript Section -->
   <script>
+
+document.addEventListener("DOMContentLoaded", function() {
+      const showPaymentBtn = document.getElementById('showPaymentBtn');
+      const paymentModal = document.getElementById('paymentModal');
+
+      // Show modal on button click
+      showPaymentBtn.addEventListener('click', function() {
+          paymentModal.classList.remove('hidden');
+      });
+
+      // Close modal when clicking outside the modal content
+      paymentModal.addEventListener('click', function(event) {
+          if (event.target === paymentModal) {
+              paymentModal.classList.add('hidden');
+          }
+      });
+  });
     // Retrieve input elements
     const checkinInput = document.getElementById('checkin');
     const checkoutInput = document.getElementById('checkout');

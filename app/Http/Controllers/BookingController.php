@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use DateTime;
+use App\Models\PaymentMethod;
 use Illuminate\Support\Facades\Log;
 
 
@@ -204,7 +205,8 @@ public function showPackages() {
 public function showForm($package_id) {
 
     $packages = Package::findOrFail($package_id);
-    return view('booking', compact('packages'));
+    $paymentMethods = PaymentMethod::where('display', true)->get();
+    return view('booking', compact('packages', 'paymentMethods'));
 
 }
 public function showBookings(Request $request)

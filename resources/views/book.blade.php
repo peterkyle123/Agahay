@@ -160,6 +160,22 @@
 }
 
 </style>
+<body>
+    <!-- Terms & Conditions Modal -->
+    <div id="termsModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full text-center">
+            <h2 class="text-2xl font-semibold text-gray-800">Terms and Conditions</h2>
+            <p class="mt-4 text-gray-700 text-justify">
+                By proceeding with the booking, you agree to abide by all resort policies, including cancellation fees,
+                refund policies, and other regulations set forth by Agahay Guesthouse Resort. Please read the full terms carefully before confirming.
+            </p>
+            <div class="mt-6">
+                <button id="agreeBtn" class="bg-yellow-600 text-white px-6 py-2 rounded-md hover:bg-yellow-700 transition">
+                    I have read and agree
+                </button>
+            </div>
+        </div>
+    </div>
 
 <header class="header">
     <a href="/" class="home-btn">Back</a>
@@ -191,5 +207,24 @@
 </a>
 
     @endforeach
-</div> </div> </body>
+</div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const termsModal = document.getElementById("termsModal");
+        const agreeBtn = document.getElementById("agreeBtn");
+
+        // Check if user has agreed to terms before
+        if (!localStorage.getItem("agreedToTerms")) {
+            termsModal.style.display = "flex";
+        }
+
+        // When the user clicks the agree button
+        agreeBtn.addEventListener("click", function () {
+            localStorage.setItem("agreedToTerms", "true");
+            termsModal.style.display = "none";
+        });
+    });
+</script>
+</body>
 </html>

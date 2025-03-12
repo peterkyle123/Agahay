@@ -181,6 +181,7 @@
                     <a href="reviews" class="sidebar-item">Reviews</a>
                     <a href="archives" class="sidebar-item">Archives</a>
                     <a href="calendar" class="sidebar-item">Calendar</a>
+                    <a href="payment_methods" class="sidebar-item">Payment Methods</a>
                     <a href="adminlogout" class="sidebar-item">Log out</a>
                 </div>
             </div>

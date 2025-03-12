@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\PaymentMethodController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -218,7 +219,11 @@ Route::patch('/admin/bookings/update-discount/{id}', [BookingController::class, 
 // REVIEWS
 Route::patch('/reviews/{review}/toggle-feature', [ReviewController::class, 'toggleFeature'])->name('reviews.toggleFeature');
 
+Route::resource('payment_methods', PaymentMethodController::class);
 
+// Route for toggling display status
+Route::patch('payment_methods/{paymentMethod}/toggle-display', [PaymentMethodController::class, 'toggleDisplay'])
+    ->name('payment_methods.toggleDisplay');
 
 // Route::get('/total-revenues', [RevenueController::class, 'totalRevenues'])->name('total.revenues');
 // Route::post('/update-cogs', [RevenueController::class, 'updateCogs'])->name('update.cogs');
