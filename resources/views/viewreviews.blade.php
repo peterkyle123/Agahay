@@ -38,7 +38,7 @@
         <div class="bg-white shadow-md rounded-lg p-4 review-item" data-rating="{{ $review->rating }}">
                 <h3 class="text-lg font-semibold text-green-800">{{ $review->name }}</h3>
                 <p class="text-sm text-gray-500">{{ $review->email ?? 'N/A' }}</p>
-                
+
                 <!-- Rating -->
                 <div class="flex my-2">
                     @for ($i = 0; $i < $review->rating; $i++)
@@ -52,12 +52,21 @@
                 <!-- Uploaded Image -->
                 @if ($review->img_upld)
                     <div class="mt-3">
-                        <img src="{{ asset('storage/' . $review->img_upld) }}" 
-                             alt="Uploaded Image" 
+                        <img src="{{ asset('storage/' . $review->img_upld) }}"
+                             alt="Uploaded Image"
                              class="w-full h-40 object-cover rounded-md cursor-pointer hover:opacity-80 transition"
                              onclick="openModal('{{ asset('storage/' . $review->img_upld) }}')">
                     </div>
                 @endif
+
+                <!-- Feature/Unfeature Button -->
+                <form action="{{ route('reviews.toggleFeature', $review->id) }}" method="POST" class="mt-3">
+                    @csrf
+                    @method('PATCH')
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition w-full">
+                        {{ $review->featured ? 'Unfeature' : 'Feature' }}
+                    </button>
+                </form>
 
                 <!-- Delete Button -->
                 <form action="{{ route('reviews.destroy', $review) }}" method="POST" class="mt-3">
@@ -105,7 +114,7 @@
                 }
             });
         }
-      
+
     </script>
 
 </body>

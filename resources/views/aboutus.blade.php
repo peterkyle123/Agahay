@@ -73,6 +73,37 @@
             </div>
         </div>
     </section>
+    <!-- Featured Reviews Section (User Side) -->
+<section id="featured-reviews" class="py-10 bg-yellow-50">
+    <div class="max-w-4xl mx-auto text-center px-4">
+        <h2 class="text-3xl sm:text-4xl font-semibold text-yellow-700">Featured Reviews</h2>
+        <p class="mt-2 text-base sm:text-lg text-gray-700">See what our guests love the most!</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+            @foreach ($featuredReviews as $review)
+                <div class="bg-white shadow-md rounded-lg p-4">
+                    <h3 class="text-lg font-semibold text-yellow-800">{{ $review->name }}</h3>
+                    <!-- Rating -->
+                    <div class="flex my-2 justify-center">
+                        @for ($i = 0; $i < $review->rating; $i++)
+                            <span class="text-yellow-500 text-lg">★</span>
+                        @endfor
+                    </div>
+                    <!-- Message -->
+                    <p class="text-gray-700 line-clamp-3">{{ $review->message }}</p>
+                    <!-- Uploaded Image -->
+                    @if ($review->img_upld)
+                        <div class="mt-3">
+                            <img src="{{ asset('storage/' . $review->img_upld) }}"
+                                 alt="Review Image"
+                                 class="w-full h-40 object-cover rounded-md cursor-pointer hover:opacity-80 transition"
+                                 onclick="openModal('{{ asset('storage/' . $review->img_upld) }}')">
+                        </div>
+                    @endif
+                </div>
+            @endforeach
+        </div>
+    </div>
+</section>
 <!-- REVIEW SECTION -->
     <section id="contact" class="py-20 bg-gradient-to-b from-green-50 to-white">
     <div class="max-w-4xl mx-auto text-center px-4">
@@ -97,7 +128,7 @@
             </div>
         @endif
         <form action="{{ route('reviews.store') }}" method="POST" class="mt-8 space-y-4 " enctype="multipart/form-data">
-            @csrf  
+            @csrf
             <input type="text" name="name" placeholder="Your Name" required class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
 
             <input type="email" name="email" placeholder="Your Email (Optional)" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">

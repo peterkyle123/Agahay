@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Admin;
+use App\Models\Review;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\RevenueController;
@@ -94,7 +95,10 @@ Route::post('/bookform', [BookingController::class, 'store'])->name('bookform.st
 
 // Static pages routes
 Route::get('/aboutus', function () {
-    return view('aboutus'); // About us page view
+    $featuredReviews = Review::where('featured', true)
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+    return view('aboutus', compact('featuredReviews'));
 })->name('aboutus');
 
 Route::get('/gallerysection', function () {
@@ -210,6 +214,11 @@ Route::get('/filter_bookings', function () {
     return view('filter_bookings', compact('bookings'));
 });
 Route::patch('/admin/bookings/update-discount/{id}', [BookingController::class, 'updateDiscount']);
+
+// REVIEWS
+Route::patch('/reviews/{review}/toggle-feature', [ReviewController::class, 'toggleFeature'])->name('reviews.toggleFeature');
+
+
 
 // Route::get('/total-revenues', [RevenueController::class, 'totalRevenues'])->name('total.revenues');
 // Route::post('/update-cogs', [RevenueController::class, 'updateCogs'])->name('update.cogs');
