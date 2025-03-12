@@ -27,9 +27,11 @@ class Package extends Model
         'image',
         'price',
         'initial_payment',
-        'number_of_guests', 
+        'number_of_guests',
         'fri_sun_price',
-        'available', 
+        'check_in_time',   // New column for check-in time
+        'check_out_time',  // New column for check-out time
+        'available',
     ];
 
     protected $casts = [

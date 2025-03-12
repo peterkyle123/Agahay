@@ -218,6 +218,10 @@
         <input type="date" id="checkin" name="check_in_date" required class="input-field">
       </div>
       <div class="input-container">
+        <label for="check_in_time">Check In Time</label>
+        <input type="time" id="check_in_time" name="check_in_time" class="input-field" value="{{ $packages->check_in_time }}" readonly>
+    </div>
+      <div class="input-container">
         <label for="phone">Phone Number</label>
         <input type="tel" id="phone" name="phone" required class="input-field" placeholder="Enter your phone number" pattern="^\d{11}$" maxlength="11" title="Phone number must be exactly 11 digits">
       </div>
@@ -225,6 +229,10 @@
         <label for="checkout">Check-out Date</label>
         <input type="date" id="checkout" name="check_out_date" required class="input-field">
       </div>
+      <div class="input-container">
+        <label for="check_out_time">Check Out Time</label>
+        <input type="time" id="check_out_time" name="check_out_time" class="input-field" value="{{ $packages->check_out_time }}" readonly>
+    </div>
       <div class="input-container">
         <label for="extra_pax">Extra Pax</label>
         <input type="number" id="extra_pax" name="extra_pax" required class="input-field" placeholder="Extra Pax?" min="0" step="1">

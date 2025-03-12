@@ -54,6 +54,9 @@ class PackageController extends Controller
             'description' => 'required|string|max:255',
             'number_of_guests' => 'required|integer|min:2',
             'fri_sun_price' => 'required|numeric|min:0',
+             // New validation rules for check in/out times:
+            'check_in_time'   => 'required|date_format:H:i',
+            'check_out_time'  => 'required|date_format:H:i',
             'available' => 'nullable|boolean', // Add this line for validation
 
         ]);
@@ -71,6 +74,9 @@ class PackageController extends Controller
         $package->description = $request->description;
         $package->number_of_guests = $request->number_of_guests;
         $package->fri_sun_price = $request->fri_sun_price;
+         // Update the new check in/out fields
+        $package->check_in_time   = $request->check_in_time;
+        $package->check_out_time  = $request->check_out_time;
         $package->available = $request->has('available'); // Crucial line for updating availability
         // Save changes to the database
         $package->save();

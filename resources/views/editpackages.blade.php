@@ -21,8 +21,8 @@
            Back
         </a>
         </div>
-       
-    
+
+
 
     </header>
  <!-- Main Container -->
@@ -52,68 +52,68 @@
     <!-- Package Name (Text Input) -->
     <div class="mb-4">
         <label class="block font-semibold mb-1">Package Name</label>
-        <input type="text" name="package_name" value="{{ $packages->package_name }}" 
+        <input type="text" name="package_name" value="{{ $packages->package_name }}"
                class="w-full border p-2 rounded" required>
     </div>
     <!-- Description -->
     <div class="mb-4">
         <label class="block font-semibold mb-1">Description</label>
-        <input type="text" name="description" value="{{ $packages->description }}" 
+        <input type="text" name="description" value="{{ $packages->description }}"
                class="w-full border p-2 rounded" required>
     </div>
     <!-- Number of Persons -->
     <div class="mb-4">
         <label class="block font-semibold mb-1">Number of Persons</label>
-        <input type="text" name="number_of_guests" value="{{ $packages->number_of_guests }}" 
+        <input type="text" name="number_of_guests" value="{{ $packages->number_of_guests }}"
                class="w-full border p-2 rounded" required>
     </div>
 
     <!-- Base Price -->
     <div class="mb-4">
         <label class="block font-semibold mb-1">Base Price (₱)</label>
-        <input type="number" name="price" value="{{ $packages->price }}" 
-               class="w-full border p-2 rounded" required min="0" 
+        <input type="number" name="price" value="{{ $packages->price }}"
+               class="w-full border p-2 rounded" required min="0"
                oninput="validatePrice(this)">
     </div>
 
     <div class="mb-4">
     <label class="block font-semibold mb-1">Additional Price For Friday-Sunday (₱)</label>
-    <input type="number" name="fri_sun_price" value="{{ $packages->fri_sun_price }}" 
-           class="w-full border p-2 rounded" required min="0" 
+    <input type="number" name="fri_sun_price" value="{{ $packages->fri_sun_price }}"
+           class="w-full border p-2 rounded" required min="0"
            oninput="validatePrice(this)">
 </div>
 
 
-    
+
     <!-- Initial Payment -->
     <div class="mb-4">
         <label class="block font-semibold mb-1">Initial Payment (₱)</label>
-        <input type="number" name="initial_payment" value="{{ $packages->initial_payment}}" 
-               class="w-full border p-2 rounded" required min="0" 
+        <input type="number" name="initial_payment" value="{{ $packages->initial_payment}}"
+               class="w-full border p-2 rounded" required min="0"
                oninput="validatePrice(this)">
     </div>
 
     <!-- Number of Days -->
     <div class="mb-4">
         <label class="block font-semibold mb-1">Number of Days</label>
-        <input type="number" name="number_of_days" value="{{ $packages->number_of_days }}" 
-               class="w-full border p-2 rounded" required min="1" 
+        <input type="number" name="number_of_days" value="{{ $packages->number_of_days }}"
+               class="w-full border p-2 rounded" required min="1"
                oninput="validateDays(this)">
     </div>
 
     <!-- Price for Extra Pax -->
     <div class="mb-4">
         <label class="block font-semibold mb-1">Price for Extra Pax (₱)</label>
-        <input type="number" name="extra_pax_price" value="{{ $packages->extra_pax_price }}" 
-               class="w-full border p-2 rounded" required min="0" 
+        <input type="number" name="extra_pax_price" value="{{ $packages->extra_pax_price }}"
+               class="w-full border p-2 rounded" required min="0"
                oninput="validatePrice(this)">
     </div>
 
     <!-- Price Per Night -->
     <div class="mb-4">
         <label class="block font-semibold mb-1">Extra Day Price (₱)</label>
-        <input type="number" name="per_day_price" value="{{ $packages->per_day_price }}" 
-               class="w-full border p-2 rounded" required min="0" 
+        <input type="number" name="per_day_price" value="{{ $packages->per_day_price }}"
+               class="w-full border p-2 rounded" required min="0"
                oninput="validatePrice(this)">
     </div>
     <div class="mb-4">
@@ -124,6 +124,15 @@
             <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
         </label>
     </div>
+</div>
+<div class="form-group">
+    <label for="check_in_time">Check In Time</label>
+    <input type="time" name="check_in_time" id="check_in_time" class="form-control" value="{{ old('check_in_time', $packages->check_in_time) }}" required>
+</div>
+
+<div class="form-group">
+    <label for="check_out_time">Check Out Time</label>
+    <input type="time" name="check_out_time" id="check_out_time" class="form-control" value="{{ old('check_out_time', $packages->check_out_time) }}" required>
 </div>
     <!-- Submit & Cancel Buttons -->
     <div class="mt-6 flex justify-between">
