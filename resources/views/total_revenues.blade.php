@@ -7,7 +7,7 @@
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
     <link rel="icon" href="{{ asset('images/palm-tree.png') }}" type="image/x-icon">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">     
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="white">
     <div class="min-h-screen p-6">
@@ -57,7 +57,7 @@
 
             @if(isset($filteredRevenues))
                 <p class="text-lg">
-                    <strong>Revenues:</strong> ₱{{ number_format($filteredRevenues, 2) }}
+                    <strong>Gross Revenue:</strong> ₱{{ number_format($filteredRevenues, 2) }}
                 </p>
             @endif
 
