@@ -162,20 +162,30 @@
 </style>
 <body>
     <!-- Terms & Conditions Modal -->
-    <div id="termsModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-        <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full text-center">
-            <h2 class="text-2xl font-semibold text-gray-800">Terms and Conditions</h2>
-            <p class="mt-4 text-gray-700 text-justify">
-                By proceeding with the booking, you agree to abide by all resort policies, including cancellation fees,
-                refund policies, and other regulations set forth by Agahay Guesthouse Resort. Please read the full terms carefully before confirming.
-            </p>
-            <div class="mt-6">
-                <button id="agreeBtn" class="bg-yellow-600 text-white px-6 py-2 rounded-md hover:bg-yellow-700 transition">
-                    I have read and agree
-                </button>
-            </div>
+<div id="termsModal" class="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 transition-opacity duration-300">
+    <div class="bg-white p-8 rounded-lg shadow-2xl max-w-lg w-full text-center relative">
+        <h2 class="text-3xl font-bold text-gray-800 mb-4">Terms and Conditions</h2>
+        <div class="overflow-y-auto max-h-64 px-2 text-gray-700 text-justify border-t pt-4">
+            <p>By proceeding with the booking, you agree to abide by all resort policies, including downpayment fees, refund policies, and other regulations set forth by Agahay Guesthouse Resort.</p>
+            <ul class="mt-3 list-disc list-inside text-sm">
+                <li>To book, customers must pay the downpayment and upload proof of payment.</li>
+                <li>Customers may cancel their booking at least 4 days before the check-in date. Late cancellations will result in NO REFUND of the downpayment.</li>
+                <li>Editing booking info is allowed only if the admin has not yet approved the booking. Once confirmed, editing is no longer possible.</li>
+                <li>The admin has the right to decline a booking, and the customer will be informed beforehand.</li>
+                <li>Booking details, especially contact information, must be accurate and up to date.</li>
+            </ul>
+        </div>
+        <div class="mt-6 flex justify-center gap-4">
+            <button id="agreeBtn" class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition">
+                I Agree
+            </button>
+            <button id="closeModal" class="text-gray-500 hover:text-gray-700 transition">
+                Close
+            </button>
         </div>
     </div>
+</div>
+
 
 <header class="header">
     <a href="/" class="home-btn">Back</a>
@@ -210,21 +220,28 @@
 </div>
 </div>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const termsModal = document.getElementById("termsModal");
-        const agreeBtn = document.getElementById("agreeBtn");
+document.addEventListener("DOMContentLoaded", function () {
+    const termsModal = document.getElementById("termsModal");
+    const agreeBtn = document.getElementById("agreeBtn");
 
-        // Check if user has agreed to terms before
-        if (!localStorage.getItem("agreedToTerms")) {
-            termsModal.style.display = "flex";
-        }
+    // Ensure modal is displayed if the user hasn't agreed
+    if (!localStorage.getItem("agreedToTerms")) {
+        termsModal.style.display = "flex";
+    }
 
-        // When the user clicks the agree button
-        agreeBtn.addEventListener("click", function () {
-            localStorage.setItem("agreedToTerms", "true");
-            termsModal.style.display = "none";
-        });
+    // User must click "I Agree" to proceed
+    agreeBtn.addEventListener("click", function () {
+        localStorage.setItem("agreedToTerms", "true");
+        termsModal.style.display = "none";
     });
+
+    // Prevent closing the modal by clicking outside it
+    termsModal.addEventListener("click", function (event) {
+        if (event.target === termsModal) {
+            event.stopPropagation();
+        }
+    });
+});
 </script>
 </body>
 </html>
