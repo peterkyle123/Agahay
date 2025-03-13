@@ -20,9 +20,9 @@
 
     <!-- Form Container -->
     <div class="container max-w-lg mx-auto mt-6 p-4 sm:p-6 bg-white rounded-lg shadow-md">
-    <form action="{{ route('b00kings.update.user', $booking->id) }}" method="POST">
-    @csrf
-    @method('PUT')
+        <form id="edit-booking-form" action="{{ route('b00kings.update.user', $booking->id) }}" method="POST">
+            @csrf
+            @method('PUT')
 
             <!-- Full Name -->
             <div class="mb-4">
@@ -33,7 +33,7 @@
             <!-- Check-in Date -->
             <div class="mb-4">
                 <label for="checkin" class="block text-sm font-semibold text-gray-700">Check-in Date</label>
-                <input type="date" id="checkin" name="check_in_date" value="{{ $booking->check_in_date }}" required class="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="date" id="checkin" name="check_in_date" value="{{ $booking->check_in_date }}" required class="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" min="{{ date('Y-m-d') }}">
             </div>
 
             <!-- Check-out Date -->
@@ -60,7 +60,13 @@
                 <textarea id="special_requests" name="special_request" class="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Any special requests?" rows="4">{{ $booking->special_request }}</textarea>
             </div>
 
+            <!-- Hidden Payment Input -->
             <input type="hidden" name="payment" id="payment" value="{{ $booking->payment }}">
+
+            <!-- Display Payment -->
+            <p class="text-lg font-semibold mt-2">
+                Total Payment: <span id="payment-display">₱{{ number_format($booking->payment, 2) }}</span>
+            </p>
 
             <!-- Submit Button -->
             <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md transition duration-300">
@@ -69,52 +75,33 @@
         </form>
     </div>
 
-    <!-- Error Modal -->
-    <div id="error-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
-            <h2 class="text-2xl font-semibold mb-4 text-center text-red-600">Error</h2>
-            <p id="error-message" class="text-center text-gray-700"></p>
-            <button id="close-error-modal" class="w-full mt-4 bg-red-600 hover:bg-red-700 text-white py-3 rounded-md transition duration-300">Close</button>
-        </div>
-    </div>
-
     <script>
         // Get the input elements
         const checkinInput = document.getElementById('checkin');
         const checkoutInput = document.getElementById('checkout');
         const extraPaxInput = document.getElementById('extra_pax');
         const paymentInput = document.getElementById('payment');
+        const paymentDisplay = document.getElementById('payment-display');
 
-        // Package details (replace with actual values from your database)
+        // Package details from the booking's package (ensure these variables are set in your controller)
         const packagePrice = {{ $booking->package->price }};
         const packageDays = {{ $booking->package->number_of_days }};
         const extraDayRate = {{ $booking->package->per_day_price }};
         const extraPaxRate = {{ $booking->package->extra_pax_price }};
         const friSunPrice = {{ $booking->package->fri_sun_price }};
 
-        // Modal elements
-        const errorModal = document.getElementById('error-modal');
-        const errorMessage = document.getElementById('error-message');
-        const closeErrorModal = document.getElementById('close-error-modal');
-
+        // Function to show error (simple alert for now)
         function showError(message) {
-            errorMessage.textContent = message;
-            errorModal.classList.remove('hidden');
+            alert(message);
         }
 
-        function hideError() {
-            errorModal.classList.add('hidden');
-        }
-
-        closeErrorModal.addEventListener('click', hideError);
-
+        // Function to calculate total payment
         function calculateTotalPayment() {
             const checkinDate = new Date(checkinInput.value);
             const checkoutDate = new Date(checkoutInput.value);
-            const extraPax = parseInt(extraPaxInput.value) || 0;
+            let extraPax = parseInt(extraPaxInput.value) || 0;
 
             if (isNaN(checkinDate) || isNaN(checkoutDate)) {
-                paymentInput.value = "";
                 showError("Please enter valid check-in and check-out dates.");
                 return;
             }
@@ -123,34 +110,45 @@
             const bookedDays = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
 
             if (bookedDays <= 0) {
-                paymentInput.value = "Invalid dates";
                 showError("Check-out date must be after check-in date.");
                 return;
             }
 
+            // Base package price
             let totalPayment = packagePrice;
 
+            // Extra days charge
             if (bookedDays > packageDays) {
                 const extraDays = bookedDays - packageDays;
                 totalPayment += extraDays * extraDayRate;
             }
 
-            totalPayment += extraPax * extraPaxRate;
+            // Extra pax charge
+            if (extraPax > 0) {
+                totalPayment += extraPax * extraPaxRate;
+            }
 
-            if (checkinDate.getDay() === 5 || checkinDate.getDay() === 6 || checkinDate.getDay() === 0) {
+            // Weekend surcharge: if check-in day is Friday (5), Saturday (6), or Sunday (0)
+            if ([5, 6, 0].includes(checkinDate.getDay())) {
                 totalPayment += friSunPrice;
             }
 
-            paymentInput.value = totalPayment.toLocaleString("en-PH", {
-                style: "currency",
-                currency: "PHP"
-            });
+            // Update hidden input and display element
+            paymentInput.value = totalPayment;
+            paymentDisplay.textContent = totalPayment.toLocaleString("en-PH", { style: "currency", currency: "PHP" });
         }
 
+        // Attach event listeners to recalc payment when fields change
         checkinInput.addEventListener("change", calculateTotalPayment);
         checkoutInput.addEventListener("change", calculateTotalPayment);
         extraPaxInput.addEventListener("input", calculateTotalPayment);
 
+        // Ensure the payment is updated before form submission
+        document.getElementById("edit-booking-form").addEventListener("submit", function(event) {
+            calculateTotalPayment();
+        });
+
+        // Initial calculation on page load
         calculateTotalPayment();
     </script>
 </body>
