@@ -76,13 +76,22 @@ class BookingController extends Controller
     }
 
    public function store(Request $request)
+
+
 {
+    $package = Package::where('package_name', $request->package_name)->first();
+    $packageDays = $package ? $package->number_of_days : 1;
+
+        // Build a conditional rule for check_out_date:
+    // For 1-day packages, allow same-day checkout (after_or_equal);
+    // for packages > 1 day, require checkout to be after check-in.
+    $checkOutRule = $packageDays > 1 ? 'after:check_in_date' : 'after_or_equal:check_in_date';
     // Validate input
     $request->validate([
         'customer_name' => 'required|string|max:255',
         'guest_name' => 'nullable|string|max:255',
         'check_in_date' => 'required|date',
-        'check_out_date' => 'required|date|after:check_in_date',
+        'check_out_date' => 'required|date|' . $checkOutRule,
         'phone' => 'required|digits:11',
         'extra_pax' => 'nullable|integer|min:0',
         'package_name' => 'nullable|string|max:255',
@@ -102,10 +111,17 @@ class BookingController extends Controller
     if ($package) {
         $checkInTime = $package->check_in_time;
         $checkOutTime = $package->check_out_time;
+        $packageDays = $package->number_of_days;
     } else {
         // Set as null or default values if package not found
         $checkInTime = null;
         $checkOutTime = null;
+        $packageDays = 1; // Default to 1 if package not found
+    }
+
+    // If package requires more than 1 day, then check that check_out_date is strictly after check_in_date.
+    if ($packageDays > 1 && $checkInDate == $checkOutDate) {
+        return redirect()->back()->with('error1', 'For this package, the check-out date must be after the check-in date.');
     }
 
     // Check if dates are available (excluding "Canceled" bookings)
