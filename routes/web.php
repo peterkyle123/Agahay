@@ -129,9 +129,6 @@ Route::get('/viewreviews', function () {
 Route::get('/editpackages/{id}', [BookingController::class, 'edit'])->name('editpackages');
 Route::put('/editpackages/{id}', [PackageController::class, 'update'])->name('editpackages.update'); // Handle Update Request
 
-
-
-
 // Admin home page route
 Route::get('/adminhome', function () {
     return view('adminhome'); // Admin home page view
@@ -170,7 +167,7 @@ Route::post('/bookform', [BookingController::class, 'store'])->name('bookform.st
 Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
 Route::get('/reviews', [ReviewController::class, 'reviews'])->name('reviews.index'); //If you have an index page
-// Route::get('/revenue-data', [RevenueController::class, 'getRevenueData']);
+
 Route::get('/archives', [AdminController::class, 'archivedBookings'])->name('admin.archivedBookings');
 Route::delete('/admin/bookings/archives/bulk-delete', [AdminController::class, 'bulkDeleteArchivedBookings'])
     ->name('admin.bulkDeleteArchivedBookings');
