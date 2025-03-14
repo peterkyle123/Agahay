@@ -29,32 +29,40 @@ class AdminController extends Controller
     // }
     // Update selected bookings' status to 'Done'
     public function updateBookingsStatus(Request $request, $id)
-{
-    $booking = Booking::findOrFail($id);
-    $action = $request->input('action');
+    {
+        $booking = Booking::findOrFail($id);
+        $action = $request->input('action');
 
-    if ($action === 'approve') {
-        $booking->status = 'Approved';
-        \Log::info('Booking ' . $id . ' approved.');
-    } elseif ($action === 'decline') {
-        $booking->status = 'Declined';
-        $booking->decline_reason = $request->input('decline_reason'); // Store the decline reason
-        $booking->save();
-        return response()->json(['success' => 'Booking has been declined successfully.']);
-    } elseif ($action === 'delete') {
-        if ($booking->status === 'Declined') {
-            $booking->delete();
-            \Log::info('Booking ' . $id . ' deleted.');
-            return redirect()->back()->with('success', 'Booking deleted successfully.');
-        } else {
-            return redirect()->back()->with('error', 'Only declined bookings can be deleted.');
+        \Log::info("updateBookingsStatus called for booking: {$id} with action: {$action}");
+
+        if ($action === 'approve') {
+            $booking->status = 'Approved';
+            \Log::info("Booking {$id} approved.");
+        } elseif ($action === 'decline') {
+            $booking->status = 'Declined';
+            $booking->decline_reason = $request->input('decline_reason'); // Store the decline reason
+            \Log::info("Booking {$id} declined with reason: " . $booking->decline_reason);
+        } elseif ($action === 'delete') {
+            if ($booking->status === 'Declined') {
+                $booking->delete();
+                \Log::info("Booking {$id} deleted.");
+                return redirect()->back()->with('success', 'Booking deleted successfully.');
+            } else {
+                return redirect()->back()->with('error', 'Only declined bookings can be deleted.');
+            }
         }
+
+        // Save any changes if not deleted
+        $booking->save();
+
+        // Return a JSON response if the request expects JSON (e.g., from an AJAX request)
+        if ($request->expectsJson()) {
+            return response()->json(['success' => "Booking status updated successfully."]);
+        }
+
+        return redirect()->back()->with('success', 'Booking status updated.');
     }
 
-    $booking->save(); // Save the updated status
-
-    return redirect()->back()->with('success', 'Booking status updated.');
-}
 
 public function archivedBookings()
 {

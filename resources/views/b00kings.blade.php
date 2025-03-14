@@ -123,53 +123,38 @@
         </table>
       </form>
 
-      <!-- Decline Modal -->
-      <div id="declineModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden flex items-center justify-center">
-        <div class="relative p-5 border w-96 shadow-lg rounded-md bg-white">
-          <div class="mt-3 text-center">
-            <h3 class="text-lg leading-6 font-medium text-gray-900">Decline Booking</h3>
-            <div class="mt-2">
-              <p class="text-sm text-gray-500">Enter the reason for declining this booking.</p>
-              <form id="declineForm" method="PATCH">
-                @csrf
-                @method('PATCH')
-                <input type="hidden" id="modalBookingId" name="booking_id">
-                <textarea id="declineReason" name="decline_reason" class="border rounded w-full p-2" placeholder="Reason"></textarea>
-                <div class="mt-4">
-                  <button type="button" class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded mr-2 close-modal">Cancel</button>
-                  <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">Decline</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
+     <!-- Decline Modal HTML -->
+<div id="declineModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+      <h2 class="text-xl font-semibold mb-4">Decline Booking</h2>
+      <input type="hidden" id="modalBookingId" value="">
+      <textarea id="declineReason" placeholder="Enter reason for decline" class="w-full p-2 border rounded mb-4"></textarea>
+      <form id="declineForm">
+        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded">Submit Decline</button>
+      </form>
+      <button class="close-modal mt-4 w-full bg-gray-300 hover:bg-gray-400 py-2 rounded">Cancel</button>
+    </div>
+  </div>
+    </div>
+  </div>
+
+  <!-- General Modal Handling Script -->
+ <!-- Decline Modal HTML -->
+<div id="declineModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+      <h2 class="text-xl font-semibold mb-4">Decline Booking</h2>
+      <input type="hidden" id="modalBookingId" value="">
+      <textarea id="declineReason" placeholder="Enter reason for decline" class="w-full p-2 border rounded mb-4"></textarea>
+      <form id="declineForm">
+        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded">Submit Decline</button>
+      </form>
+      <button class="close-modal mt-4 w-full bg-gray-300 hover:bg-gray-400 py-2 rounded">Cancel</button>
     </div>
   </div>
 
   <!-- General Modal Handling Script -->
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const selectAllCheckbox = document.getElementById('select-all');
-      const checkboxes = document.querySelectorAll('.booking-checkbox');
-
-      if (selectAllCheckbox) {
-        selectAllCheckbox.addEventListener('change', function () {
-          checkboxes.forEach(checkbox => {
-            checkbox.checked = this.checked;
-          });
-        });
-      }
-
-      checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function () {
-          if (selectAllCheckbox) {
-            selectAllCheckbox.checked = [...checkboxes].every(cb => cb.checked);
-          }
-        });
-      });
-    });
-
+    // Open the modal and assign the booking ID to a hidden field
     document.querySelectorAll('.open-modal').forEach(button => {
       button.addEventListener('click', function() {
         const bookingId = this.getAttribute('data-booking-id');
@@ -178,12 +163,14 @@
       });
     });
 
+    // Close the modal when clicking on any element with class "close-modal"
     document.querySelectorAll('.close-modal').forEach(button => {
       button.addEventListener('click', function() {
         document.getElementById('declineModal').classList.add('hidden');
       });
     });
 
+    // Handle the decline form submission
     document.getElementById('declineForm').addEventListener('submit', function(event) {
       event.preventDefault();
 
@@ -195,25 +182,38 @@
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json', // Ensures JSON response from the server
           'X-CSRF-TOKEN': csrfToken,
         },
-        body: JSON.stringify({ action: 'decline', decline_reason: declineReason, _method: 'PATCH' }),
+        body: JSON.stringify({
+          action: 'decline',
+          decline_reason: declineReason,
+          _method: 'PATCH'
+        }),
       })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          console.error('Network response was not ok:', response);
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
       .then(data => {
         if (data.success) {
           alert(data.success);
-          location.reload();
+          location.reload(); // Refresh the page after a successful update
         } else {
+          console.error('Error in response data:', data);
           alert('Failed to decline booking.');
         }
       })
       .catch(error => {
-        console.error('Error:', error);
+        console.error('Error during fetch:', error);
         alert('An error occurred.');
       });
     });
   </script>
+
 
   <!-- Discount Update Script -->
   <script>

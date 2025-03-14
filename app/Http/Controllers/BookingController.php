@@ -423,18 +423,7 @@ public function lockDownpayment(Request $request, $bookingId)
 
     return response()->json(['success' => 'Downpayment status updated']);
 }
-// public function showMarkDownpaymentPaid(Booking $booking)
-// {
-//     return view('downpayment-paid', compact('booking'));
-// }
 
-// public function processMarkDownpaymentPaid(Request $request, Booking $booking)
-// {
-//     $booking->downpayment = 'Paid';
-//     $booking->save();
-
-//     return redirect()->route('admin.mark.downpayment.paid', $booking->id)->with('success', 'Downpayment marked as Paid.');
-// }
 public function uploadProofOfPayment(Request $request, Booking $booking)
 {
     $request->validate([
@@ -455,13 +444,7 @@ public function uploadProofOfPayment(Request $request, Booking $booking)
 
     return response()->json(['error' => 'Failed to upload proof of payment.']);
 }
-// public function edituser($id)
-// {
-//     $booking = Booking::findOrFail($id);
-//     $packages = Package::all(); // Fetch packages for dropdown
 
-//     return view('editbooking', compact('booking', 'packages'));
-// }
 public function showEditUser($id)
 {
     $booking = Booking::findOrFail($id);

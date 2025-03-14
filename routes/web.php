@@ -124,21 +124,12 @@ Route::get('/viewreviews', function () {
     return view('viewreviews'); // Admin logout page view
 })->name('viewreviews');
 
-// Route::get('/revenues', function () {
-//     return view('revenues'); // Admin logout page view
-// })->name('revenues');
 
-// Route::get('/editpackages', function () {
-//        $packages = Package::all();
-//     return view('editpackages',compact('packages'));
 // })->name('editpackages');
 Route::get('/editpackages/{id}', [BookingController::class, 'edit'])->name('editpackages');
 Route::put('/editpackages/{id}', [PackageController::class, 'update'])->name('editpackages.update'); // Handle Update Request
 
 
-// Route::get('/admin_calendar', function () {
-//     return view('admin_calendar'); // calendar
-// })->name('admin_calendar');
 
 
 // Admin home page route
@@ -198,8 +189,7 @@ Route::delete('/admin/bookings/approved/bulk-delete', [AdminController::class, '
 Route::get('/get-unavailable-dates', [BookingController::class, 'getUnavailableDates'])->name('get.unavailable.dates');
 Route::get('/total-revenues', [RevenueController::class, 'totalRevenues'])->name('total.revenues');
 Route::get('/user/calendar', [BookingController::class, 'calendars'])->name('user.calendar')->defaults('userView', true);
-// Route::get('/admin/bookings/{booking}/mark-downpayment-paid', [BookingController::class, 'showMarkDownpaymentPaid'])->name('admin.mark.downpayment.paid');
-// Route::post('/admin/bookings/{booking}/mark-downpayment-paid/process', [BookingController::class, 'processMarkDownpaymentPaid'])->name('admin.mark.downpayment.paid.process');
+
 Route::post('/bookings/{booking}/upload-proof', [BookingController::class, 'uploadProofOfPayment'])->name('booking.upload.proof');
 Route::get('/statistics', [RevenueController::class, 'statistics'])->name('statistics');
 
@@ -225,6 +215,4 @@ Route::resource('payment_methods', PaymentMethodController::class);
 Route::patch('payment_methods/{paymentMethod}/toggle-display', [PaymentMethodController::class, 'toggleDisplay'])
     ->name('payment_methods.toggleDisplay');
 
-// Route::get('/total-revenues', [RevenueController::class, 'totalRevenues'])->name('total.revenues');
-// Route::post('/update-cogs', [RevenueController::class, 'updateCogs'])->name('update.cogs');
 
