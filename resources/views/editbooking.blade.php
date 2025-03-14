@@ -107,7 +107,7 @@
             }
 
             const timeDifference = checkoutDate - checkinDate;
-            const bookedDays = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+            const bookedDays = Math.floor(timeDifference / (1000 * 60 * 60 * 24)) + 1;
 
             if (bookedDays <= 0) {
                 showError("Check-out date must be after check-in date.");
