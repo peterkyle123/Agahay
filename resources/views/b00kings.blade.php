@@ -100,29 +100,20 @@
                   </td>
                   <td class="px-4 py-2">{{ $booking->status ?? 'Pending' }}</td>
                   <td class="px-4 py-2">{{ $booking->package_name }}</td>
-
-                  <!-- Payment Column: Base Payment (read from DB) -->
                   <td class="px-4 py-2">
                     <span id="payment-{{ $booking->id }}" data-base="{{ $booking->payment }}">
                       ₱{{ number_format($booking->payment, 2) }}
                     </span>
                   </td>
-
-                  <!-- Discount Input Column -->
                   <td class="px-4 py-2">
                     <input type="number" name="discount[{{ $booking->id }}]" class="discount-input border p-2 rounded w-20"
                            data-id="{{ $booking->id }}" value="{{ $booking->discount }}" min="0" max="100">
                   </td>
-
-                  <!-- Final Payment Column (display computed discounted value) -->
                   <td class="px-4 py-2" id="final-payment-{{ $booking->id }}">
                     ₱{{ number_format($booking->payment, 2) }}
                   </td>
-
                   <!-- Hidden input for final_payment (submitted with the form) -->
                   <input type="hidden" name="final_payment[{{ $booking->id }}]" id="hidden-final-payment-{{ $booking->id }}" value="{{ $booking->payment }}">
-
-                  <!-- Action Column -->
                   <td class="px-4 py-2">
                     @if ($booking->status == 'Pending')
                       <button type="submit" name="action" value="approve" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md"
@@ -153,7 +144,7 @@
         </a>
       </div>
 
-      <!-- Decline Modal (unchanged) -->
+      <!-- Decline Modal HTML -->
       <div id="declineModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
         <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
           <h2 class="text-xl font-semibold mb-4">Decline Booking</h2>
@@ -174,34 +165,6 @@
 
   <!-- Modal Scripts (for Decline) -->
   <script>
-
-$(document).ready(function(){
-    $('.discount-input').on('input', function() {
-        let discount = parseFloat($(this).val()) || 0;
-        let bookingId = $(this).data('id');
-
-        // Retrieve the base payment from the Payment cell's data attribute
-        let $paymentCell = $('#payment-' + bookingId);
-        let basePayment = parseFloat($paymentCell.data('base'));
-
-        // Validate discount
-        if(isNaN(discount) || discount < 0 || discount > 100) {
-            alert("Please enter a valid discount between 0 and 100.");
-            $(this).val(0);
-            discount = 0;
-        }
-
-        // Calculate the final payment
-        let finalPayment = basePayment * (1 - discount / 100);
-
-        // Update the Final Payment cell in the UI
-        $('#final-payment-' + bookingId).text("₱" + finalPayment.toFixed(2));
-
-        // Update the hidden input for final_payment
-        $('#hidden-final-payment-' + bookingId).val(finalPayment.toFixed(2));
-    });
-});
-
     // Open decline modal
     document.querySelectorAll('.open-modal').forEach(button => {
       button.addEventListener('click', function() {
@@ -221,7 +184,6 @@ $(document).ready(function(){
     // Handle decline form submission
     document.getElementById('declineForm').addEventListener('submit', function(event) {
       event.preventDefault();
-
       const bookingId = document.getElementById('modalBookingId').value;
       const declineReason = document.getElementById('declineReason').value;
       const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -234,16 +196,13 @@ $(document).ready(function(){
           'X-CSRF-TOKEN': csrfToken,
         },
         body: JSON.stringify({
-          action: 'decline',
-          decline_reason: declineReason,
-          _method: 'PATCH'
-        }),
+        action: 'decline',
+        decline_reason: declineReason,
+        _method: 'PATCH'
+        })
       })
       .then(response => {
-        if (!response.ok) {
-          console.error('Network response was not ok:', response);
-          throw new Error('Network response was not ok');
-        }
+        if (!response.ok) throw new Error('Network response was not ok');
         return response.json();
       })
       .then(data => {
@@ -251,7 +210,6 @@ $(document).ready(function(){
           alert(data.success);
           location.reload();
         } else {
-          console.error('Error in response data:', data);
           alert('Failed to decline booking.');
         }
       })
@@ -264,24 +222,35 @@ $(document).ready(function(){
 
   <!-- Discount Update Script -->
   <script>
+    $(document).ready(function(){
+      $('.discount-input').on('input', function() {
+        let discount = parseFloat($(this).val()) || 0;
+        let bookingId = $(this).data('id');
+        let $paymentCell = $('#payment-' + bookingId);
+        let basePayment = parseFloat($paymentCell.data('base'));
+        if(isNaN(discount) || discount < 0 || discount > 100) {
+          alert("Please enter a valid discount between 0 and 100.");
+          $(this).val(0);
+          discount = 0;
+        }
+        let finalPayment = basePayment * (1 - discount / 100);
+        $('#final-payment-' + bookingId).text("₱" + finalPayment.toFixed(2));
+        $('#hidden-final-payment-' + bookingId).val(finalPayment.toFixed(2));
+      });
+    });
+  </script>
+
+  <script>
     document.addEventListener('DOMContentLoaded', function() {
       document.querySelectorAll('.discount-input').forEach(input => {
         input.addEventListener('input', function() {
           let discount = parseFloat(this.value) || 0;
           let bookingId = this.getAttribute('data-id');
-
-          // Retrieve base payment from Payment cell's data attribute
           let paymentCell = document.getElementById(`payment-${bookingId}`);
           let basePayment = parseFloat(paymentCell.getAttribute('data-base'));
-
-          // Calculate new final payment based on discount
           let newPayment = basePayment * (1 - discount / 100);
-
-          // Update the Final Payment cell in the UI
           let finalPaymentCell = document.getElementById(`final-payment-${bookingId}`);
           finalPaymentCell.textContent = '₱' + newPayment.toFixed(2);
-
-          // Update the hidden input for final_payment
           document.getElementById(`hidden-final-payment-${bookingId}`).value = newPayment.toFixed(2);
         });
       });

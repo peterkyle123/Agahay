@@ -41,7 +41,9 @@ class AdminController extends Controller
             $final_payments = $request->input('final_payment');
 
             if (!isset($discounts[$id]) || !isset($final_payments[$id])) {
-                return redirect()->back()->with('error', 'Invalid data submitted for the booking.');
+                return $request->expectsJson()
+                    ? response()->json(['error' => 'Invalid data submitted for the booking.'], 422)
+                    : redirect()->back()->with('error', 'Invalid data submitted for the booking.');
             }
 
             $discount = $discounts[$id];
@@ -49,22 +51,52 @@ class AdminController extends Controller
 
             // Update the booking record
             $booking->discount = $discount;
-            // Overwrite the payment with the new final payment value (formatted as a float with 2 decimals)
-            $booking->payment = number_format($final_payment, 2, '.', '');
-            $booking->status = 'Approved';  // Optionally update status
+            $booking->payment  = number_format($final_payment, 2, '.', '');
+            $booking->status   = 'Approved';
             $booking->save();
 
             \Log::info("Booking {$id} approved. Discount: {$discount} Final Payment: {$booking->payment}");
 
-            return redirect()->back()->with('success', 'Booking updated and discount applied successfully!');
+            // Return JSON if AJAX, otherwise redirect
+            return $request->expectsJson()
+                ? response()->json(['success' => 'Booking updated and discount applied successfully!'])
+                : redirect()->back()->with('success', 'Booking updated and discount applied successfully!');
         }
 
-        // Process other actions (decline, delete) as needed...
+        elseif ($action === 'decline') {
+            // Set booking status to 'Declined' and record the decline reason
+            $booking->status = 'Declined';
+            $booking->decline_reason = $request->input('decline_reason');
+            $booking->save();
 
-        return redirect()->back()->with('error', 'Invalid action.');
+            \Log::info("Booking {$id} declined with reason: " . $booking->decline_reason);
+
+            // Return JSON if AJAX, otherwise redirect
+            return $request->expectsJson()
+                ? response()->json(['success' => 'Booking declined successfully.'])
+                : redirect()->back()->with('success', 'Booking declined successfully!');
+        }
+
+        elseif ($action === 'delete') {
+            if ($booking->status === 'Declined') {
+                $booking->delete();
+                \Log::info("Booking {$id} deleted.");
+
+                return $request->expectsJson()
+                    ? response()->json(['success' => 'Booking deleted successfully.'])
+                    : redirect()->back()->with('success', 'Booking deleted successfully.');
+            } else {
+                return $request->expectsJson()
+                    ? response()->json(['error' => 'Only declined bookings can be deleted.'], 422)
+                    : redirect()->back()->with('error', 'Only declined bookings can be deleted.');
+            }
+        }
+
+        // Invalid action
+        return $request->expectsJson()
+            ? response()->json(['error' => 'Invalid action.'], 400)
+            : redirect()->back()->with('error', 'Invalid action.');
     }
-
-
 
 public function archivedBookings()
 {

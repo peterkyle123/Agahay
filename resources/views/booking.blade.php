@@ -323,6 +323,18 @@
         return `${yyyy}-${mm}-${dd}`;
       }
 
+      // Disable or update check-out date input if package is 1-day
+      function updateCheckout() {
+        if (packageDays === 1) {
+          checkoutInput.value = checkinInput.value;
+          checkoutInput.disabled = true;
+        } else {
+          checkoutInput.disabled = false;
+        }
+      }
+      checkinInput.addEventListener("change", updateCheckout);
+      updateCheckout(); // Run on load
+
       // Fetch unavailable dates from the server
       fetch("/get-unavailable-dates")
         .then(response => response.json())

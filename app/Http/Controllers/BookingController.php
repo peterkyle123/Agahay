@@ -85,13 +85,14 @@ class BookingController extends Controller
         // Build a conditional rule for check_out_date:
     // For 1-day packages, allow same-day checkout (after_or_equal);
     // for packages > 1 day, require checkout to be after check-in.
-    $checkOutRule = $packageDays > 1 ? 'after:check_in_date' : 'after_or_equal:check_in_date';
+    $checkOutRule = $packageDays > 1 ? 'required|date|after:check_in_date' : 'nullable|date';
+
     // Validate input
     $request->validate([
         'customer_name' => 'required|string|max:255',
         'guest_name' => 'nullable|string|max:255',
         'check_in_date' => 'required|date',
-        'check_out_date' => 'required|date|' . $checkOutRule,
+        'check_out_date'   => $checkOutRule,
         'phone' => 'required|digits:11',
         'extra_pax' => 'nullable|integer|min:0',
         'package_name' => 'nullable|string|max:255',
@@ -105,7 +106,8 @@ class BookingController extends Controller
     $discount = $request->discount ?? 0;
 
     $checkInDate = $request->check_in_date;
-    $checkOutDate = $request->check_out_date;
+    // If the package is 1-day, set checkout equal to check-in.
+    $checkOutDate = $packageDays == 1 ? $checkInDate : $request->check_out_date;
     // Retrieve package to get its check in/out times (assumes package_name is provided)
     $package = Package::where('package_name', $request->package_name)->first();
     if ($package) {
@@ -454,16 +456,23 @@ public function showEditUser($id)
 public function updateUser(Request $request, $id)
 {
     $booking = Booking::findOrFail($id);
+    $packageDays = $booking->package->number_of_days ?? 1;
+    $checkoutRule = $packageDays > 1 ? 'required|date|after:check_in_date' : 'nullable|date';
+
 
     $validatedData = $request->validate([
         'customer_name'   => 'required|string|max:255',
         'check_in_date'   => 'required|date',
-        'check_out_date'  => 'required|date|after:check_in_date',
+        'check_out_date'  => $checkoutRule,
         'phone'           => 'required|digits:11',
         'extra_pax'       => 'required|integer|min:0',
         'special_request' => 'nullable|string',
         'payment'         => 'required|numeric|min:0'
     ]);
+
+    if ($packageDays == 1) {
+        $validatedData['check_out_date'] = $validatedData['check_in_date'];
+    }
 
     // Update only the base booking details and base payment
     $booking->customer_name   = $validatedData['customer_name'];

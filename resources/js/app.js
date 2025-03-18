@@ -1,2 +1,2 @@
 import './bootstrap';
-require('@tailwindcss/line-clamp')
+import '@tailwindcss/line-clamp';

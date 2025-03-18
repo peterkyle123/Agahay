@@ -142,6 +142,26 @@
 
     // Initial calculation on page load
     calculateTotalPayment();
+      // Get form elements
+  const checkinInput = document.getElementById('checkin');
+  const checkoutInput = document.getElementById('checkout');
+  // Package details from the booking's package (provided by the controller)
+  const packageDays = {{ $booking->package->number_of_days }};
+
+  // Function to update checkout field for 1-day packages
+  function updateCheckoutForOneDay() {
+    if (packageDays === 1) {
+      // Set checkout date equal to check-in date and disable the input
+      checkoutInput.value = checkinInput.value;
+      checkoutInput.disabled = true;
+    } else {
+      checkoutInput.disabled = false;
+    }
+  }
+
+  // Update checkout when check-in changes and on page load
+  checkinInput.addEventListener("change", updateCheckoutForOneDay);
+  updateCheckoutForOneDay();
   </script>
 </body>
 </html>
