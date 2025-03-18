@@ -201,7 +201,8 @@ Route::get('/filter_bookings', function () {
     $bookings = \App\Models\Booking::paginate(5);
     return view('filter_bookings', compact('bookings'));
 });
-Route::patch('/admin/bookings/update-discount/{id}', [BookingController::class, 'updateDiscount']);
+Route::patch('/admin/bookings/discount/{id}', [BookingController::class, 'updateDiscount']);
+
 
 // REVIEWS
 Route::patch('/reviews/{review}/toggle-feature', [ReviewController::class, 'toggleFeature'])->name('reviews.toggleFeature');

@@ -38,6 +38,9 @@
             <p><strong>Check-in:</strong> {{ $booking->check_in_date }}</p>
             <p><strong>Check-out:</strong> {{ $booking->check_out_date }}</p>
             <p><strong>Status:</strong> {{ $booking->status }}</p>
+                @if($booking->status == 'Declined')
+                    <p><strong>Decline Reason:</strong> {{ $booking->decline_reason }}</p>
+                @endif
             <p><strong>Package:</strong> {{ $booking->package_name }}</p>
             <p><strong>Initial Payment (Downpayment):</strong>
                 @if($booking->package)

@@ -7,6 +7,8 @@
   <title>Admin - Booking List</title>
   @vite('resources/css/app.css')
   @vite('resources/js/app.js')
+  <!-- Include jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="icon" href="{{ asset('images/palm-tree.png') }}" type="image/x-icon">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
@@ -24,6 +26,7 @@
       </div>
     </header>
 
+    <!-- Search Form -->
     <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
       <h2 class="text-xl font-semibold text-green-800 mb-4">Search Bookings</h2>
       <form action="{{ route('b00kings') }}" method="GET" class="flex items-center space-x-4">
@@ -32,8 +35,10 @@
       </form>
     </div>
 
+    <!-- Bookings Table Form -->
     <div class="bg-white rounded-xl shadow-lg p-6">
       <h2 class="text-xl font-semibold text-green-800 mb-4">List of Bookings</h2>
+
       @if (session('success'))
         <div class="bg-green-500 text-white p-3 rounded-md mb-4">
           {{ session('success') }}
@@ -41,8 +46,12 @@
       @endif
 
       <div class="mb-4">
-        <a href="{{ route('b00kings', ['sort' => 'asc', 'search' => request('search')]) }}" class="text-green-600 hover:text-green-800">Sort Ascending (Check-in)</a> |
-        <a href="{{ route('b00kings', ['sort' => 'desc', 'search' => request('search')]) }}" class="text-green-600 hover:text-green-800">Sort Descending (Check-in)</a>
+        <a href="{{ route('b00kings', ['sort' => 'asc', 'search' => request('search')]) }}" class="text-green-600 hover:text-green-800">
+          Sort Ascending (Check-in)
+        </a> |
+        <a href="{{ route('b00kings', ['sort' => 'desc', 'search' => request('search')]) }}" class="text-green-600 hover:text-green-800">
+          Sort Descending (Check-in)
+        </a>
       </div>
 
       @if (session('error'))
@@ -51,6 +60,8 @@
         </div>
       @endif
 
+      <!-- Note: The form below wraps the table; when the Approve button is clicked for a specific booking,
+           its discount and computed final payment are submitted. -->
       <form action="{{ route('admin.updateBookingsStatus', ['id' => 0]) }}" method="POST">
         @csrf
         @method('PATCH')
@@ -89,29 +100,42 @@
                   </td>
                   <td class="px-4 py-2">{{ $booking->status ?? 'Pending' }}</td>
                   <td class="px-4 py-2">{{ $booking->package_name }}</td>
-                  <!-- Payment cell: store both base and original payment -->
+
+                  <!-- Payment Column: Base Payment (read from DB) -->
                   <td class="px-4 py-2">
-                    <!-- Final Payment column uses model's computed accessor -->
-                    ₱{{ number_format($booking->final_payment, 2) }}
+                    <span id="payment-{{ $booking->id }}" data-base="{{ $booking->payment }}">
+                      ₱{{ number_format($booking->payment, 2) }}
+                    </span>
                   </td>
+
+                  <!-- Discount Input Column -->
                   <td class="px-4 py-2">
-                    <input type="number" class="discount-input border p-2 rounded w-20"
+                    <input type="number" name="discount[{{ $booking->id }}]" class="discount-input border p-2 rounded w-20"
                            data-id="{{ $booking->id }}" value="{{ $booking->discount }}" min="0" max="100">
                   </td>
 
-                  <td class="px-4 py-2" id="payment-{{ $booking->id }}" data-original="{{ $booking->payment }}" data-base="{{ $booking->payment }}">
+                  <!-- Final Payment Column (display computed discounted value) -->
+                  <td class="px-4 py-2" id="final-payment-{{ $booking->id }}">
                     ₱{{ number_format($booking->payment, 2) }}
                   </td>
+
+                  <!-- Hidden input for final_payment (submitted with the form) -->
+                  <input type="hidden" name="final_payment[{{ $booking->id }}]" id="hidden-final-payment-{{ $booking->id }}" value="{{ $booking->payment }}">
+
+                  <!-- Action Column -->
                   <td class="px-4 py-2">
                     @if ($booking->status == 'Pending')
-                      <button type="submit" name="action" value="approve" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md" formaction="{{ route('admin.updateBookingsStatus', ['id' => $booking->id]) }}">
+                      <button type="submit" name="action" value="approve" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md"
+                              formaction="{{ route('admin.updateBookingsStatus', ['id' => $booking->id]) }}">
                         Approve
                       </button>
-                      <button type="button" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md open-modal" data-booking-id="{{ $booking->id }}">
+                      <button type="button" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md open-modal"
+                              data-booking-id="{{ $booking->id }}">
                         Decline
                       </button>
                     @elseif ($booking->status == 'Declined')
-                      <button type="submit" name="action" value="delete" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md" formaction="{{ route('admin.updateBookingsStatus', ['id' => $booking->id]) }}">
+                      <button type="submit" name="action" value="delete" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md"
+                              formaction="{{ route('admin.updateBookingsStatus', ['id' => $booking->id]) }}">
                         Delete
                       </button>
                     @endif
@@ -123,38 +147,62 @@
         </table>
       </form>
 
-     <!-- Decline Modal HTML -->
-<div id="declineModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
-    <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
-      <h2 class="text-xl font-semibold mb-4">Decline Booking</h2>
-      <input type="hidden" id="modalBookingId" value="">
-      <textarea id="declineReason" placeholder="Enter reason for decline" class="w-full p-2 border rounded mb-4"></textarea>
-      <form id="declineForm">
-        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded">Submit Decline</button>
-      </form>
-      <button class="close-modal mt-4 w-full bg-gray-300 hover:bg-gray-400 py-2 rounded">Cancel</button>
-    </div>
-  </div>
+      <div class="mt-4">
+        <a href="{{ route('book') }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md inline-block">
+          Add Booking
+        </a>
+      </div>
+
+      <!-- Decline Modal (unchanged) -->
+      <div id="declineModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+          <h2 class="text-xl font-semibold mb-4">Decline Booking</h2>
+          <input type="hidden" id="modalBookingId" value="">
+          <textarea id="declineReason" placeholder="Enter reason for decline" class="w-full p-2 border rounded mb-4"></textarea>
+          <form id="declineForm">
+            <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded">
+              Submit Decline
+            </button>
+          </form>
+          <button class="close-modal mt-4 w-full bg-gray-300 hover:bg-gray-400 py-2 rounded">
+            Cancel
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- General Modal Handling Script -->
- <!-- Decline Modal HTML -->
-<div id="declineModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
-    <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
-      <h2 class="text-xl font-semibold mb-4">Decline Booking</h2>
-      <input type="hidden" id="modalBookingId" value="">
-      <textarea id="declineReason" placeholder="Enter reason for decline" class="w-full p-2 border rounded mb-4"></textarea>
-      <form id="declineForm">
-        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded">Submit Decline</button>
-      </form>
-      <button class="close-modal mt-4 w-full bg-gray-300 hover:bg-gray-400 py-2 rounded">Cancel</button>
-    </div>
-  </div>
-
-  <!-- General Modal Handling Script -->
+  <!-- Modal Scripts (for Decline) -->
   <script>
-    // Open the modal and assign the booking ID to a hidden field
+
+$(document).ready(function(){
+    $('.discount-input').on('input', function() {
+        let discount = parseFloat($(this).val()) || 0;
+        let bookingId = $(this).data('id');
+
+        // Retrieve the base payment from the Payment cell's data attribute
+        let $paymentCell = $('#payment-' + bookingId);
+        let basePayment = parseFloat($paymentCell.data('base'));
+
+        // Validate discount
+        if(isNaN(discount) || discount < 0 || discount > 100) {
+            alert("Please enter a valid discount between 0 and 100.");
+            $(this).val(0);
+            discount = 0;
+        }
+
+        // Calculate the final payment
+        let finalPayment = basePayment * (1 - discount / 100);
+
+        // Update the Final Payment cell in the UI
+        $('#final-payment-' + bookingId).text("₱" + finalPayment.toFixed(2));
+
+        // Update the hidden input for final_payment
+        $('#hidden-final-payment-' + bookingId).val(finalPayment.toFixed(2));
+    });
+});
+
+    // Open decline modal
     document.querySelectorAll('.open-modal').forEach(button => {
       button.addEventListener('click', function() {
         const bookingId = this.getAttribute('data-booking-id');
@@ -163,14 +211,14 @@
       });
     });
 
-    // Close the modal when clicking on any element with class "close-modal"
+    // Close decline modal
     document.querySelectorAll('.close-modal').forEach(button => {
       button.addEventListener('click', function() {
         document.getElementById('declineModal').classList.add('hidden');
       });
     });
 
-    // Handle the decline form submission
+    // Handle decline form submission
     document.getElementById('declineForm').addEventListener('submit', function(event) {
       event.preventDefault();
 
@@ -182,7 +230,7 @@
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json', // Ensures JSON response from the server
+          'Accept': 'application/json',
           'X-CSRF-TOKEN': csrfToken,
         },
         body: JSON.stringify({
@@ -201,7 +249,7 @@
       .then(data => {
         if (data.success) {
           alert(data.success);
-          location.reload(); // Refresh the page after a successful update
+          location.reload();
         } else {
           console.error('Error in response data:', data);
           alert('Failed to decline booking.');
@@ -214,49 +262,27 @@
     });
   </script>
 
-
   <!-- Discount Update Script -->
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
       document.querySelectorAll('.discount-input').forEach(input => {
-        input.addEventListener('input', function () {
+        input.addEventListener('input', function() {
           let discount = parseFloat(this.value) || 0;
           let bookingId = this.getAttribute('data-id');
-          let paymentCell = document.getElementById(`payment-${bookingId}`);
-          // Always use the fixed original amount stored in data-base for calculations
-          let basePayment = parseFloat(paymentCell.getAttribute('data-base'));
 
-          if (discount < 0 || discount > 100) {
-            alert('Discount must be between 0 and 100');
-            this.value = 0;
-            discount = 0;
-          }
+          // Retrieve base payment from Payment cell's data attribute
+          let paymentCell = document.getElementById(`payment-${bookingId}`);
+          let basePayment = parseFloat(paymentCell.getAttribute('data-base'));
 
           // Calculate new final payment based on discount
           let newPayment = basePayment * (1 - discount / 100);
-          // Update Payment cell display (with currency formatting)
-          paymentCell.textContent = '₱' + newPayment.toFixed(2);
 
-          // Send AJAX request to update discount (and final payment in database)
-          let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-          fetch(`/admin/bookings/update-discount/${bookingId}`, {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-CSRF-TOKEN': csrfToken
-            },
-            body: JSON.stringify({ discount: discount })
-          })
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              console.log('Discount updated successfully');
-              // Do not update data-base so that base remains fixed
-            } else {
-              alert('Failed to update discount');
-            }
-          })
-          .catch(error => console.error('Error:', error));
+          // Update the Final Payment cell in the UI
+          let finalPaymentCell = document.getElementById(`final-payment-${bookingId}`);
+          finalPaymentCell.textContent = '₱' + newPayment.toFixed(2);
+
+          // Update the hidden input for final_payment
+          document.getElementById(`hidden-final-payment-${bookingId}`).value = newPayment.toFixed(2);
         });
       });
     });

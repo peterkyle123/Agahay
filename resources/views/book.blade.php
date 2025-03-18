@@ -179,17 +179,14 @@
             <button id="agreeBtn" class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition">
                 I Agree
             </button>
-            <button id="closeModal" class="text-gray-500 hover:text-gray-700 transition">
-                Close
-            </button>
         </div>
     </div>
 </div>
 
-
+{{--
 <header class="header">
     <a href="/" class="home-btn">Back</a>
-</header>
+</header> --}}
 
 <div class="content-wrapper"> <div class="option-container">  @foreach ($packages as $package)
 <a href="{{ $package->available ? route('frm', ['package_id' => $package->package_id]) : '#' }}"

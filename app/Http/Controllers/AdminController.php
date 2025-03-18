@@ -36,32 +36,34 @@ class AdminController extends Controller
         \Log::info("updateBookingsStatus called for booking: {$id} with action: {$action}");
 
         if ($action === 'approve') {
-            $booking->status = 'Approved';
-            \Log::info("Booking {$id} approved.");
-        } elseif ($action === 'decline') {
-            $booking->status = 'Declined';
-            $booking->decline_reason = $request->input('decline_reason'); // Store the decline reason
-            \Log::info("Booking {$id} declined with reason: " . $booking->decline_reason);
-        } elseif ($action === 'delete') {
-            if ($booking->status === 'Declined') {
-                $booking->delete();
-                \Log::info("Booking {$id} deleted.");
-                return redirect()->back()->with('success', 'Booking deleted successfully.');
-            } else {
-                return redirect()->back()->with('error', 'Only declined bookings can be deleted.');
+            // Retrieve the discount and final_payment arrays from the form submission
+            $discounts = $request->input('discount');
+            $final_payments = $request->input('final_payment');
+
+            if (!isset($discounts[$id]) || !isset($final_payments[$id])) {
+                return redirect()->back()->with('error', 'Invalid data submitted for the booking.');
             }
+
+            $discount = $discounts[$id];
+            $final_payment = $final_payments[$id];
+
+            // Update the booking record
+            $booking->discount = $discount;
+            // Overwrite the payment with the new final payment value (formatted as a float with 2 decimals)
+            $booking->payment = number_format($final_payment, 2, '.', '');
+            $booking->status = 'Approved';  // Optionally update status
+            $booking->save();
+
+            \Log::info("Booking {$id} approved. Discount: {$discount} Final Payment: {$booking->payment}");
+
+            return redirect()->back()->with('success', 'Booking updated and discount applied successfully!');
         }
 
-        // Save any changes if not deleted
-        $booking->save();
+        // Process other actions (decline, delete) as needed...
 
-        // Return a JSON response if the request expects JSON (e.g., from an AJAX request)
-        if ($request->expectsJson()) {
-            return response()->json(['success' => "Booking status updated successfully."]);
-        }
-
-        return redirect()->back()->with('success', 'Booking status updated.');
+        return redirect()->back()->with('error', 'Invalid action.');
     }
+
 
 
 public function archivedBookings()

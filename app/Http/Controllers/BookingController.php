@@ -61,7 +61,7 @@ class BookingController extends Controller
     $checkOutDate = Carbon::parse($booking->check_out_date);
 
     $booking->days_staying = $checkInDate->diffInDays($checkOutDate); // Calculate the difference in days
-    $booking->save(); // Add this line
+    // $booking->save(); // Add this line
 }
 
         // Return the view with the bookings data
@@ -453,33 +453,35 @@ public function showEditUser($id)
 
 public function updateUser(Request $request, $id)
 {
-    // Find the existing booking
     $booking = Booking::findOrFail($id);
 
-    // Validate the request data
-    $request->validate([
-        'customer_name' => 'required|string|max:255',
-        'check_in_date' => 'required|date',
-        'check_out_date' => 'required|date|after:check_in_date',
-        'phone' => 'required|digits:11',
-        'extra_pax' => 'required|integer|min:0',
+    $validatedData = $request->validate([
+        'customer_name'   => 'required|string|max:255',
+        'check_in_date'   => 'required|date',
+        'check_out_date'  => 'required|date|after:check_in_date',
+        'phone'           => 'required|digits:11',
+        'extra_pax'       => 'required|integer|min:0',
         'special_request' => 'nullable|string',
+        'payment'         => 'required|numeric|min:0'
     ]);
 
-    // Update the existing booking (do not create a new one)
-    $booking->customer_name = $request->customer_name;
-    $booking->check_in_date = $request->check_in_date;
-    $booking->check_out_date = $request->check_out_date;
-    $booking->phone = $request->phone;
-    $booking->extra_pax = $request->extra_pax;
-    $booking->special_request = $request->special_request;
-    $booking->payment = $request->payment; // Ensure this is handled correctly
+    // Update only the base booking details and base payment
+    $booking->customer_name   = $validatedData['customer_name'];
+    $booking->check_in_date   = $validatedData['check_in_date'];
+    $booking->check_out_date  = $validatedData['check_out_date'];
+    $booking->phone           = $validatedData['phone'];
+    $booking->extra_pax       = $validatedData['extra_pax'];
+    $booking->special_request = $validatedData['special_request'];
+    $booking->payment         = $validatedData['payment'];
 
-    // Save the updated booking
     $booking->save();
+    $booking->refresh();
 
     return redirect()->route('trackbooking')->with('success', 'Booking updated successfully!');
 }
+
+
+
 public function deleteMultiple(Request $request) {
     $bookingIds = $request->bookingIds;
     Booking::whereIn('id', $bookingIds)->delete();
@@ -498,42 +500,35 @@ public function showFilteredBookings()
     return view('filter_bookings', compact('bookings'));
 }
 // added
-public function updateDiscount(Request $request, $id)
+public function updateBookingsStatus(Request $request, $id)
 {
-    $request->validate([
-        'discount' => 'required|numeric|min:0|max:100',
+    // Validate the submitted discount and final_payment arrays.
+    $validatedData = $request->validate([
+        'discount.*' => 'required|numeric|min:0|max:100',
+        'final_payment.*' => 'required|numeric|min:0'
     ]);
 
-    $booking = Booking::find($id);
-    if (!$booking) {
-        return response()->json(['error' => 'Booking not found.'], 404);
+    // Extract the discount and final payment for the booking being approved
+    $discounts = $request->input('discount');       // e.g., ['123' => 10, ...]
+    $final_payments = $request->input('final_payment'); // e.g., ['123' => 9000.00, ...]
+
+    if (!isset($discounts[$id]) || !isset($final_payments[$id])) {
+        return redirect()->back()->with('error', 'Invalid data submitted for the booking.');
     }
 
-    // Determine the original payment amount.
-    // If an old discount exists and is less than 100%, we reverse it.
-    if ($booking->discount > 0 && $booking->discount < 100) {
-        $originalPayment = $booking->payment / (1 - ($booking->discount / 100));
-    } else {
-        $originalPayment = $booking->payment;
-    }
+    $discount = $discounts[$id];
+    $final_payment = $final_payments[$id];
 
-    // Get the new discount from the request.
-    $newDiscount = $request->discount;
-    // Calculate the final payment with the new discount.
-    $finalPayment = $originalPayment * (1 - ($newDiscount / 100));
+    $booking = Booking::findOrFail($id);
 
-    // Update both discount and payment (storing the final payment)
-    $booking->discount = $newDiscount;
-    // Store as a numeric string with 2 decimals (or simply as a float)
-    $booking->payment = number_format($finalPayment, 2, '.', '');
+    // Update discount and overwrite payment with the new final payment value.
+    $booking->discount = $discount;
+    $booking->payment = number_format($final_payment, 2, '.', '');
+    $booking->status = 'Approved';  // Optionally mark as Approved
     $booking->save();
 
-    return response()->json([
-        'success' => 'Discount updated successfully!',
-        'final_payment' => $booking->payment // returns the updated final payment
-    ]);
+    return redirect()->back()->with('success', 'Booking updated and discount applied successfully!');
 }
-
 
 
 
