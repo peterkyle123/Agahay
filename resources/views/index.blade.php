@@ -7,23 +7,28 @@
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
     <link rel="icon" href="{{asset('images/palm-tree.png')}}" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Allan:wght@400;700&family=Anton&family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+
 </head>
 <body>
 <div class="flex flex-wrap">
     <div class="w-full sm:w-8/12 mb-10">
       <div class="container mx-auto h-full sm:p-10">
         <nav class="flex px-4 justify-between items-center">
-          <div class="text-4xl font-bold flex">
-            <img src="{{asset('images/palm-tree.png')}}" class="w-10"/>Agahay Guest House<span class="text-green-700"></span>
-          </div>
+            <div class="flex items-center space-x-3">
+                <img src="{{ asset('images/gahaya.jpg') }}" alt="Agahay Guest House Logo" class="h-20 w-auto" />
+                <span class="font-anton text-5xl">Agahay Guesthouse</span>
+            </div>
           <div>
             <img src="https://image.flaticon.com/icons/svg/497/497348.svg" alt="" class="w-8">
           </div>
-          
+
         </nav>
         <header class="container px-4 lg:flex mt-10 items-center h-full lg:mt-0">
           <div class="w-full">
-            <h1 class="text-4xl lg:text-6xl font-bold">Experience comfort and serenity at a reasonable price</h1>
+            <h1 class="text-4xl lg:text-4xl font-dancing-script">Experience comfort and serenity at a reasonable price</h1>
             <div class="w-20 h-2 bg-green-700 my-4"></div>
             <p class="text-xl text-justify mb-10">Agahay Guesthouse offers an exclusive and luxurious retreat, ensuring complete privacy with the entire property reserved for guests. The guesthouse features spacious, elegantly designed rooms that provide comfort and relaxation. With no other guests on-site, it guarantees an intimate, undisturbed atmosphere, making it the perfect getaway for those seeking both serenity and sophistication. Every detail is crafted with care, offering high-end amenities and a refined environment for a truly luxurious experience.</p>
             <div class="flex space-x-4">
@@ -83,8 +88,8 @@
             </div>
             <h1 class="text-3xl my-5">Exclusive</h1>
             <p class="mb-5">Agahay Guesthouse offers an exclusive, private retreat with the entire property reserved for guests. Enjoy a peaceful, undisturbed experience with access to spacious accommodations, a private swimming pool, billiards, and videoke. Its secluded location ensures tranquility, making it the perfect getaway for those seeking privacy and relaxation.</p>
-          
-           
+
+
         </section>
 
         <section class="p-5 py-10 bg-green-50 text-center transform duration-500 hover:-translate-y-2 cursor-pointer">
@@ -123,7 +128,7 @@
             </div>
             <h1 class="text-3xl my-5">Spacious Rooms</h1>
             <p class="mb-5">Agahay Guesthouse features spacious rooms that offer comfort and relaxation. Each room is designed with ample space to ensure a cozy, open environment, providing guests with a sense of freedom and comfort. The generous room sizes allow for a relaxing stay, making it an ideal choice for both small and large groups.</p>
-            
+
         </section>
 
         <section class="p-5 py-10 bg-red-50 text-center transform duration-500 hover:-translate-y-2 cursor-pointer">
@@ -162,7 +167,7 @@
             </div>
             <h1 class="text-3xl my-5">Luxurious</h1>
             <p class="mb-5">Agahay Guesthouse exudes luxury with its elegant design and high-end amenities. Every detail is crafted to provide a refined and opulent experience, from the tastefully furnished rooms to the premium facilities. Guests can indulge in a lavish, comfortable atmosphere that enhances their stay, making it a truly luxurious retreat.</p>
-           
+
         </section>
         <div class="w-full justify-center"></div>
         <button class="bg-gradient-to-r from-green-500 to-green-700 text-white text-2xl font-medium px-4 py-2 rounded shadow"><a href="{{ route('gallerysection') }}">Gallery</a></button>

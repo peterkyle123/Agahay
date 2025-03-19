@@ -13,6 +13,11 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                'staatliches': ['Staatliches', 'sans-serif'],
+                'agbalumo': ['Agbalumo', 'sans-serif'],
+                'dancing-script': ['Dancing Script', 'cursive', 'sans-serif'],
+                'anton': ['Anton', 'sans-serif'],
+                'allan': ['Allan', 'sans-serif'],
             },
         },
     },

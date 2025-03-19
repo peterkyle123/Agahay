@@ -1,0 +1,7 @@
+/* resources/css/app.css or resources/css/fonts.css */
+@font-face {
+    font-family: 'Alex Brush';
+    src: url('/fonts/AlexBrush-Regular.ttf') format('truetype'); /* Or .woff2 if you use that format */
+    font-weight: normal;
+    font-style: normal;
+}
