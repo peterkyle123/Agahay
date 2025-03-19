@@ -81,7 +81,6 @@
       </button>
     </form>
   </div>
-
   <script>
     // Get form elements
     const checkinInput = document.getElementById('checkin');
@@ -131,37 +130,36 @@
 
       // Update the hidden input and payment display
       paymentInput.value = totalPayment;
-      paymentDisplay.textContent = totalPayment.toLocaleString("en-PH", { style: "currency", currency: "PHP" });
+      paymentDisplay.textContent = totalPayment.toLocaleString("en-PH", {
+        style: "currency",
+        currency: "PHP"
+      });
     }
 
-    // Recalculate payment when the relevant fields change
-    checkinInput.addEventListener("change", calculateTotalPayment);
+    // Function to update checkout field for 1-day packages
+    function updateCheckoutForOneDay() {
+      if (packageDays === 1) {
+        // Set checkout date equal to check-in date and disable the input
+        checkoutInput.value = checkinInput.value;
+        checkoutInput.disabled = true;
+      } else {
+        checkoutInput.disabled = false;
+      }
+    }
+
+    // Event listeners for recalculating payment and updating checkout date
+    checkinInput.addEventListener("change", function() {
+      updateCheckoutForOneDay();
+      calculateTotalPayment();
+    });
     checkoutInput.addEventListener("change", calculateTotalPayment);
     extraPaxInput.addEventListener("input", calculateTotalPayment);
     document.getElementById("edit-booking-form").addEventListener("submit", calculateTotalPayment);
 
-    // Initial calculation on page load
+    // Initial calculations on page load
+    updateCheckoutForOneDay();
     calculateTotalPayment();
-      // Get form elements
-  const checkinInput = document.getElementById('checkin');
-  const checkoutInput = document.getElementById('checkout');
-  // Package details from the booking's package (provided by the controller)
-  const packageDays = {{ $booking->package->number_of_days }};
-
-  // Function to update checkout field for 1-day packages
-  function updateCheckoutForOneDay() {
-    if (packageDays === 1) {
-      // Set checkout date equal to check-in date and disable the input
-      checkoutInput.value = checkinInput.value;
-      checkoutInput.disabled = true;
-    } else {
-      checkoutInput.disabled = false;
-    }
-  }
-
-  // Update checkout when check-in changes and on page load
-  checkinInput.addEventListener("change", updateCheckoutForOneDay);
-  updateCheckoutForOneDay();
   </script>
+
 </body>
 </html>
