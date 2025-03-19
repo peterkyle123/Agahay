@@ -10,6 +10,9 @@ class PaymentMethodController extends Controller
     // Display a listing of payment methods for admin
     public function index()
     {
+        if (!session()->has('admin')) {
+            return redirect()->route('adminlogin'); // Redirects to login page if no session
+        }
         $paymentMethods = PaymentMethod::all();
         return view('payment_methods.index', compact('paymentMethods'));
     }
