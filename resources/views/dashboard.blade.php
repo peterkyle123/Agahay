@@ -208,7 +208,8 @@
                 <div class="flex flex-row space-x-6">
                     <!-- Bookings Revenue for This Month -->
                     <div class="bg-white border-gradient rounded-xl w-4/12 p-6 card">
-                        <p class="text-3xl text-green-900">Canceled Revenues <br><strong>Initial Downpayment</strong></p>
+                        <p class="text-3xl text-green-900">Canceled Bookings <br></p>
+                        <a href="approvedCanceled" class="btn-main mt-12">See Canceled Bookings</a>
                         <p class="text-xl text-white mt-4"></p>
                     </div>
 

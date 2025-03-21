@@ -7,17 +7,50 @@
     @vite('resources/css/app.css')
     <link rel="icon" href="{{ asset('images/palm-tree.png') }}" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </head>
 <body class="white min-h-screen">
+  <!-- Header -->
+  <header class="bg-white dark:bg-gray-900 h-20 w-full flex items-center fixed top-0 left-0 z-50 shadow-md">
+    <nav class="flex justify-start space-x-8 ml-6">
+        <a href="/packages" class="text-green-600 hover:text-green-900 text-s">Back</a>
+        <a href="/dashboard" class="text-green-600 hover:text-green-900 text-s">Home</a>
+        <a href="/packages" class="text-green-600 hover:text-green-900 text-s">Packages</a>
+        {{-- drop down for bookings --}}
+        <div class="relative" x-data="{ open: false }">
+            <button class="text-green-600 hover:text-green-900 text-s"
+                @click="open = !open">
+                Bookings ▼
+            </button>
+            <div x-show="open" @click.away="open = false"
+                class="absolute mt-2 w-48 bg-white border rounded-lg shadow-lg z-50">
+                <a href="/approved-bookings"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Approved</a>
+                <a href="/cancelrequestA"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Requesting for Cancellation</a>
+            </div>
+        </div>
 
-    <!-- Header -->
-    <header class="bg-gradient-to-r from-green-500 to-green-800 text-white text-xl font-bold p-4 rounded-lg w-full flex justify-between items-center">
-        <span>Reviews</span>
-        <a href="/dashboard" class="bg-white text-green-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition mr-2 sm:mr-4 text-sm sm:text-base">
-            Home
-        </a>
-    </header>
+        <!-- Dropdown for Revenues -->
+        <div class="relative" x-data="{ open: false }">
+            <button class="text-green-600 hover:text-green-900 text-s"
+                @click="open = !open">
+                Revenues ▼
+            </button>
+            <div x-show="open" @click.away="open = false"
+                class="absolute mt-2 w-48 bg-white border rounded-lg shadow-lg z-50">
+                <a href="/total-revenues"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Done Revenues</a>
+                <a href="/approvedCanceled"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Canceled Revenues</a>
+            </div>
+        </div>
 
+        <a href="/adminlogout" class="text-green-600 hover:text-green-900 text-s">Logout</a>
+    </nav>
+</header>
+<div class="mt-24">
     @if(session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
             <strong class="font-bold">Success!</strong>
@@ -26,7 +59,7 @@
     @endif
 
       <!-- Filter Options -->
-      <div class="p-6 flex justify-center space-x-4">
+      <div class="p-6 flex justify-center space-x-4 ">
         <button onclick="filterReviews('all')" class="bg-blue-500 text-white px-4 py-2 rounded-lg">All Reviews</button>
         <button onclick="filterReviews('positive')" class="bg-green-500 text-white px-4 py-2 rounded-lg">Positive Reviews</button>
         <button onclick="filterReviews('negative')" class="bg-red-500 text-white px-4 py-2 rounded-lg">Negative Reviews</button>

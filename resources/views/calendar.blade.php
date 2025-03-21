@@ -109,7 +109,7 @@
         .vip { background-color: #FFA500; } /* Orange */
         .large-group { background-color: #FF4500; } /* Red */
         .canceled { background-color: #808080; } /* Gray */
-        
+
         .highlight {
              background-color:rgb(0, 255, 55) !important; /* Gold color */
              color: black !important;
@@ -151,6 +151,13 @@
     <div class="legend-item">
         <span class="legend-color" style="background-color:rgb(78, 53, 220);"></span> Requesting for Cancellation
     </div>
+    <div class="legend-item">
+        <span class="legend-color" style="background-color: #007bff;"></span> Approved
+    </div>
+    <div class="legend-item">
+        <span class="legend-color" style="background-color: #6c757d;"></span> Declined
+    </div>
+</div>
 </div>
 
     <!-- FullCalendar Script -->
@@ -181,6 +188,10 @@
                     info.el.style.backgroundColor = '#dc3545'; // Red for canceled
                 } else if (bookingStatus === 'Requesting for Cancellation') {
                     info.el.style.backgroundColor = 'rgb(78, 53, 220)'; // Blue for request cancel
+                } else if (bookingStatus === 'Approved') {
+                    info.el.style.backgroundColor = '#007bff'; // Blue for approved
+                } else if (bookingStatus === 'Declined') {
+                    info.el.style.backgroundColor = '#6c757d'; // Gray for declined
                 }
             }
         });

@@ -8,12 +8,51 @@
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
 </head>
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
-<body class="bg-gray-100 font-sans">
+<header class="bg-white dark:bg-gray-900 h-20 w-full flex items-center fixed top-0 left-0 z-50 shadow-md">
+    <nav class="flex justify-start space-x-8 ml-6">
+        <a href="/packages" class="text-green-600 hover:text-green-900 text-s">Back</a>
+        <a href="/dashboard" class="text-green-600 hover:text-green-900 text-s">Home</a>
+        <a href="/packages" class="text-green-600 hover:text-green-900 text-s">Packages</a>
+        {{-- drop down for bookings --}}
+        <div class="relative" x-data="{ open: false }">
+            <button class="text-green-600 hover:text-green-900 text-s"
+                @click="open = !open">
+                Bookings ▼
+            </button>
+            <div x-show="open" @click.away="open = false"
+                class="absolute mt-2 w-48 bg-white border rounded-lg shadow-lg z-50">
+                <a href="/approved-bookings"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Approved</a>
+                <a href="/cancelrequestA"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Requesting for Cancellation</a>
+            </div>
+        </div>
+
+        <!-- Dropdown for Revenues -->
+        <div class="relative" x-data="{ open: false }">
+            <button class="text-green-600 hover:text-green-900 text-s"
+                @click="open = !open">
+                Revenues ▼
+            </button>
+            <div x-show="open" @click.away="open = false"
+                class="absolute mt-2 w-48 bg-white border rounded-lg shadow-lg z-50">
+                <a href="/total-revenues"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Done Revenues</a>
+                <a href="/approvedCanceled"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Canceled Revenues</a>
+            </div>
+        </div>
+
+        <a href="/adminlogout" class="text-green-600 hover:text-green-900 text-s">Logout</a>
+    </nav>
+</header>
+
+<body class="bg-gray-100 font-sans mt-24">
     <div class="container mx-auto p-4">
         <div class="bg-gradient-to-r from-red-600 to-red-700 text-white p-4 rounded-lg mb-4 flex justify-between items-center">
             <span class="text-lg font-semibold">Request for Cancellation</span>
-            <a href="/dashboard" class="bg-white text-red-700 px-3 py-1 rounded-md font-semibold uppercase text-sm shadow hover:bg-gray-200 transition">Home</a>
         </div>
 
         <div class="bg-white rounded-lg shadow-md p-6 overflow-x-auto">

@@ -6,27 +6,54 @@
     <title>Edit Package</title>
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
+
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <link rel="icon" href="{{asset('images/palm-tree.png')}}" type="image/x-icon">
 </head>
 
 <body class="white flex flex-col items-center min-h-screen">
 
     <!-- Header -->
-    <header class="bg-green-700 text-white text-xl font-bold p-4 rounded-lg w-full flex justify-between items-center">
-        <span>Packages</span>
-        <div> <a href="/dashboard" class="bg-white text-green-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition mr-2 sm:mr-4 text-sm sm:text-base">
-            Home
-        </a>
-        <a href="/packages" class="bg-white text-green-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition mr-2 sm:mr-4 text-sm sm:text-base">
-           Back
-        </a>
-        </div>
+    <header class="bg-white dark:bg-gray-900 h-20 w-full flex items-center fixed top-0 left-0 z-50 shadow-md">
+        <nav class="flex justify-start space-x-8 ml-6">
+            <a href="/packages" class="text-green-600 hover:text-green-900 text-s">Back</a>
+            <a href="/dashboard" class="text-green-600 hover:text-green-900 text-s">Home</a>
+            <a href="/packages" class="text-green-600 hover:text-green-900 text-s">Packages</a>
+            {{-- drop down for bookings --}}
+            <div class="relative" x-data="{ open: false }">
+                <button class="text-green-600 hover:text-green-900 text-s"
+                    @click="open = !open">
+                    Bookings ▼
+                </button>
+                <div x-show="open" @click.away="open = false"
+                    class="absolute mt-2 w-48 bg-white border rounded-lg shadow-lg z-50">
+                    <a href="/approved-bookings"
+                        class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Approved</a>
+                    <a href="/cancelrequestA"
+                        class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Requesting for Cancellation</a>
+                </div>
+            </div>
 
+            <!-- Dropdown for Revenues -->
+            <div class="relative" x-data="{ open: false }">
+                <button class="text-green-600 hover:text-green-900 text-s"
+                    @click="open = !open">
+                    Revenues ▼
+                </button>
+                <div x-show="open" @click.away="open = false"
+                    class="absolute mt-2 w-48 bg-white border rounded-lg shadow-lg z-50">
+                    <a href="/total-revenues"
+                        class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Done Revenues</a>
+                    <a href="/approvedCanceled"
+                        class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Canceled Revenues</a>
+                </div>
+            </div>
 
-
+            <a href="/adminlogout" class="text-green-600 hover:text-green-900 text-s">Logout</a>
+        </nav>
     </header>
  <!-- Main Container -->
- <div class="flex-grow flex items-center justify-center w-full">
+ <div class="flex-grow flex items-center justify-center w-full mt-24">
         <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-lg">
             <h2 class="text-2xl font-semibold text-center mb-4">Edit Package</h2>
         <!-- Display Success Message -->

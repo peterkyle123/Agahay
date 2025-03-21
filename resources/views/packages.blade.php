@@ -7,6 +7,7 @@
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
     <link rel="icon" href="{{asset('images/palm-tree.png')}}" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -115,20 +116,53 @@
 </head>
 <body class="white">
             <!-- Header -->
-    <header class="bg-gradient-to-r from-green-500 to-green-800 text-white text-xl font-bold p-4 rounded-lg w-full flex justify-between items-center">
-        <span>Packages</span>
-        <a href="/dashboard" class="bg-white text-green-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition mr-2 sm:mr-4 text-sm sm:text-base">
-            Home
-        </a>
-    </header>
+ <!-- Header -->
+ <header class="bg-white dark:bg-gray-900 h-20 w-full flex items-center fixed top-0 left-0 z-50 shadow-md">
+    <nav class="flex justify-start space-x-8 ml-6">
+        <a href="/packages" class="text-green-600 hover:text-green-900 text-s">Back</a>
+        <a href="/dashboard" class="text-green-600 hover:text-green-900 text-s">Home</a>
+        <a href="/packages" class="text-green-600 hover:text-green-900 text-s">Packages</a>
+        {{-- drop down for bookings --}}
+        <div class="relative" x-data="{ open: false }">
+            <button class="text-green-600 hover:text-green-900 text-s"
+                @click="open = !open">
+                Bookings ▼
+            </button>
+            <div x-show="open" @click.away="open = false"
+                class="absolute mt-2 w-48 bg-white border rounded-lg shadow-lg z-50">
+                <a href="/approved-bookings"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Approved</a>
+                <a href="/cancelrequestA"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Requesting for Cancellation</a>
+            </div>
+        </div>
+
+        <!-- Dropdown for Revenues -->
+        <div class="relative" x-data="{ open: false }">
+            <button class="text-green-600 hover:text-green-900 text-s"
+                @click="open = !open">
+                Revenues ▼
+            </button>
+            <div x-show="open" @click.away="open = false"
+                class="absolute mt-2 w-48 bg-white border rounded-lg shadow-lg z-50">
+                <a href="/total-revenues"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Done Revenues</a>
+                <a href="/approvedCanceled"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Canceled Revenues</a>
+            </div>
+        </div>
+
+        <a href="/adminlogout" class="text-green-600 hover:text-green-900 text-s">Logout</a>
+    </nav>
+</header>
     <div class="option-container">
         <!-- Small Group Booking -->
         @foreach ($packages as $package)
-        <div class="option option-{{ $loop->index + 1 }}" 
+        <div class="option option-{{ $loop->index + 1 }} mt-24"
              style="background-image: url('{{ asset($package->image) }}');">
-    
+
         <div class="option-text">{{ $package->package_name }}</div>
-    
+
         <div class="description-container">
                 <div class="description-text">
             {{ $package->description }}
@@ -143,7 +177,7 @@
         </div>
 </div>
     @endforeach
-       
+
     </div>
 
 </body>

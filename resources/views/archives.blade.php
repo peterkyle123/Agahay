@@ -7,24 +7,53 @@
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
     <link rel="icon" href="{{ asset('images/palm-tree.png') }}" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="white">
     <div class="min-h-screen p-6">
         <!-- Header -->
-        <header class="bg-gradient-to-r from-green-500 to-green-800 text-white font-bold text-2xl p-4 rounded-xl mb-6 flex justify-between items-center">
-            <span class="text-white">Archived Bookings</span>
-            <div class="flex space-x-4">
-                <a href="{{ url('/approvedCanceled') }}" class="bg-white text-red-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition text-sm sm:text-base">
-                    Canceled Bookings
-                </a>
-                <a href="{{ route('dashboard') }}" class="bg-white text-gray-900 px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition text-sm sm:text-base">
-                    Home
-                </a>
-            </div>
+        <header class="bg-white dark:bg-gray-900 h-20 w-full flex items-center fixed top-0 left-0 z-50 shadow-md">
+            <nav class="flex justify-start space-x-8 ml-6">
+                <a href="/packages" class="text-green-600 hover:text-green-900 text-s">Back</a>
+                <a href="/dashboard" class="text-green-600 hover:text-green-900 text-s">Home</a>
+                <a href="/packages" class="text-green-600 hover:text-green-900 text-s">Packages</a>
+                {{-- drop down for bookings --}}
+                <div class="relative" x-data="{ open: false }">
+                    <button class="text-green-600 hover:text-green-900 text-s"
+                        @click="open = !open">
+                        Bookings ▼
+                    </button>
+                    <div x-show="open" @click.away="open = false"
+                        class="absolute mt-2 w-48 bg-white border rounded-lg shadow-lg z-50">
+                        <a href="/approved-bookings"
+                            class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Approved</a>
+                        <a href="/cancelrequestA"
+                            class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Requesting for Cancellation</a>
+                    </div>
+                </div>
+
+                <!-- Dropdown for Revenues -->
+                <div class="relative" x-data="{ open: false }">
+                    <button class="text-green-600 hover:text-green-900 text-s"
+                        @click="open = !open">
+                        Revenues ▼
+                    </button>
+                    <div x-show="open" @click.away="open = false"
+                        class="absolute mt-2 w-48 bg-white border rounded-lg shadow-lg z-50">
+                        <a href="/total-revenues"
+                            class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Done Revenues</a>
+                        <a href="/approvedCanceled"
+                            class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Canceled Revenues</a>
+                    </div>
+                </div>
+
+                <a href="/adminlogout" class="text-green-600 hover:text-green-900 text-s">Logout</a>
+            </nav>
         </header>
 
-        <div class="bg-white rounded-xl shadow-lg p-6">
+
+        <div class="bg-white rounded-xl shadow-lg p-6 mt-24">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">List of Completed Bookings (Done)</h2>
 
             @if(session('success'))
@@ -65,7 +94,7 @@
                             <th class="px-4 py-2 text-left">Phone</th>
                             <th class="px-4 py-2 text-left">Payment</th>
                             <th class="px-4 py-2 text-left">Category</th>
-                        </tr>   
+                        </tr>
                     </thead>
                     <tbody>
                         @forelse ($archivedBookings as $booking)

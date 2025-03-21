@@ -19,7 +19,7 @@
         <nav class="flex px-4 justify-between items-center">
             <div class="flex items-center space-x-3">
                 <img src="{{ asset('images/gahaya.jpg') }}" alt="Agahay Guest House Logo" class="h-20 w-auto" />
-                <span class="font-anton text-5xl">Agahay Guesthouse</span>
+                <span class="font-allan text-6xl">Agahay Guesthouse</span>
             </div>
           <div>
             <img src="https://image.flaticon.com/icons/svg/497/497348.svg" alt="" class="w-8">
