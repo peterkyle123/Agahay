@@ -15,7 +15,8 @@
              <!-- Header -->
              <header class="bg-white dark:bg-gray-900 h-20 w-full flex items-center fixed top-0 left-0 z-50 shadow-md">
                 <nav class="flex justify-start space-x-8 ml-6">
-                    <a href="/packages" class="text-green-600 hover:text-green-900 text-s">Back</a>
+
+                    <a href="#" onclick="window.history.back(); return false;" class="text-green-600 hover:text-green-900 text-s">Back</a>
                     <a href="/dashboard" class="text-green-600 hover:text-green-900 text-s">Home</a>
                     <a href="/packages" class="text-green-600 hover:text-green-900 text-s">Packages</a>
                     {{-- drop down for bookings --}}

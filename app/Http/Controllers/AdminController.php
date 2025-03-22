@@ -91,12 +91,28 @@ class AdminController extends Controller
                     : redirect()->back()->with('error', 'Only declined bookings can be deleted.');
             }
         }
+     elseif ($action === 'done') {
+        // Only allow changing status from Approved to Done
+        if ($booking->status === 'Approved') {
+            $booking->status = 'Done';
+            $booking->save();
 
-        // Invalid action
-        return $request->expectsJson()
-            ? response()->json(['error' => 'Invalid action.'], 400)
-            : redirect()->back()->with('error', 'Invalid action.');
+            \Log::info("Booking {$id} marked as done.");
+
+            return $request->expectsJson()
+                ? response()->json(['success' => 'Booking marked as done successfully!'])
+                : redirect()->back()->with('success', 'Booking marked as done successfully!');
+        } else {
+            return $request->expectsJson()
+                ? response()->json(['error' => 'Only approved bookings can be marked as done.'], 422)
+                : redirect()->back()->with('error', 'Only approved bookings can be marked as done.');
+        }
     }
+
+    return $request->expectsJson()
+        ? response()->json(['error' => 'Invalid action.'], 400)
+        : redirect()->back()->with('error', 'Invalid action.');
+}
 
 public function archivedBookings()
 {

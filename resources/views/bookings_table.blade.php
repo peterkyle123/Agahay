@@ -20,6 +20,7 @@
             <th class="py-2 px-4">Check-out</th>
             <th class="py-2 px-4">Status</th>
             <th class="py-2 px-4">Action</th>
+
         </tr>
     </thead>
     <tbody>

@@ -8,8 +8,53 @@
     @vite('resources/js/app.js')
     <link rel="icon" href="{{ asset('images/palm-tree.png') }}" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center">
+
+<header class="bg-white dark:bg-gray-900 h-20 w-full flex items-center fixed top-0 left-0 z-50 shadow-md">
+    <nav class="flex justify-start space-x-8 ml-6">
+
+        <a href="#" onclick="window.history.back(); return false;" class="text-green-600 hover:text-green-900 text-s">Back</a>
+        <a href="/dashboard" class="text-green-600 hover:text-green-900 text-s">Home</a>
+        <a href="/packages" class="text-green-600 hover:text-green-900 text-s">Packages</a>
+        {{-- drop down for bookings --}}
+        <div class="relative" x-data="{ open: false }">
+            <button class="text-green-600 hover:text-green-900 text-s"
+                @click="open = !open">
+                Bookings ▼
+            </button>
+            <div x-show="open" @click.away="open = false"
+                class="absolute mt-2 w-48 bg-white border rounded-lg shadow-lg z-50">
+                <a href="/approved-bookings"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Approved</a>
+                <a href="/approvedCanceled"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Canceled</a>
+                <a href="/archives"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Done</a>
+                <a href="/cancelrequestA"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Requesting for Cancellation</a>
+            </div>
+        </div>
+
+        <!-- Dropdown for Revenues -->
+        <div class="relative" x-data="{ open: false }">
+            <button class="text-green-600 hover:text-green-900 text-s"
+                @click="open = !open">
+                Revenues ▼
+            </button>
+            <div x-show="open" @click.away="open = false"
+                class="absolute mt-2 w-48 bg-white border rounded-lg shadow-lg z-50">
+                <a href="/total-revenues"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Done Revenues</a>
+                <a href="/approvedCanceled"
+                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Canceled Revenues</a>
+            </div>
+        </div>
+
+        <a href="/adminlogout" class="text-green-600 hover:text-green-900 text-s">Logout</a>
+    </nav>
+</header>
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h1 class="text-2xl font-bold mb-6 text-center text-gray-800">Add Payment Method</h1>
 

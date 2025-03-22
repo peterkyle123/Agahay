@@ -13,6 +13,13 @@
 
 </head>
 <body>
+    <style>
+        .fb-page {
+            max-width: 100%;
+        }
+    </style>
+    <div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v22.0"></script>
 <div class="flex flex-wrap">
     <div class="w-full sm:w-8/12 mb-10">
       <div class="container mx-auto h-full sm:p-10">
@@ -44,10 +51,27 @@
 </div>
           </div>
         </header>
+
       </div>
     </div>
-    <img src="{{asset('images/agahayresort.jpg')}}" alt="Leafs" class="w-full h-48 object-cover sm:h-screen sm:w-4/12">
+    <div class="fb-page"
+     data-href="https://www.facebook.com/facebook"
+     data-tabs="timeline"
+     data-width="1000"
+     data-height="500"
+     data-small-header="false"
+     data-adapt-container-width="false"
+     data-hide-cover="false"
+     data-show-facepile="true">
+    <blockquote cite="https://www.facebook.com/facebook"
+        class="fb-xfbml-parse-ignore">
+        <a href="https://www.facebook.com/facebook">Facebook</a>
+    </blockquote>
+</div>
   </div>
+<!-- Facebook Page Embed -->
+
+
 
   <section class="container w-full justify-center mx-auto p-10 md:py-12 px-0 md:p-8 md:px-0">
     <section
@@ -174,5 +198,6 @@
 
     </section>
 </section>
+
 </body>
 </html>
