@@ -152,6 +152,29 @@
         </form>
     </div>
 </section>
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v22.0"></script>
+<div class="w-full h-48 sm:h-screen sm:w-4/12 flex items-center justify-center mx-auto p-10 md:py-12 px-0 md:p-8 md:px-0 mt-24">
+  <div
+    class="fb-page"
+    data-href="https://www.facebook.com/agahayguesthouse"
+    data-tabs="timeline"
+    data-width="500"
+    data-height="500"
+    data-small-header="false"
+    data-adapt-container-width="false"
+    data-hide-cover="false"
+    data-show-facepile="true"
+  >
+    <blockquote
+      cite="https://www.facebook.com/agahayguesthouse"
+      class="fb-xfbml-parse-ignore"
+    >
+      <a href="https://www.facebook.com/agahayguesthouse">Facebook</a>
+    </blockquote>
+  </div>
+</div>
+
 <!-- STARS -->
 <script>
     const stars = document.querySelectorAll('.star');

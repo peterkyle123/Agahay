@@ -13,13 +13,7 @@
 
 </head>
 <body>
-    <style>
-        .fb-page {
-            max-width: 100%;
-        }
-    </style>
-    <div id="fb-root"></div>
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v22.0"></script>
+
 <div class="flex flex-wrap">
     <div class="w-full sm:w-8/12 mb-10">
       <div class="container mx-auto h-full sm:p-10">
@@ -49,26 +43,16 @@
         <a href="{{ route('trackbooking') }}">Track Booking</a>
     </button>
 </div>
+
           </div>
         </header>
 
       </div>
+
     </div>
-    <div class="fb-page"
-     data-href="https://www.facebook.com/facebook"
-     data-tabs="timeline"
-     data-width="1000"
-     data-height="500"
-     data-small-header="false"
-     data-adapt-container-width="false"
-     data-hide-cover="false"
-     data-show-facepile="true">
-    <blockquote cite="https://www.facebook.com/facebook"
-        class="fb-xfbml-parse-ignore">
-        <a href="https://www.facebook.com/facebook">Facebook</a>
-    </blockquote>
+    <img src="{{asset('images/agahayresort.jpg')}}" alt="Leafs" class="w-full h-48 object-cover sm:h-screen sm:w-4/12">
 </div>
-  </div>
+
 <!-- Facebook Page Embed -->
 
 
